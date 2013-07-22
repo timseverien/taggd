@@ -1,0 +1,27 @@
+.taggd {
+    overflow: hidden;
+}
+
+.taggd-item,
+.taggd-item-hover {
+    padding: 10px;
+}
+
+.taggd-item {
+    background-color: rgba(0, 0, 0, 0.25);
+
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+}
+
+.taggd-item-hover {
+    background-color: rgba(0, 0, 0, 0.75);
+    color: white;
+    font-family: "Helvetica Neue Light", HelveticaNeue-Light, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+    font-weight: lighter;
+
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+}
