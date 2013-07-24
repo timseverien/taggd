@@ -1,27 +1,40 @@
-.taggd {
-    overflow: hidden;
-}
+.taggd-wrapper { overflow: hidden; }
 
-.taggd-item,
-.taggd-item-hover {
-    padding: 10px;
-}
+.taggd-wrapper .taggd-item,
+.taggd-wrapper .taggd-item-hover { padding: 10px; }
 
-.taggd-item {
+.taggd-wrapper .taggd-item {
     background-color: rgba(0, 0, 0, 0.25);
 
     -moz-border-radius: 50%;
     -webkit-border-radius: 50%;
     border-radius: 50%;
+
+    -moz-transition: background-color 0.2s;
+    -webkit-transition: background-color 0.2s;
+    transition: background-color 0.2s;
+    z-index: 1000;
 }
 
-.taggd-item-hover {
+.taggd-wrapper .taggd-item.active,
+.taggd-wrapper .taggd-item:hover { background-color: rgba(0, 0, 0, 0.5); }
+
+.taggd-wrapper .taggd-item-hover {
     background-color: rgba(0, 0, 0, 0.75);
-    color: white;
-    font-family: "Helvetica Neue Light", HelveticaNeue-Light, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
-    font-weight: lighter;
 
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
     border-radius: 4px;
+
+    color: white;
+    font-weight: lighter;
+    opacity: 0;
+    position: absolute;
+
+    -moz-transition: opacity 0.2s;
+    -webkit-transition: opacity 0.2s;
+    transition: opacity 0.2s;
+    z-index: 999;
 }
+
+.taggd-wrapper .taggd-item-hover.show { opacity: 1; }
