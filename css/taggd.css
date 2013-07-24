@@ -1,10 +1,12 @@
 .taggd-wrapper { overflow: hidden; }
 
 .taggd-wrapper .taggd-item,
-.taggd-wrapper .taggd-item-hover { padding: 10px; }
+.taggd-wrapper .taggd-item-hover {
+    padding: 10px;
+}
 
 .taggd-wrapper .taggd-item {
-    background-color: rgba(0, 0, 0, 0.25);
+    background-color: rgba(221, 17, 68, 0.5);
 
     -moz-border-radius: 50%;
     -webkit-border-radius: 50%;
@@ -17,10 +19,10 @@
 }
 
 .taggd-wrapper .taggd-item.active,
-.taggd-wrapper .taggd-item:hover { background-color: rgba(0, 0, 0, 0.5); }
+.taggd-wrapper .taggd-item:hover { background-color: rgba(221, 17, 68, 0.75); }
 
 .taggd-wrapper .taggd-item-hover {
-    background-color: rgba(0, 0, 0, 0.75);
+    background-color: rgba(221, 17, 68, 0.75);
 
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
