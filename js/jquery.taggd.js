@@ -1,3 +1,15 @@
+/*
+ * jQuery Taggd
+ * A helpful plugin that helps you adding 'tags' on images.
+ *
+ * Tim Severien
+ * http://timseverien.nl
+ *
+ * Copyright (c) 2013 Tim Severien
+ * Released under the GPLv2 license.
+ *
+ */
+
 (function($) {
     var settings = {
         'align': {
