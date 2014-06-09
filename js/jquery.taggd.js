@@ -121,7 +121,6 @@
         'draw': function() {
             var $this = this;
             var $parent = $this.parent('.taggd-wrapper');
-            var poffset = $parent.offset();
 
             $parent.removeAttr('style').css({
                 'height': $this.height(),
@@ -131,8 +130,8 @@
             $parent.find('span').each(function(i, e) {
                 var $el = $(e);
 
-                var left = $el.attr('data-x') * $this.width() + poffset.left;
-                var top = $el.attr('data-y') * $this.height() + poffset.top;
+                var left = $el.attr('data-x') * $this.width();
+                var top = $el.attr('data-y') * $this.height();
 
                 if($el.hasClass('taggd-item')) {
                     $el.css({

@@ -1,4 +1,7 @@
-.taggd-wrapper { overflow: hidden; }
+.taggd-wrapper {
+	overflow: hidden;
+	position: relative;
+}
 
 .taggd-wrapper .taggd-item,
 .taggd-wrapper .taggd-item-hover {
