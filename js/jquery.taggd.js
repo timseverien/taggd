@@ -44,6 +44,7 @@
         'items': function(items) {
             var $this = this;
             var $wrapper = $this.parent('.taggd-wrapper');
+	        $wrapper.find('.taggd-item').remove();
 
             $this.css({ 'height': 'auto', 'width': 'auto' });
 
