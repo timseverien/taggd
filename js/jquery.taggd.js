@@ -35,6 +35,8 @@
             $(window).resize(function() {
                 methods.draw.call($this);
             });
+
+            return this;
         },
 
         'items': function(items) {
