@@ -116,7 +116,13 @@
             if(hover.hasClass('show')) methods.hide.call(this);
             else methods.show.call(this);
         },
-
+	'clear':function(){
+            var $this = this;
+            var $wrapper = $this.parent('.taggd-wrapper');
+            $wrapper.find('.taggd-item').remove();
+            $wrapper.find('.taggd-item-hover').remove();
+            $this.unwrap($('<div class="taggd-wrapper" />'));
+        },
         'draw': function() {
             var $this = this;
             var $parent = $this.parent('.taggd-wrapper');
