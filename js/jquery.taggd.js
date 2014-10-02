@@ -27,6 +27,8 @@
             var $this = this;
 
             $this.wrap(wrapper);
+            
+            $this._data = [];
 
             $this.settings = {};
             $.extend(true, $this.settings, settings);
@@ -40,7 +42,9 @@
         },
 
         'items': function(items) {
-            var $this = this;
+        	var $this = this;
+            $this._data = items;
+            
             var $wrapper = $this.parent('.taggd-wrapper');
 	        $wrapper.find('.taggd-item').remove();
 
@@ -96,6 +100,10 @@
 
             $this.removeAttr('style');
             methods.draw.call($this);
+        },
+        
+        'data':function(){
+            return this._data;
         },
 
         'show': function() {
