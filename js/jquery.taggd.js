@@ -118,11 +118,11 @@
 	Taggd.prototype.iterateTags = function(a, yep) {
 		var func;
 		
-		if(typeof a === 'number') {
+		if($.isNumeric(a)) {
 			func = function(i, e) { return a === i; };
 		} else if(typeof a === 'string') {
 			func = function(i, e) { return $(e).is(a); }
-		} else if(Object.prototype.toString.call(a) === '[object Array]') {
+		} else if($.isArray(a)) {
 			func = function(i, e) {
 				var $e = $(e);
 				var result = false;
@@ -145,7 +145,7 @@
 				var $e = $(e);
 				return $e.is(a);
 			};
-		} else if(typeof a === 'function') {
+		} else if($.isFunction(a)) {
 			func = a;
 		} else if(!a) {
 			func = function() { return true; }
