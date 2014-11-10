@@ -1,25 +1,27 @@
-/*
+/****************************************************************
  * jQuery Taggd
  * A helpful plugin that helps you adding 'tags' on images.
  *
  * Copyright (C) 2014 Tim Severien
  * License: MIT
- */
+ ****************************************************************/
 
 (function($) {
-    var defaults = {
-        align: {
-            x: 'center',
-            y: 'center'
-        },
+	'use strict';
+	
+	var defaults = {
+		align: {
+			x: 'center',
+			y: 'center'
+		},
 
-        handlers: {},
+		handlers: {},
 
-        offset: {
-            left: 0,
-            top: 0
-        }
-    };
+		offset: {
+			left: 0,
+			top: 0
+		}
+	};
 	
 	var methods = {
 		show: function() {
@@ -47,6 +49,11 @@
 		}
 	};
 	
+	
+	/****************************************************************
+	 * TAGGD
+	 ****************************************************************/
+	
 	var Taggd = function(element, options, data) {
 		var _this = this;
 		
@@ -64,12 +71,22 @@
 		});
 	};
 	
+	
+	/****************************************************************
+	 * INITIALISATION
+	 ****************************************************************/
+	
 	Taggd.prototype.initWrapper = function() {
 		var wrapper = $('<div class="taggd-wrapper" />');
 		this.element.wrap(wrapper);
 		
 		this.wrapper = this.element.parent('.taggd-wrapper');
 	};
+	
+	
+	/****************************************************************
+	 * DATA MANAGEMENT
+	 ****************************************************************/
 	
 	Taggd.prototype.addData = function(data) {
 		if($.isArray(data)) {
@@ -93,10 +110,81 @@
 		this.wrapper.find('.taggd-item, .taggd-item-hover').remove();
 	};
 	
+	
+	/****************************************************************
+	 * TAGS MANAGEMENT
+	 ****************************************************************/
+	
+	Taggd.prototype.iterateTags = function(a, yep) {
+		var func;
+		
+		if(typeof a === 'number') {
+			func = function(i, e) { return a === i; };
+		} else if(typeof a === 'string') {
+			func = function(i, e) { return $(e).is(a); }
+		} else if(Object.prototype.toString.call(a) === '[object Array]') {
+			func = function(i, e) {
+				var $e = $(e);
+				var result = false;
+				
+				$.each(a, function(ai, ae) {
+					if(
+						i === ai ||
+						e === ae ||
+						$e.is(ae)
+					) {
+						result = true;
+						return false;
+					}
+				});
+				
+				return result;
+			}
+		} else if(typeof a === 'object') {
+			func = function(i, e) {
+				var $e = $(e);
+				return $e.is(a);
+			};
+		} else if(typeof a === 'function') {
+			func = a;
+		} else if(!a) {
+			func = function() { return true; }
+		} else return this;
+		
+		this.wrapper.find('.taggd-item').each(function(i, e) {
+			if(typeof yep === 'function' && func.call(this, i, e)) {
+				yep.call(this, i, e);
+			}
+		});
+		
+		return this;
+	};
+	
+	Taggd.prototype.show = function(a) {
+		return this.iterateTags(a, methods.show);
+	};
+	
+	Taggd.prototype.hide = function(a) {
+		return this.iterateTags(a, methods.hide);
+	};
+	
+	Taggd.prototype.toggle = function(a) {
+		return this.iterateTags(a, methods.toggle);
+	};
+	
+	/****************************************************************
+	 * CLEANING UP
+	 ****************************************************************/
+	
 	Taggd.prototype.dispose = function() {
 		this.clear();
 		this.element.unwrap(this.wrapper);
 	};
+	
+	
+	/****************************************************************
+	 * SEMI-PRIVATE
+	 ****************************************************************/
 	
 	Taggd.prototype.addDOM = function() {
 		var _this = this;
@@ -108,7 +196,7 @@
 		var width = this.element.width();
 		
 		$.each(this.data, function(i, v) {
-			var $item = $('<span class="taggd-item" style="position: absolute;" />');
+			var $item = $('<span />');
 			var $hover;
 			
 			if(
@@ -119,10 +207,17 @@
 				v.y = v.y / height;
 			}
 			
+			if(typeof v.attributes === 'object') {
+				$item.attr(v.attributes);
+			}
+			
 			$item.attr({
 				'data-x': v.x,
 				'data-y': v.y
 			});
+			
+			$item.css('position', 'absolute');
+			$item.addClass('taggd-item');
 			
 			_this.wrapper.append($item);
 			
@@ -199,6 +294,11 @@
 			}
 		});
 	};
+	
+	
+	/****************************************************************
+	 * JQUERY LINK
+	 ****************************************************************/
 	
 	$.fn.taggd = function(options, data) {
 		return new Taggd(this, options, data);
