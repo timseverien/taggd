@@ -1,10 +1,9 @@
-/****************************************************************
+/*!
  * jQuery Taggd
  * A helpful plugin that helps you adding 'tags' on images.
  *
- * Copyright (C) 2014 Tim Severien
  * License: MIT
- ****************************************************************/
+ */
 
 (function($) {
 	'use strict';
@@ -60,9 +59,24 @@
 		this.element = $(element);
 		this.options = $.extend(true, {}, defaults, options);
 		this.data = data;
+		this.initialized = false;
+		
+		if(!this.element.height() || !this.element.width()) {
+			this.element.on('load', _this.initialize.bind(this));
+		} else this.initialize();
+	};
+	
+	
+	/****************************************************************
+	 * INITIALISATION
+	 ****************************************************************/
+	
+	Taggd.prototype.initialize = function() {
+		var _this = this;
+		
+		this.initialized = true;
 		
 		this.initWrapper();
-		
 		this.addDOM();
 		this.updateDOM();
 		
@@ -70,11 +84,6 @@
 			_this.updateDOM();
 		});
 	};
-	
-	
-	/****************************************************************
-	 * INITIALISATION
-	 ****************************************************************/
 	
 	Taggd.prototype.initWrapper = function() {
 		var wrapper = $('<div class="taggd-wrapper" />');
@@ -95,18 +104,23 @@
 			this.data.push(data);
 		}
 		
-		this.addDOM();
-		this.updateDOM();
+		if(this.initialized) {
+			this.addDOM();
+			this.updateDOM();
+		}
 	};
 	
 	Taggd.prototype.setData = function(data) {
 		this.data = data;
 		
-		this.addDOM();
-		this.updateDOM();
+		if(this.initialized) {
+			this.addDOM();
+			this.updateDOM();
+		}
 	};
 	
 	Taggd.prototype.clear = function() {
+		if(!this.initialized) return;
 		this.wrapper.find('.taggd-item, .taggd-item-hover').remove();
 	};
 	
