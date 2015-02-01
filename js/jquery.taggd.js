@@ -9,6 +9,8 @@
 	'use strict';
 	
 	var defaults = {
+		edit: false,
+		
 		align: {
 			x: 'center',
 			y: 'center'
@@ -19,15 +21,21 @@
 		offset: {
 			left: 0,
 			top: 0
+		},
+		
+		strings: {
+			save: '&#x2713;',
+			delete: '&#x00D7;'
 		}
 	};
 	
 	var methods = {
 		show: function() {
-			var $this = $(this);
+			var $this = $(this),
+				$label = $this.next();
 			
 			$this.addClass('active');
-			$this.next().addClass('show');
+			$label.addClass('show').find('input').focus();
 		},
 		
 		hide: function() {
@@ -56,6 +64,15 @@
 	var Taggd = function(element, options, data) {
 		var _this = this;
 		
+		if(options.edit) {
+			options.handlers = {
+				click: function() {
+					_this.hide();
+					methods.show.call(this);
+				}
+			};
+		}
+		
 		this.element = $(element);
 		this.options = $.extend(true, {}, defaults, options);
 		this.data = data;
@@ -78,7 +95,22 @@
 		
 		this.initWrapper();
 		this.addDOM();
-		this.updateDOM();
+		
+		if(this.options.edit) {
+			this.element.on('click', function(e) {
+				var poffset = $(this).parent().offset(),
+					x = (e.pageX - poffset.left) / _this.element.width(),
+					y = (e.pageY - poffset.top) / _this.element.height();
+
+				_this.addData({
+					x: x,
+					y: y,
+					text: ''
+				});
+
+				_this.show(_this.data.length - 1);
+			});
+		}
 		
 		$(window).resize(function() {
 			_this.updateDOM();
@@ -92,6 +124,53 @@
 		this.wrapper = this.element.parent('.taggd-wrapper');
 	};
 	
+	Taggd.prototype.alterDOM = function() {
+		var _this = this;
+		
+		this.wrapper.find('.taggd-item-hover').each(function() {
+			var $e = $(this),
+				
+				$input = $('<input type="text" size="16" />')
+					.val($e.text()),
+				$button_ok = $('<button />')
+					.html(_this.options.strings.save),
+				$button_delete = $('<button />')
+					.html(_this.options.strings.delete);
+			
+			$button_ok.on('click', function() {
+				_this.hide();
+			});
+			
+			$button_delete.on('click', function() {
+				var x = $e.attr('data-x'),
+					y = $e.attr('data-y');
+				
+				_this.data = $.grep(_this.data, function(v) {
+					return v.x != x || v.y != y;
+				});
+				
+				_this.addDOM();
+				_this.element.triggerHandler('change');
+			});
+			
+			$input.on('change', function() {
+				var x = $e.attr('data-x'),
+					y = $e.attr('data-y'),
+					item = $.grep(_this.data, function(v) {
+						return v.x == x && v.y == y;
+					}).pop();
+				
+				if(item) item.text = $input.val();
+				
+				_this.addDOM();
+				_this.element.triggerHandler('change');
+			});
+			
+			$e.empty().append($input, $button_ok, $button_delete);
+		});
+		
+		_this.updateDOM();
+	};
 	
 	/****************************************************************
 	 * DATA MANAGEMENT
@@ -106,7 +185,7 @@
 		
 		if(this.initialized) {
 			this.addDOM();
-			this.updateDOM();
+			this.element.triggerHandler('change');
 		}
 	};
 	
@@ -115,7 +194,6 @@
 		
 		if(this.initialized) {
 			this.addDOM();
-			this.updateDOM();
 		}
 	};
 	
@@ -249,7 +327,7 @@
 			
 			_this.wrapper.append($item);
 			
-			if(typeof v.text === 'string' && v.text.length > 0) {
+			if(typeof v.text === 'string' && (v.text.length > 0 || _this.options.edit)) {
 				$hover = $('<span class="taggd-item-hover" style="position: absolute;" />').html(v.text);
 				
 				$hover.attr({
@@ -279,6 +357,12 @@
 		});
 		
 		this.element.removeAttr('style');
+		
+		if(this.options.edit) {
+			this.alterDOM();
+		}
+		
+		this.updateDOM();
 	};
 	
 	Taggd.prototype.updateDOM = function() {

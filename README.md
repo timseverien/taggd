@@ -37,23 +37,31 @@ Optionally you can use include (and edit) the css file as well.
 		// event handlers of the tags
 		handlers: {
 		
-		// Any vanilla JavaScript event is a valid key
-		click: function(e) {
-			alert('You clicked a button');
-			
-			this; // the DOM Node
-			e;	// the Event
-		},
+			// Any vanilla JavaScript event is a valid key
+			click: function(e) {
+				alert('You clicked a button');
+
+				this; // the DOM Node
+				e;	// the Event
+			},
 		
 		
-		// For convenience, you can use strings to
-		// show, hide and toggle the popups
+			// For convenience, you can use strings to
+			// show, hide and toggle the popups
 			mouseenter: 'show',
 			mouseleave: 'hide'
 		}
 		
+		// Whether to enable editor mode
+		edit: false,
+		
+		// Strings for buttons
+		strings: {
+			save: '&#x2713;',
+			delete: '&#x00D7;'
+		}
 	};
-
+	
 
 	// The magic comes together here
 	$('.taggd').taggd( options, data );
