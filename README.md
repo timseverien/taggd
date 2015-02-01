@@ -5,7 +5,7 @@ A configurable jQuery plugin that allows you to tag images.
 
 ## 1. Installation
 
-[Download the archive](https://github.com/timseverien/taggd/archive/v2.0.1.zip) or browse the repository.
+[Download the archive](https://github.com/timseverien/taggd/archive/v2.0.3.zip) or browse the repository.
 
 Then include it after your jQuery file.
 
