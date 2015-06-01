@@ -46,10 +46,9 @@ Optionally you can use include (and edit) the css file as well.
 			},
 		
 		
-			// For convenience, you can use strings to
-			// show, hide and toggle the popups
-			mouseenter: 'show',
-			mouseleave: 'hide'
+			// Use 'show', 'hide' and 'toggle' to show/hide popups on mouse actions.
+			mouseenter: 'show', # Displays popup on mouseenter.
+			mouseleave: 'hide'  # Hides popup on mouseleave.
 		}
 		
 		// Whether to enable editor mode
