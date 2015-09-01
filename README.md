@@ -19,24 +19,24 @@ Optionally you can use include (and edit) the css file as well.
 ## 2. Configuration
 
 	var options = {
-		
+
 		// Aligning the text popups
 		align: {
 			x: 'center', // left, center or right
 			y: 'center'	// top,	center or bottom
 		},
-		
-		
+
+
 		// The (relative) offset of the popups in pixels
 		offset: {
 			left: 0, // horizontal offset
 			top: 12	// vertical offset
 		},
-		
-		
+
+
 		// event handlers of the tags
 		handlers: {
-		
+
 			// Any vanilla JavaScript event is a valid key
 			click: function(e) {
 				alert('You clicked a button');
@@ -44,24 +44,23 @@ Optionally you can use include (and edit) the css file as well.
 				this; // the DOM Node
 				e;	// the Event
 			},
-		
-		
-			// For convenience, you can use strings to
-			// show, hide and toggle the popups
-			mouseenter: 'show',
-			mouseleave: 'hide'
-		},
+
+
+			// Use 'show', 'hide' and 'toggle' to show/hide popups on mouse actions.
+			mouseenter: 'show', # Displays popup on mouseenter.
+			mouseleave: 'hide'  # Hides popup on mouseleave.
+		}
 		
 		// Whether to enable editor mode
 		edit: false,
-		
+
 		// Strings for buttons
 		strings: {
 			save: '&#x2713;',
 			delete: '&#x00D7;'
 		}
 	};
-	
+
 
 	// The magic comes together here
 	$('.taggd').taggd( options, data );
@@ -75,18 +74,18 @@ Data are the tags. Taggd accepts different formats, so pay close attention!
 		{
 			x: 0.512,
 			y: 0.33,
-			
+
 			// (Optional) Set the text of the popup.
 			// If omitted, no popup window will appear.
 			text: 'Huey',
-			
+
 			// (Optional) Set the element’s attributes.
 			attributes: {
 				id:    'my-id',
 				class: 'my-class'
 			}
 		},
-		
+
 		// x and y values can be in pixels too
 		// Don’t you worry, they will scale perfectly
 		{
@@ -130,22 +129,22 @@ These three methods all accept the following arguments.
 
 	// A specific index
 	taggd.show( 1 );
-	
+
 	// A CSS selector
 	taggd.show( '#el-one, :nth-child(1)' );
-	
+
 	// A jQuery element
 	taggd.show( $('#el-two') );
-	
+
 	// An array containing any of the formats above
 	taggd.show( ['#el-one', 1] );
-	
+
 	// A function that returns true or false
 	taggd.show(function(i, e) {
-		
+
 		// Show if tag contains a search query
 		return data[i].text.indexOf(search_query);
-		
+
 	});
 
 These methods can be chained.
