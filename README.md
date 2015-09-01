@@ -50,7 +50,7 @@ Optionally you can use include (and edit) the css file as well.
 			// show, hide and toggle the popups
 			mouseenter: 'show',
 			mouseleave: 'hide'
-		}
+		},
 		
 		// Whether to enable editor mode
 		edit: false,
