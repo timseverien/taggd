@@ -50,7 +50,7 @@ Optionally you can use include (and edit) the css file as well.
 			mouseenter: 'show', # Displays popup on mouseenter.
 			mouseleave: 'hide'  # Hides popup on mouseleave.
 		}
-		
+
 		// Whether to enable editor mode
 		edit: false,
 
@@ -97,7 +97,7 @@ Data are the tags. Taggd accepts different formats, so pay close attention!
 
 As noted in the comments, whatever unit you use, they will scale. The coordinates are always right.
 
-Not sure how to get them? I’ve made [a generator to get coordinates](https://timseverien.com/projects/taggd/generator/).
+Not sure how to get them? I’ve made [a generator to get coordinates](https://timseverien.github.io/taggd/generator/).
 
 ## 4. The API
 
@@ -152,4 +152,4 @@ These methods can be chained.
 	taggd.hide().show( 1 );
 
 
-For examples and styled documentation, visit the [project page](https://timseverien.com/projects/taggd/).
+For examples and styled documentation, visit the [project page](https://timseverien.github.io/taggd/).
