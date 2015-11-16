@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>taggd - A jQuery plugin to add notes to your images.</title>
+
+	<link rel="stylesheet" href="css/normalize.css" />
+	<link rel="stylesheet" href="css/style.css" />
+
+	<link rel="stylesheet" href="css/taggd.css" />
+
+	<script>
+		var data = [];
+		var options = [];
+	</script>
+</head>
+<body>
+
+	<main class="container">
+		<div class="hero">
+			<img src="img/example.jpg" class="taggd" alt="" />
+
+			<div class="hero__title">
+				<h1>taggd</h1>
+				<h2>Add notes to your images, responsively.</h2>
+			</div>
+		</div>
+
+		<script>
+			options.push({
+				align: {
+					y: 'top'
+				},
+
+				offset: {
+					top: 12
+				},
+
+				handlers: {
+					mouseenter: 'show',
+					mouseleave: 'hide'
+				}
+			});
+
+			data.push([
+				{ x: 0.512, y: 0.33, text: 'Huey' },
+				{ x: 0.548, y: 0.33, text: 'Dewey' },
+				{ x: 0.567, y: 0.36, text: 'Louie' }
+			]);
+		</script>
+
+		<div class="wrapper">
+			<h1>What is taggd?</h1>
+			<p>Despite images say more than a thousands words, sometimes it&rsquo;s just not enough. Taggd is a jQuery plugin that adds tags to your image.</p>
+
+			<div class="section">
+				<h2>1. Installation</h2>
+
+				<p>Download <a href="https://github.com/timseverien/taggd/archive/master.zip">the archive</a> or <a href="https://github.com/timseverien/taggd">browse the repository</a>.</p>
+				<p>Then include it after your jQuery file.</p>
+
+				<pre><code><span class="highlight">&lt;script src="js/jquery.js"&gt;&lt;/script&gt;
+&lt;script src="js/jquery.taggd.js"&gt;&lt;/script&gt;</span></code></pre>
+
+				<p>Optionally you can use include (and edit) the css file as well.</p>
+
+				<pre><code><span class="highlight">&lt;link href="css/taggd.css" /&gt;</span></code></pre>
+			</div>
+
+			<div class="section">
+				<h2>2. Configuration</h2>
+
+				<pre><code>var options = {
+
+  <span class="highlight"><span class="comment">// Aligning the text popups</span>
+  align: {
+    x: 'center', <span class="comment">// left, center or right</span>
+    y: 'center'  <span class="comment">// top,  center or bottom</span>
+  },
+
+
+  <span class="comment">// The (relative) offset of the popups in pixels</span>
+  offset: {
+    left: 0, <span class="comment">// horizontal offset</span>
+    top: 12  <span class="comment">// vertical offset</span>
+  },
+
+
+  <span class="comment">// event handlers of the tags</span>
+  handlers: {
+
+    <span class="comment">// Any vanilla JavaScript event is a valid key</span>
+    click: function(e) {
+      alert('You clicked a button');
+
+      this; <span class="comment">// the DOM Node</span>
+      e;    <span class="comment">// the Event</span>
+    },
+
+
+    <span class="comment">// For convenience, you can use strings to
+    // show, hide and toggle the popups</span>
+    mouseenter: 'show',
+    mouseleave: 'hide'
+  }</span>
+
+};
+
+
+<span class="comment">// The magic comes together here</span>
+<span class="highlight">$('.taggd').taggd( options, data );</span></code></pre>
+			</div>
+
+			<div class="section">
+				<h2>3. What is &ldquo;data&rdquo; and how do I get it?</h2>
+
+				<p>Data are the tags. Taggd accepts different formats, so pay close attention!</p>
+
+				<pre><code>var data = [
+  <span class="comment">// x and y values can be decimals (0-1)</span>
+  <span class="highlight">{
+    x: 0.512,
+    y: 0.33,
+
+    <span class="comment">// (Optional) Set the text of the popup.</span>
+    <span class="comment">// If omitted, no popup window will appear.</span>
+    text: 'Huey',
+
+    <span class="comment">// (Optional) Set the element&rsquo;s attributes.</span>
+    attributes: {
+    	id:    'my-id',
+    	class: 'my-class'
+    }
+  },
+
+  <span class="comment">// x and y values can be in pixels too
+  // Don&rsquo;t you worry, they will scale perfectly</span>
+  {
+    x: 1052,
+    y: 356,
+    text: 'Duwey'
+  }</span>
+];</code></pre>
+				<p>As noted in the comments, whatever unit you use, they will scale. The coordinates are always right.</p>
+
+				<p>Not sure how to get them? I&rsquo;ve made <a href="//timseverien.com/projects/taggd/generator/" target="_blank">a generator to get coordinates</a>.</p>
+			</div>
+
+			<div class="section">
+				<h2>4. The API</h2>
+
+				<p>But other than putting in data, you can do more with Taggd!</p>
+
+				<h3>Managing data</h3>
+
+				<pre><code><span class="highlight"><span class="comment">// Replace existing data with new data</span>
+taggd.setData(</span> [ ... ] <span class="highlight">);
+
+<span class="comment">// Add new items</span>
+taggd.addData(</span> { ... } <span class="highlight">);            <span class="comment">// one item or</span>
+taggd.addData(</span> [{ ... }, { ... }] <span class="highlight">); <span class="comment">// multiple items</span>
+
+<span class="comment">// Get rid of all the tags</span>
+taggd.clear();
+
+<span class="comment">// Undo everthing Taggd did</span>
+taggd.dispose();</span></code></pre>
+
+				<h3>Show/hide/toggle tags</h3>
+
+<pre><code><span class="highlight"><span class="comment">// Show/hide/toggle all items</span>
+taggd.show();
+taggd.hide();
+taggd.toggle();</span></code></pre>
+
+				<p>These three methods all accept the following arguments.</p>
+
+<pre><code><span class="comment">// A specific index</span>
+taggd.show( <span class="highlight">1</span> );
+
+<span class="comment">// A CSS selector</span>
+taggd.show( <span class="highlight">'#el-one, :nth-child(1)'</span> );
+
+<span class="comment">// A jQuery element</span>
+taggd.show( <span class="highlight">$('#el-two')</span> );
+
+<span class="comment">// An array containing any of the formats above</span>
+taggd.show( <span class="highlight">['#el-one', 1]</span> );
+
+<span class="comment">// A function that returns true or false</span>
+taggd.show(<span class="highlight">function(i, e) {
+
+  // Show if tag contains a search query
+  return data[i].text.indexOf(search_query);
+
+}</span>);</code></pre>
+
+				<p>These methods can be chained.</p>
+
+				<pre><code><span class="highlight">taggd.hide().show(</span> 1 <span class="highlight">);</span></code></pre>
+			</div>
+		</div>
+	</main>
+
+	<section class="container">
+		<div class="wrapper">
+			<h1>Examples</h1>
+		</div>
+
+		<!--------------------------------
+		  - DEMO 0
+		  -------------------------------->
+
+		<div class="wrapper">
+			<h2>1. Basic</h2>
+		</div>
+
+		<p>
+			<img src="img/demo-0.jpg" class="taggd" alt="" />
+		</p>
+
+		<div class="wrapper">
+			<pre><code>var options = {
+  <span class="highlight">align: {
+    y: 'bottom'
+  },
+
+  offset: {
+    top: -35
+  },
+
+  handlers: {
+    mouseenter: 'show',
+    mouseleave: 'hide'
+  }</span>
+};
+
+var data = [
+  <span class="highlight"><span class="comment">// pixel-based coordinates</span>
+  { x: 1099,  y: 220,  text: 'Dave'   },
+
+  <span class="comment">// 0-1 coordinates</span>
+  { x: 0.431, y: 0.33, text: 'Phil'   },
+  { x: 0.468, y: 0.28, text: 'Steven' }</span>
+];</code></pre>
+		</div>
+
+		<script>
+			options.push({
+				align: {
+					y: 'bottom'
+				},
+
+				offset: {
+					top: -35
+				},
+
+				handlers: {
+					mouseenter: 'show',
+					mouseleave: 'hide'
+				}
+			});
+
+			data.push([
+				{ x: 1099,  y: 220,  text: 'Dave'   }, // pixel-based
+				{ x: 0.431, y: 0.33, text: 'Phil'   }, // scale (0 - 1)
+				{ x: 0.468, y: 0.28, text: 'Steven' }
+			]);
+		</script>
+
+		<!--------------------------------
+		  - DEMO 1
+		  -------------------------------->
+
+		<div class="wrapper">
+			<h2>2. Click to toggle</h2>
+		</div>
+
+		<p>
+			<img src="img/demo-1.jpg" class="taggd" alt="" />
+		</p>
+
+		<div class="wrapper">
+			<pre><code>var options = {
+  <span class="highlight">handlers: {
+    click: 'toggle'
+  }</span>
+};</code></pre>
+		</div>
+
+		<script>
+			options.push({
+				align: {
+					y: 'top'
+				},
+
+				offset: {
+					top: 15
+				},
+
+				handlers: {
+					click: 'toggle'
+				}
+			});
+
+			data.push([
+				{ x: 0.62, y: 0.7, text: 'Rope'             },
+				{ x: 0.51, y: 0.5, text: 'Bird'             },
+				{ x: 0.40, y: 0.3, text: 'Water, obviously' }
+			]);
+		</script>
+
+		<!--------------------------------
+		  - DEMO 3
+		  -------------------------------->
+
+		<div class="wrapper">
+			<h2>4. Custom data and extern link</h2>
+		</div>
+
+		<img src="img/demo-3.jpg" class="taggd" alt="" />
+
+		<div class="wrapper">
+			<pre><code>var options = {
+  handlers: {
+     <span class="highlight">click: function( e, data ) {
+      window.open(
+        'http://en.wikipedia.org/wiki/' + data.uri,
+        '_blank'
+      );</span>
+    }
+  }
+}
+
+var data = [
+  {
+    x: 0.1,
+    y: 0.54,
+    text: 'Auto Rickshaw',
+    <span class="highlight">uri: 'Auto_rickshaw'</span>
+  },
+
+  {
+    x: 0.49,
+    y: 0.57,
+    text: 'Registration Plate',
+    <span class="highlight">uri: 'Vehicle_registration_plate'</span>
+  },
+
+  {
+    x: 0.38,
+    y: 0.9,
+    text: 'Lighting',
+    <span class="highlight">uri: 'Automotive_lighting'</span>
+  }
+];</code></pre>
+		</div>
+
+		<script>
+			options.push({
+				align: {
+					y: 'top'
+				},
+
+				offset: {
+					top: 12
+				},
+
+				handlers: {
+					click: function( e, data ) {
+						var wiki = 'http://en.wikipedia.org/wiki/' + data.uri;
+						window.open( wiki, '_blank' );
+					},
+
+					mouseenter: 'show',
+					mouseleave: 'hide'
+				}
+			});
+
+			data.push([
+				{ x: 0.1,  y: 0.54, text: 'Auto Rickshaw',      uri: 'Auto_rickshaw'              },
+				{ x: 0.49, y: 0.57, text: 'Registration Plate', uri: 'Vehicle_registration_plate' },
+				{ x: 0.38, y: 0.9,  text: 'Lighting',           uri: 'Automotive_lighting'        }
+			]);
+		</script>
+	</section>
+
+
+	<footer class="section">
+		<div class="wrapper">
+			<p>Your&rsquo;s truly, <a href="https://twitter.com/TimSeverien">@timseverien</a>. For more projects, see <a href="https://timseverien.com">timseverien.com</a>.</p>
+		</div>
+	</footer>
+
+	<script src="js/jquery-1.11.1.min.js"></script>
+	<script src="js/jquery.taggd.js"></script>
+
+	<script>
+	$(window).load(function() {
+		$('.taggd').each(function(i, e) {
+			$(e).taggd(options[i], data[i]);
+		});
+	});
+	</script>
+
+</body>
+</html>

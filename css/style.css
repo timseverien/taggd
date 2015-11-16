@@ -1,0 +1,97 @@
+@import url(//fonts.googleapis.com/css?family=Oswald:700);
+
+body {
+    -webkit-font-smoothing: antialiased;
+    color: #222;
+    font-size: 120%;
+}
+
+
+/********************************
+ * LAYOUT
+ ********************************/
+
+.wrapper {
+    margin: 0;
+    padding: 0 2em;
+}
+
+.section {
+    background-color: rgba(0, 0, 0, 0.025);
+    padding: 0 1em;
+    margin-bottom: 2em;
+    overflow: hidden;
+}
+
+footer.section {
+	margin-bottom: 0;
+}
+
+
+/********************************
+ * HERO
+ ********************************/
+
+.hero {
+    position: relative;
+}
+
+.hero__title {
+    bottom: 2em;
+    color: #fff;
+    left: 2em;
+    position: absolute;
+}
+
+.hero__title h1,
+.hero__title h2 {
+    margin: 0;
+    line-height: 1;
+}
+
+.hero__title h1 { font-size: 4em; }
+.hero__title h2 { font-size: 1.4em; }
+
+
+/********************************
+ * CONTENT
+ ********************************/
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+}
+
+h1 {
+	text-transform: uppercase;
+}
+
+img { width: 100%; }
+a { color: #db325c; }
+
+
+/********************************
+ * CODE & HIGHLIGHTING
+ ********************************/
+
+code { color: #555; }
+
+code .comment {
+	color: #aaa;
+	font-weight: normal;
+}
+
+code .highlight {
+	color: #db325c;
+	font-weight: bold;
+}
+
+/********************************
+ * SUPER RESPONSIVE
+ ********************************/
+
+@media only screen and (min-width: 36em) {
+    .wrapper {
+        width: 36em;
+    }
+}
