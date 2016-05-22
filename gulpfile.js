@@ -1,4 +1,9 @@
+const browserify = require('browserify');
+const babelify = require('babelify');
+const buffer = require('vinyl-buffer');
 const del = require('del');
+const source = require('vinyl-source-stream');
+
 const gulp = require('gulp');
 const $ = require('gulp-load-plugins')({
   rename: {
@@ -17,6 +22,7 @@ const OPTIONS_BABEL = {
 const paths = {
   scripts: {
     src: `${DIR_SOURCE}/scripts/**/*.js`,
+    entry: `${DIR_SOURCE}/scripts/Taggd.js`,
     dest: DIR_BUILD,
   },
   styles: {
@@ -26,11 +32,15 @@ const paths = {
 };
 
 function buildScripts() {
-  return gulp.src(paths.scripts.src)
-    .pipe($.sourcemaps.init())
-    .pipe($.concat('taggd.js'))
-    .pipe($.babel(OPTIONS_BABEL))
+  return browserify()
+    .transform(babelify, OPTIONS_BABEL)
+    .require(paths.scripts.entry, { entry: true })
+    .bundle()
+    .pipe(source('taggd.js'))
+    .pipe(buffer())
     .pipe(gulp.dest(paths.scripts.dest))
+
+    .pipe($.sourcemaps.init({ loadMaps: true }))
     .pipe($.minifyJs())
     .pipe($.rename('taggd.min.js'))
     .pipe($.sourcemaps.write('.'))
