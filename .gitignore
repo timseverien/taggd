@@ -1,0 +1,4 @@
+node_modules
+
+# Avoid committing map files
+dest/**/*.map
