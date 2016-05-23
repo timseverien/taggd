@@ -1,12 +1,11 @@
 const ObjectIs = require('./util/object-is');
 const TypeErrorMessage = require('./util/type-error-message');
 
-/**
- * @todo:
- * - Generate DOM
- */
 class Tag {
   constructor() {
+    this.buttonElement = document.createElement('button');
+    this.popupElement = document.createElement('span');
+
     this.setPosition(0, 0);
     this.setText('');
   }
@@ -16,6 +15,7 @@ class Tag {
    * @return {Taggd.Tag} Current Tag
    */
   show() {
+    this.popupElement.style.display = 'none';
     return this;
   }
 
@@ -24,6 +24,7 @@ class Tag {
    * @return {Taggd.Tag} Current Tag
    */
   hide() {
+    this.popupElement.style.display = '';
     return this;
   }
 
@@ -37,7 +38,12 @@ class Tag {
       throw new Error(TypeErrorMessage.getMessage(type, 'a string or a function'));
     }
 
-    this.text = text;
+    if (ObjectIs.function(text)) {
+      this.popupElement.innerHTML = text(this);
+    } else {
+      this.popupElement.innerHTML = text;
+    }
+
     return this;
   }
 
@@ -55,8 +61,24 @@ class Tag {
       throw new Error(TypeErrorMessage.getIntegerMessage(y));
     }
 
-    this.position = {x, y};
+    const positionStyle = Tag.getPositionStyle(x, y);
+    this.popupElement.style.left = positionStyle.left;
+    this.popupElement.style.top = positionStyle.top;
+
     return this;
+  }
+
+  /**
+   * Get the position style
+   * @param {Number} x - The tag’s x-coordinate
+   * @param {Number} y - The tag’s y-coordinate
+   * @return {Object} The style
+   */
+  static getPositionStyle(x, y) {
+    return {
+      left: (x * 100) + '%',
+      top: (y * 100) + '%',
+    };
   }
 }
 
