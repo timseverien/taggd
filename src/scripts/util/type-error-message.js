@@ -41,6 +41,15 @@ module.exports = {
   },
 
   /**
+   * Get the TypeError Object message
+   * @param {Object} object - The tested object
+   * @return {String} The error message
+   */
+  getObjectMessage: (object) => {
+    return getTypeErrorMessage(object, 'an object');
+  },
+
+  /**
    * Get the TypeError Taggd.Tag message
    * @param {Object} object - The tested object
    * @return {String} The error message

@@ -10,8 +10,17 @@ const TypeErrorMessage = require('./util/type-error-message');
  * - Create event handlers for editor mode
  */
 class Taggd {
-  constructor(data = []) {
+  constructor(options = {}, data = []) {
+    this.setOptions(options);
     this.setTags(data);
+  }
+
+  setOptions(options) {
+    if (!ObjectIs.ofType(options, 'object')) {
+      throw new TypeError(TypeErrorMessage.getObjectMessage(tag));
+    }
+
+    this.options = options;
   }
 
   /**
