@@ -10,8 +10,8 @@ const TypeErrorMessage = require('./util/type-error-message');
  * - Create event handlers for editor mode
  */
 class Taggd {
-  constructor() {
-    this.tags = [];
+  constructor(data = []) {
+    this.setTags(data);
   }
 
   /**
