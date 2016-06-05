@@ -1,11 +1,11 @@
-module.exports = {
+var TypeErrorMessage = {
   /**
    * Get the TypeError message
    * @param {Object} object - The tested object
    * @param {String} expectedType - A string describing the expected type
    * @return {String} The error message
    */
-  getMessage: (object, expectedType) => {
+  getMessage: function (object, expectedType) {
     return `${object} should be ${expectedType}`;
   },
 
@@ -15,11 +15,11 @@ module.exports = {
    * @param {String} expectedType - The expected type of all array items
    * @return {String} The error message
    */
-  getArrayMessage: (object, expectedType) => {
+  getArrayMessage: function (object, expectedType) {
     if (expectedType) {
-      return getTypeErrorMessage(object, `an array of ${ofType}`);
+      return this.getTypeErrorMessage(object, `an array of ${expectedType}`);
     }
-    return getTypeErrorMessage(object, 'an array');
+    return this.getTypeErrorMessage(object, 'an array');
   },
 
   /**
@@ -27,8 +27,8 @@ module.exports = {
    * @param {Object} object - The tested object
    * @return {String} The error message
    */
-  getFunctionMessage: (object) => {
-    return getTypeErrorMessage(object, 'a function');
+  getFunctionMessage: function (object) {
+    return this.getTypeErrorMessage(object, 'a function');
   },
 
   /**
@@ -36,8 +36,8 @@ module.exports = {
    * @param {Object} object - The tested object
    * @return {String} The error message
    */
-  getIntegerMessage: (object) => {
-    return getTypeErrorMessage(object, 'an intenger');
+  getIntegerMessage: function (object) {
+    return this.getTypeErrorMessage(object, 'an intenger');
   },
 
   /**
@@ -45,8 +45,8 @@ module.exports = {
    * @param {Object} object - The tested object
    * @return {String} The error message
    */
-  getObjectMessage: (object) => {
-    return getTypeErrorMessage(object, 'an object');
+  getObjectMessage: function (object) {
+    return this.getTypeErrorMessage(object, 'an object');
   },
 
   /**
@@ -54,7 +54,19 @@ module.exports = {
    * @param {Object} object - The tested object
    * @return {String} The error message
    */
-   getTagMessage: (object) => {
-     return getTypeErrorMessage(object, 'a tag');
+   getTagMessage: function (object) {
+     return this.getTypeErrorMessage(object, 'a tag');
    },
+
+   /**
+    * Get TypeError message
+    * @param {Object} object - The tested object
+    * @param {String} message - The type message
+    * @return {String} The error message
+    */
+   getTypeErrorMessage: function(object, message) {
+     return `${object} is not a ${message}`;
+   }
 };
+
+module.exports = TypeErrorMessage;

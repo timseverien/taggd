@@ -10,7 +10,16 @@ const TypeErrorMessage = require('./util/type-error-message');
  * - Create event handlers for editor mode
  */
 class Taggd {
-  constructor(options = {}, data = []) {
+  constructor(image, options = {}, data = []) {
+    this.wrapper = document.createElement('div');
+    this.wrapper.classList.add('taggd');
+
+    this.wrapper.insertBefore(image);
+    image.parentElement.removeChild(image);
+    this.wrapper.appendChild(image);
+
+    this.tags = [];
+
     this.setOptions(options);
     this.setTags(data);
   }
@@ -70,7 +79,7 @@ class Taggd {
    * @param {Taggd.Tag[]} tags An array of tags
    */
   setTags(tags) {
-    this.deleteTags()
+    this.deleteTags();
     this.addTags(tags);
     return this;
   }
@@ -81,7 +90,7 @@ class Taggd {
    * @return {Taggd} Current Taggd instance
    */
   addTags(tags) {
-    if (Array.isArray(tags)) {
+    if (!Array.isArray(tags)) {
       throw new TypeError(TypeErrorMessage.getArrayMessage(tags, 'Taggd.Tag'));
     }
 
@@ -102,7 +111,7 @@ class Taggd {
    * @return {Taggd} Current Taggd instance
    */
   deleteTags() {
-    this.tags.length = 0;
+    this.tags.slice(0, this.tags.length);
     return this;
   }
 
@@ -147,3 +156,5 @@ class Taggd {
 
 module.exports = Taggd;
 module.exports.Tag = Tag;
+
+window.Taggd = Taggd;
