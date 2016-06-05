@@ -6,6 +6,9 @@
     "type": "git",
     "url": "git+https://github.com/timseverien/taggd.git"
   },
+  "scripts": {
+    "test": "karma start karma.conf.js"
+  },
   "author": {
     "name": "Tim Severien",
     "email": "timseverien@gmail.com",
@@ -27,6 +30,11 @@
     "gulp-rename": "^1.2.2",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-uglify": "^1.5.3",
+    "jasmine-core": "^2.4.1",
+    "karma": "^0.13.22",
+    "karma-jasmine": "^1.0.2",
+    "karma-phantomjs-launcher": "^1.0.0",
+    "phantomjs-prebuilt": "^2.1.7",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
   }
