@@ -1,5 +1,6 @@
 describe('Initialization', function () {
   beforeEach(createImage);
+  afterEach(destroyBody);
 
   it('should wrap image', function() {
     var image = getImageElement();
@@ -7,6 +8,4 @@ describe('Initialization', function () {
 
     expect(image.parentElement.classList.contains('taggd')).toEqual(true);
   });
-
-  afterEach(destroyBody);
 });
