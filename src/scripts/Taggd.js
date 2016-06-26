@@ -4,9 +4,7 @@ const TypeErrorMessage = require('./util/type-error-message');
 
 /**
  * @todo:
- * - Alter existing DOM
  * - Handle options
- * - Create and add DOM for tags
  * - Create event handlers for editor mode
  */
 class Taggd {
@@ -38,11 +36,14 @@ class Taggd {
    * @return {Taggd} Current Taggd instance
    */
   addTag(tag) {
-    if (!ObjectIs.ofType(tag, Tag)) {
+    if (!ObjectIs.ofInstance(tag, Tag)) {
       throw new TypeError(TypeErrorMessage.getTagMessage(tag));
     }
 
     this.tags.push(tag);
+    this.wrapper.appendChild(tag.buttonElement);
+    this.wrapper.appendChild(tag.popupElement);
+
     return this;
   }
 
@@ -70,7 +71,10 @@ class Taggd {
       throw new TypeError(TypeErrorMessage.getIntegerMessage(index));
     }
 
-    this.tags.splice(index, 1);
+    const tag = this.tags.splice(index, 1);
+    this.wrapper.removeChild(tag.buttonElement);
+    this.wrapper.removeChild(tag.popupElement);
+
     return this;
   }
 
@@ -94,7 +98,7 @@ class Taggd {
       throw new TypeError(TypeErrorMessage.getArrayMessage(tags, 'Taggd.Tag'));
     }
 
-    this.tags.forEach((tag) => this.addTag(tag));
+    tags.forEach((tag) => this.addTag(tag));
     return this;
   }
 
@@ -157,4 +161,4 @@ class Taggd {
 module.exports = Taggd;
 module.exports.Tag = Tag;
 
-window.Taggd = Taggd;
+window.Taggd = module.exports;

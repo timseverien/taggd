@@ -9,14 +9,14 @@ var ObjectIs = require('./util/object-is');
 var TypeErrorMessage = require('./util/type-error-message');
 
 var Tag = function () {
-  function Tag() {
+  function Tag(position, text) {
     _classCallCheck(this, Tag);
 
     this.buttonElement = document.createElement('button');
     this.popupElement = document.createElement('span');
 
-    this.setPosition(0, 0);
-    this.setText('');
+    this.setPosition(position.x, position.y);
+    this.setText(text);
   }
 
   /**
@@ -76,10 +76,10 @@ var Tag = function () {
   }, {
     key: 'setPosition',
     value: function setPosition(x, y) {
-      if (!Number.isNumber(x)) {
+      if (!ObjectIs.number(x)) {
         throw new Error(TypeErrorMessage.getIntegerMessage(x));
       }
-      if (!Number.isNumber(y)) {
+      if (!ObjectIs.number(y)) {
         throw new Error(TypeErrorMessage.getIntegerMessage(y));
       }
 
@@ -105,6 +105,18 @@ var Tag = function () {
         top: y * 100 + '%'
       };
     }
+
+    /**
+     * Create a tag from object
+     * @param {Object} object - The object containing all information
+     * @return {Tag} The created Tag instance
+     */
+
+  }, {
+    key: 'createFromObject',
+    value: function createFromObject(object) {
+      return new Tag(object.position, object.text);
+    }
   }]);
 
   return Tag;
@@ -125,9 +137,7 @@ var TypeErrorMessage = require('./util/type-error-message');
 
 /**
  * @todo:
- * - Alter existing DOM
  * - Handle options
- * - Create and add DOM for tags
  * - Create event handlers for editor mode
  */
 
@@ -170,11 +180,14 @@ var Taggd = function () {
   }, {
     key: 'addTag',
     value: function addTag(tag) {
-      if (!ObjectIs.ofType(tag, Tag)) {
+      if (!ObjectIs.ofInstance(tag, Tag)) {
         throw new TypeError(TypeErrorMessage.getTagMessage(tag));
       }
 
       this.tags.push(tag);
+      this.wrapper.appendChild(tag.buttonElement);
+      this.wrapper.appendChild(tag.popupElement);
+
       return this;
     }
 
@@ -208,7 +221,10 @@ var Taggd = function () {
         throw new TypeError(TypeErrorMessage.getIntegerMessage(index));
       }
 
-      this.tags.splice(index, 1);
+      var tag = this.tags.splice(index, 1);
+      this.wrapper.removeChild(tag.buttonElement);
+      this.wrapper.removeChild(tag.popupElement);
+
       return this;
     }
 
@@ -240,7 +256,7 @@ var Taggd = function () {
         throw new TypeError(TypeErrorMessage.getArrayMessage(tags, 'Taggd.Tag'));
       }
 
-      this.tags.forEach(function (tag) {
+      tags.forEach(function (tag) {
         return _this.addTag(tag);
       });
       return this;
@@ -322,7 +338,7 @@ var Taggd = function () {
 module.exports = Taggd;
 module.exports.Tag = Tag;
 
-window.Taggd = Taggd;
+window.Taggd = module.exports;
 
 },{"./Tag":1,"./util/object-is":3,"./util/type-error-message":4}],3:[function(require,module,exports){
 'use strict';
@@ -357,6 +373,15 @@ module.exports = {
    */
   function: function _function(object) {
     return typeof object === 'function';
+  },
+
+  /**
+   * Check whether given object is a Number
+   * @param {Object} object - The object to test
+   * @return {Boolean}
+   */
+  number: function number(object) {
+    return !isNaN(parseFloat(object));
   }
 };
 

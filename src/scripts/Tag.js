@@ -2,12 +2,12 @@ const ObjectIs = require('./util/object-is');
 const TypeErrorMessage = require('./util/type-error-message');
 
 class Tag {
-  constructor() {
+  constructor(position, text) {
     this.buttonElement = document.createElement('button');
     this.popupElement = document.createElement('span');
 
-    this.setPosition(0, 0);
-    this.setText('');
+    this.setPosition(position.x, position.y);
+    this.setText(text);
   }
 
   /**
@@ -54,10 +54,10 @@ class Tag {
    * @return {Taggd.Tag} Current Tag
    */
   setPosition(x, y) {
-    if (!Number.isNumber(x)) {
+    if (!ObjectIs.number(x)) {
       throw new Error(TypeErrorMessage.getIntegerMessage(x));
     }
-    if (!Number.isNumber(y)) {
+    if (!ObjectIs.number(y)) {
       throw new Error(TypeErrorMessage.getIntegerMessage(y));
     }
 
@@ -79,6 +79,15 @@ class Tag {
       left: (x * 100) + '%',
       top: (y * 100) + '%',
     };
+  }
+
+  /**
+   * Create a tag from object
+   * @param {Object} object - The object containing all information
+   * @return {Tag} The created Tag instance
+   */
+  static createFromObject(object) {
+    return new Tag(object.position, object.text);
   }
 }
 

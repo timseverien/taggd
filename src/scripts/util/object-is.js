@@ -27,4 +27,13 @@ module.exports = {
   function: (object) => {
     return typeof object === 'function';
   },
+
+  /**
+   * Check whether given object is a Number
+   * @param {Object} object - The object to test
+   * @return {Boolean}
+   */
+  number: (object) => {
+    return !isNaN(parseFloat(object));
+  }
 };
