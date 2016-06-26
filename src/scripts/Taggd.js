@@ -4,13 +4,12 @@ const TypeErrorMessage = require('./util/type-error-message');
 
 /**
  * @todo:
- * - Handle options
- *   - When a tag’s info window should be shown
  * - Trigger events
  * - Editor mode
  * 	 - Enable/disable mode
  * 	 - Save/delete button configuration
  * 	 - Trigger events upon creation/deletion
+ * - Set ARIA roles
  */
 class Taggd {
   constructor(image, options = {}, data = []) {

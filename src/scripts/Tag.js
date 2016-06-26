@@ -3,7 +3,6 @@ const TypeErrorMessage = require('./util/type-error-message');
 
 /**
  * @todo:
- * - Set attributes
  * - Set custom data (for use in user-defined event handlers)
  */
 class Tag {
