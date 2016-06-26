@@ -1,6 +1,11 @@
 const ObjectIs = require('./util/object-is');
 const TypeErrorMessage = require('./util/type-error-message');
 
+/**
+ * @todo:
+ * - Set attributes
+ * - Set custom data (for use in user-defined event handlers)
+ */
 class Tag {
   constructor(position, text) {
     this.buttonElement = document.createElement('button');
