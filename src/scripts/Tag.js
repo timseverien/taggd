@@ -7,12 +7,15 @@ const TypeErrorMessage = require('./util/type-error-message');
  * - Set custom data (for use in user-defined event handlers)
  */
 class Tag {
-  constructor(position, text) {
+  constructor(position, text, buttonAttributes = {}, popupAttributes = {}) {
     this.buttonElement = document.createElement('button');
     this.popupElement = document.createElement('span');
 
+    this.setButtonAttributes(buttonAttributes);
+    this.setPopupAttributes(popupAttributes);
     this.setPosition(position.x, position.y);
     this.setText(text);
+
     this.hide();
   }
 
@@ -75,6 +78,52 @@ class Tag {
   }
 
   /**
+   * Set the tag button’s attributes
+   * @param {Object} atttributes - The attributes to set
+   * @return {Taggd.Tag} Current tag
+   */
+  setButtonAttributes(attributes = {}) {
+    Tag.setElementAttributes(this.buttonElement, attributes);
+    return this;
+  }
+
+  /**
+   * Set the tag popup’s attributes
+   * @param {Object} atttributes - The attributes to set
+   * @return {Taggd.Tag} Current tag
+   */
+  setPopupAttributes(attributes = {}) {
+    Tag.setElementAttributes(this.popupElement, attributes);
+    return this;
+  }
+
+  /**
+   * Set element attributes
+   * @param {DomNode} element - The element the attributes should be set to
+   * @param {Object} attributes = {} - A map of attributes to set
+   * @return {DomNode} The original element
+   */
+  static setElementAttributes(element, attributes = {}) {
+    if (!ObjectIs.ofType(attributes, 'object')) {
+      throw new Error(TypeErrorMessage.getObjectMessage(attributes));
+    }
+
+    for (let attribute in attributes) {
+      const value = attributes[attribute];
+
+      if (attribute === 'class' && element.getAttribute(attribute)) {
+        const classValue = element.getAttribute(attribute) + ` ${value}`;
+        element.setAttribute(attribute, classValue);
+        continue;
+      }
+
+      element.setAttribute(attribute, value);
+    }
+
+    return element;
+  }
+
+  /**
    * Get the position style
    * @param {Number} x - The tag’s x-coordinate
    * @param {Number} y - The tag’s y-coordinate
@@ -93,7 +142,12 @@ class Tag {
    * @return {Tag} The created Tag instance
    */
   static createFromObject(object) {
-    return new Tag(object.position, object.text);
+    return new Tag(
+      object.position,
+      object.text,
+      object.buttonAttributes,
+      object.popupAttributes
+    );
   }
 }
 

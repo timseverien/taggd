@@ -16,13 +16,19 @@ var TypeErrorMessage = require('./util/type-error-message');
 
 var Tag = function () {
   function Tag(position, text) {
+    var buttonAttributes = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+    var popupAttributes = arguments.length <= 3 || arguments[3] === undefined ? {} : arguments[3];
+
     _classCallCheck(this, Tag);
 
     this.buttonElement = document.createElement('button');
     this.popupElement = document.createElement('span');
 
+    this.setButtonAttributes(buttonAttributes);
+    this.setPopupAttributes(popupAttributes);
     this.setPosition(position.x, position.y);
     this.setText(text);
+
     this.hide();
   }
 
@@ -98,13 +104,74 @@ var Tag = function () {
     }
 
     /**
+     * Set the tag button’s attributes
+     * @param {Object} atttributes - The attributes to set
+     * @return {Taggd.Tag} Current tag
+     */
+
+  }, {
+    key: 'setButtonAttributes',
+    value: function setButtonAttributes() {
+      var attributes = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+      Tag.setElementAttributes(this.buttonElement, attributes);
+      return this;
+    }
+
+    /**
+     * Set the tag popup’s attributes
+     * @param {Object} atttributes - The attributes to set
+     * @return {Taggd.Tag} Current tag
+     */
+
+  }, {
+    key: 'setPopupAttributes',
+    value: function setPopupAttributes() {
+      var attributes = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+      Tag.setElementAttributes(this.popupElement, attributes);
+      return this;
+    }
+
+    /**
+     * Set element attributes
+     * @param {DomNode} element - The element the attributes should be set to
+     * @param {Object} attributes = {} - A map of attributes to set
+     * @return {DomNode} The original element
+     */
+
+  }], [{
+    key: 'setElementAttributes',
+    value: function setElementAttributes(element) {
+      var attributes = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+      if (!ObjectIs.ofType(attributes, 'object')) {
+        throw new Error(TypeErrorMessage.getObjectMessage(attributes));
+      }
+
+      for (var attribute in attributes) {
+        var value = attributes[attribute];
+
+        if (attribute === 'class' && element.getAttribute(attribute)) {
+          var classValue = element.getAttribute(attribute) + (' ' + value);
+          element.setAttribute(attribute, classValue);
+          continue;
+        }
+
+        element.setAttribute(attribute, value);
+      }
+
+      return element;
+    }
+
+    /**
      * Get the position style
      * @param {Number} x - The tag’s x-coordinate
      * @param {Number} y - The tag’s y-coordinate
      * @return {Object} The style
      */
 
-  }], [{
+  }, {
     key: 'getPositionStyle',
     value: function getPositionStyle(x, y) {
       return {
@@ -122,7 +189,7 @@ var Tag = function () {
   }, {
     key: 'createFromObject',
     value: function createFromObject(object) {
-      return new Tag(object.position, object.text);
+      return new Tag(object.position, object.text, object.buttonAttributes, object.popupAttributes);
     }
   }]);
 
