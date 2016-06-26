@@ -1,4 +1,4 @@
-describe('Initialization', function () {
+describe('Tag generation', function () {
   beforeEach(createImage);
   afterEach(destroyBody);
 
