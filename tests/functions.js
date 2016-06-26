@@ -29,3 +29,16 @@ function getImageElement() {
   var images = document.getElementsByTagName('img');
   return images[0];
 }
+
+/**
+ * Trigger an event on element
+ * @param {DomNode} element - The element to trigger the event on
+ * @param {String} eventName - The event name
+ */
+function triggerEvent(element, eventName) {
+  element.dispatchEvent(new Event(eventName, {
+    'bubbles': true,
+    'cancelable': true,
+    'view': window,
+  }));
+}

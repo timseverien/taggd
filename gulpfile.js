@@ -17,6 +17,7 @@ const DIR_SOURCE = 'src';
 
 const OPTIONS_BABEL = {
   presets: ['es2015'],
+  plugins: ['transform-object-assign'],
 };
 
 const paths = {

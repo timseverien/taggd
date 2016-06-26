@@ -8,6 +8,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var ObjectIs = require('./util/object-is');
 var TypeErrorMessage = require('./util/type-error-message');
 
+/**
+ * @todo:
+ * - Set attributes
+ * - Set custom data (for use in user-defined event handlers)
+ */
+
 var Tag = function () {
   function Tag(position, text) {
     _classCallCheck(this, Tag);
@@ -17,6 +23,7 @@ var Tag = function () {
 
     this.setPosition(position.x, position.y);
     this.setText(text);
+    this.hide();
   }
 
   /**
@@ -28,7 +35,7 @@ var Tag = function () {
   _createClass(Tag, [{
     key: 'show',
     value: function show() {
-      this.popupElement.style.display = 'none';
+      this.popupElement.style.display = '';
       return this;
     }
 
@@ -40,7 +47,7 @@ var Tag = function () {
   }, {
     key: 'hide',
     value: function hide() {
-      this.popupElement.style.display = '';
+      this.popupElement.style.display = 'none';
       return this;
     }
 
@@ -127,6 +134,8 @@ module.exports = Tag;
 },{"./util/object-is":3,"./util/type-error-message":4}],2:[function(require,module,exports){
 'use strict';
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -138,7 +147,12 @@ var TypeErrorMessage = require('./util/type-error-message');
 /**
  * @todo:
  * - Handle options
- * - Create event handlers for editor mode
+ *   - When a tag’s info window should be shown
+ * - Trigger events
+ * - Editor mode
+ * 	 - Enable/disable mode
+ * 	 - Save/delete button configuration
+ * 	 - Trigger events upon creation/deletion
  */
 
 var Taggd = function () {
@@ -168,7 +182,7 @@ var Taggd = function () {
         throw new TypeError(TypeErrorMessage.getObjectMessage(tag));
       }
 
-      this.options = options;
+      this.options = _extends({}, Taggd.DEFAULT_OPTIONS, options);
     }
 
     /**
@@ -183,6 +197,14 @@ var Taggd = function () {
       if (!ObjectIs.ofInstance(tag, Tag)) {
         throw new TypeError(TypeErrorMessage.getTagMessage(tag));
       }
+
+      // Add events to show/hide tags
+      tag.buttonElement.addEventListener(this.options.show, function () {
+        return tag.show();
+      });
+      tag.buttonElement.addEventListener(this.options.hide, function () {
+        return tag.hide();
+      });
 
       this.tags.push(tag);
       this.wrapper.appendChild(tag.buttonElement);
@@ -334,6 +356,17 @@ var Taggd = function () {
 
   return Taggd;
 }();
+
+/**
+ * Default options for all Taggd instances
+ * @type {Object}
+ */
+
+
+Taggd.DEFAULT_OPTIONS = {
+  show: 'mouseenter',
+  hide: 'mouseleave'
+};
 
 module.exports = Taggd;
 module.exports.Tag = Tag;

@@ -32,7 +32,7 @@ class Taggd {
       throw new TypeError(TypeErrorMessage.getObjectMessage(tag));
     }
 
-    this.options = options;
+    this.options = Object.assign({}, Taggd.DEFAULT_OPTIONS, options);
   }
 
   /**
@@ -44,6 +44,10 @@ class Taggd {
     if (!ObjectIs.ofInstance(tag, Tag)) {
       throw new TypeError(TypeErrorMessage.getTagMessage(tag));
     }
+
+    // Add events to show/hide tags
+    tag.buttonElement.addEventListener(this.options.show, () => tag.show());
+    tag.buttonElement.addEventListener(this.options.hide, () => tag.hide());
 
     this.tags.push(tag);
     this.wrapper.appendChild(tag.buttonElement);
@@ -162,6 +166,15 @@ class Taggd {
 
   }
 }
+
+/**
+ * Default options for all Taggd instances
+ * @type {Object}
+ */
+Taggd.DEFAULT_OPTIONS = {
+  show: 'mouseenter',
+  hide: 'mouseleave',
+};
 
 module.exports = Taggd;
 module.exports.Tag = Tag;

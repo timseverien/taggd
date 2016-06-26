@@ -13,6 +13,7 @@ class Tag {
 
     this.setPosition(position.x, position.y);
     this.setText(text);
+    this.hide();
   }
 
   /**
@@ -20,7 +21,7 @@ class Tag {
    * @return {Taggd.Tag} Current Tag
    */
   show() {
-    this.popupElement.style.display = 'none';
+    this.popupElement.style.display = '';
     return this;
   }
 
@@ -29,7 +30,7 @@ class Tag {
    * @return {Taggd.Tag} Current Tag
    */
   hide() {
-    this.popupElement.style.display = '';
+    this.popupElement.style.display = 'none';
     return this;
   }
 
