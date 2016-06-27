@@ -2,6 +2,20 @@ describe('Tag generation', function () {
   beforeEach(createImage);
   afterEach(destroyBody);
 
+  it('should add elements to the DOM', function () {
+    var image = getImageElement();
+    var tags = [
+      new Taggd.Tag({
+        x: Math.random(),
+        y: Math.random(),
+      }, 'Hello World')
+    ];
+
+    var taggd = new Taggd(image, {}, tags);
+    expect(tags[0].buttonElement.parentElement).toEqual(taggd.wrapper);
+    expect(tags[0].popupElement.parentElement).toEqual(taggd.wrapper);
+  });
+
   it('should set correct text for popup element', function () {
     var image = getImageElement();
     var tags = [
