@@ -1,10 +1,53 @@
+const dispatchEvent = require('dispatch-event');
+
 const Tag = require('./Tag');
 const ObjectIs = require('./util/object-is');
 const TypeErrorMessage = require('./util/type-error-message');
 
+Number.isInteger = Number.isInteger || require('number-is-integer');
+
+/**
+ * Create a new event for a specific tag
+ * @param {String} eventName - The event name
+ * @param {Taggd} taggd - The Taggd instance
+ * @param {Tag} [tag] - The Tag instance
+ * @return {CustomEvent} The created event
+ */
+function createTaggdEvent(eventName, taggd, tag = undefined) {
+  const detail = { taggd };
+
+  if (tag) {
+    detail['tag'] = tag;
+  }
+
+  return new CustomEvent(eventName, {
+    detail,
+  });
+}
+
+/**
+ * Create a new event for a specific tag
+ * @param {String} eventName - The event name
+ * @param {Taggd} taggd - The Taggd instance
+ * @param {Tag} [tag] - The Tag instance
+ * @return {CustomEvent} The created event
+ */
+function createCancelableTaggdEvent(eventName, taggd, tag = undefined) {
+  const detail = { taggd };
+
+  if (tag) {
+    detail['tag'] = tag;
+  }
+
+  return new CustomEvent(eventName, {
+    cancelable: true,
+    detail,
+  });
+}
+
 /**
  * @todo:
- * - Trigger events
+ * - Write tests for event.preventDefault()
  * - Editor mode
  * 	 - Enable/disable mode
  * 	 - Save/delete button configuration
@@ -20,10 +63,14 @@ class Taggd {
     image.parentElement.removeChild(image);
     this.wrapper.appendChild(image);
 
+    this.image = image;
     this.tags = [];
 
     this.setOptions(options);
     this.setTags(data);
+
+    const initEvent = createTaggdEvent('taggd.init', this);
+    dispatchEvent(this.image, initEvent);
   }
 
   setOptions(options) {
@@ -44,13 +91,21 @@ class Taggd {
       throw new TypeError(TypeErrorMessage.getTagMessage(tag));
     }
 
-    // Add events to show/hide tags
-    tag.buttonElement.addEventListener(this.options.show, () => tag.show());
-    tag.buttonElement.addEventListener(this.options.hide, () => tag.hide());
+    const addEvent = createCancelableTaggdEvent('taggd.tag.add', this, tag);
+    const isCanceled = !dispatchEvent(this.image, addEvent);
 
-    this.tags.push(tag);
-    this.wrapper.appendChild(tag.buttonElement);
-    this.wrapper.appendChild(tag.popupElement);
+    if (!isCanceled) {
+      // Add events to show/hide tags
+      tag.buttonElement.addEventListener(this.options.show, () => tag.show());
+      tag.buttonElement.addEventListener(this.options.hide, () => tag.hide());
+
+      this.tags.push(tag);
+      this.wrapper.appendChild(tag.buttonElement);
+      this.wrapper.appendChild(tag.popupElement);
+
+      const addedEvent = createTaggdEvent('taggd.tag.added', this, tag);
+      dispatchEvent(this.image, addedEvent);
+    }
 
     return this;
   }
@@ -61,7 +116,7 @@ class Taggd {
    * @return {Taggd.Tag} The tag to get
    */
   getTag(index) {
-    if (Number.isInteger(index)) {
+    if (!Number.isInteger(index)) {
       throw new TypeError(TypeErrorMessage.getIntegerMessage(index));
     }
 
@@ -75,13 +130,26 @@ class Taggd {
    * @return {Taggd} Current Taggd instance
    */
   deleteTag(index) {
-    if (Number.isInteger(index)) {
+    if (!Number.isInteger(index)) {
       throw new TypeError(TypeErrorMessage.getIntegerMessage(index));
     }
 
-    const tag = this.tags.splice(index, 1);
-    this.wrapper.removeChild(tag.buttonElement);
-    this.wrapper.removeChild(tag.popupElement);
+    if (!this.tags[index]) {
+      throw new Error(`Tag at index ${index} does not exist.`);
+    }
+
+    const tag = this.tags[index];
+    const deleteEvent = createCancelableTaggdEvent('taggd.tag.delete', this, tag);
+    const isCanceled = !dispatchEvent(this.image, deleteEvent);
+
+    if (!isCanceled) {
+      this.wrapper.removeChild(tag.buttonElement);
+      this.wrapper.removeChild(tag.popupElement);
+      this.tags.splice(tag, 1);
+
+      const deletedEvent = createTaggdEvent('taggd.tag.deleted', this, tag);
+      dispatchEvent(this.image, deletedEvent);
+    }
 
     return this;
   }
@@ -146,7 +214,12 @@ class Taggd {
    * @return {Taggd} Current Taggd instance
    */
   destroy() {
-    this.deleteTags();
+    const destroyEvent = createTaggdEvent('taggd.destroy', this);
+    const isCanceled = !dispatchEvent(this.image, destroyEvent);
+
+    if (!isCanceled) {
+      this.deleteTags();
+    }
   }
 
   /**
@@ -154,7 +227,12 @@ class Taggd {
    * @return {Taggd} Current Taggd instance
    */
   enableEditorMode() {
+    const enableEditorEvent = createTaggdEvent('taggd.editor.enable', this);
+    const isCanceled = !dispatchEvent(this.image, enableEditorEvent);
 
+    if (!isCanceled) {
+      // TODO: Enable editor mode
+    }
   }
 
   /**
@@ -162,7 +240,12 @@ class Taggd {
    * @return {Taggd} Current Taggd instance
    */
   disableEditorMode() {
+    const disableEditorEvent = createTaggdEvent('taggd.editor.disable', this);
+    const isCanceled = !dispatchEvent(this.image, disableEditorEvent);
 
+    if (!isCanceled) {
+      // TODO: Enable editor mode
+    }
   }
 }
 

@@ -25,6 +25,7 @@
     "babelify": "^7.3.0",
     "browserify": "^13.0.1",
     "del": "^2.2.0",
+    "dispatch-event": "^1.0.0",
     "gulp": "github:gulpjs/gulp#4.0",
     "gulp-cssnano": "^2.1.2",
     "gulp-load-plugins": "^1.2.2",
@@ -35,6 +36,7 @@
     "karma": "^0.13.22",
     "karma-jasmine": "^1.0.2",
     "karma-phantomjs-launcher": "^1.0.0",
+    "number-is-integer": "^1.0.0",
     "phantomjs-prebuilt": "^2.1.7",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
