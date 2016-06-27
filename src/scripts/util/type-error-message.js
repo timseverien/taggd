@@ -37,7 +37,7 @@ var TypeErrorMessage = {
    * @return {String} The error message
    */
   getIntegerMessage: function (object) {
-    return this.getTypeErrorMessage(object, 'an intenger');
+    return this.getTypeErrorMessage(object, 'an integer');
   },
 
   /**
