@@ -1,5 +1,3 @@
-const dispatchEvent = require('dispatch-event');
-
 const ObjectIs = require('./util/object-is');
 const TypeErrorMessage = require('./util/type-error-message');
 
@@ -11,6 +9,7 @@ const TypeErrorMessage = require('./util/type-error-message');
  */
 function createTagEvent(eventName, tag) {
   return new CustomEvent(eventName, {
+    bubbles: true,
     detail: {
       tag,
     },
@@ -25,6 +24,7 @@ function createTagEvent(eventName, tag) {
  */
 function createCancelableTagEvent(eventName, tag) {
   return new CustomEvent(eventName, {
+    bubbles: true,
     cancelable: true,
     detail: {
       tag,
@@ -55,13 +55,13 @@ class Tag {
    */
   show() {
     const showEvent = createCancelableTagEvent('taggd.tag.show', this);
-    const isCanceled = !dispatchEvent(this.popupElement, showEvent);
+    const isCanceled = !this.popupElement.dispatchEvent(showEvent);
 
     if (!isCanceled) {
       this.popupElement.style.display = '';
 
       const shownEvent = createTagEvent('taggd.tag.shown', this);
-      dispatchEvent(this.popupElement, shownEvent);
+      this.popupElement.dispatchEvent(shownEvent);
     }
 
     return this;
@@ -73,13 +73,13 @@ class Tag {
    */
   hide() {
     const hideEvent = createCancelableTagEvent('taggd.tag.hide', this);
-    const isCanceled = !dispatchEvent(this.popupElement, hideEvent);
+    const isCanceled = !this.popupElement.dispatchEvent(hideEvent);
 
     if (!isCanceled) {
       this.popupElement.style.display = 'none';
 
       const hiddenEvent = createTagEvent('taggd.tag.hidden', this);
-      dispatchEvent(this.popupElement, hiddenEvent);
+      this.popupElement.dispatchEvent(hiddenEvent);
     }
 
     return this;
@@ -96,7 +96,7 @@ class Tag {
     }
 
     const changeEvent = createCancelableTagEvent('taggd.tag.change', this);
-    const isCanceled = !dispatchEvent(this.popupElement, changeEvent);
+    const isCanceled = !this.popupElement.dispatchEvent(changeEvent);
 
     if (!isCanceled) {
       if (ObjectIs.function(text)) {
@@ -106,7 +106,7 @@ class Tag {
       }
 
       const changedEvent = createTagEvent('taggd.tag.changed', this);
-      dispatchEvent(this.popupElement, changedEvent);
+      this.popupElement.dispatchEvent(changedEvent);
     }
 
     return this;
@@ -127,7 +127,7 @@ class Tag {
     }
 
     const changeEvent = createCancelableTagEvent('taggd.tag.change', this);
-    const isCanceled = !dispatchEvent(this.popupElement, changeEvent);
+    const isCanceled = !this.popupElement.dispatchEvent(changeEvent);
 
     if (!isCanceled) {
       const positionStyle = Tag.getPositionStyle(x, y);
@@ -135,7 +135,7 @@ class Tag {
       this.popupElement.style.top = positionStyle.top;
 
       const changedEvent = createTagEvent('taggd.tag.changed', this);
-      dispatchEvent(this.popupElement, changedEvent);
+      this.popupElement.dispatchEvent(changedEvent);
     }
 
     return this;
@@ -148,13 +148,13 @@ class Tag {
    */
   setButtonAttributes(attributes = {}) {
     const changeEvent = createCancelableTagEvent('taggd.tag.change', this);
-    const isCanceled = !dispatchEvent(this.buttonElement, changeEvent);
+    const isCanceled = !this.buttonElement.dispatchEvent(changeEvent);
 
     if (!isCanceled) {
       Tag.setElementAttributes(this.buttonElement, attributes);
 
       const changedEvent = createTagEvent('taggd.tag.changed', this);
-      dispatchEvent(this.buttonElement, changedEvent);
+      this.buttonElement.dispatchEvent(changedEvent);
     }
 
     return this;
@@ -167,13 +167,13 @@ class Tag {
    */
   setPopupAttributes(attributes = {}) {
     const changeEvent = createCancelableTagEvent('taggd.tag.change', this);
-    const isCanceled = !dispatchEvent(this.popupElement, changeEvent);
+    const isCanceled = !this.popupElement.dispatchEvent(changeEvent);
 
     if (!isCanceled) {
       Tag.setElementAttributes(this.popupElement, attributes);
 
       const changedEvent = createTagEvent('taggd.tag.changed', this);
-      dispatchEvent(this.popupElement, changedEvent);
+      this.popupElement.dispatchEvent(changedEvent);
     }
 
     return this;

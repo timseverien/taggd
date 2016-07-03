@@ -65,4 +65,29 @@ describe('Initialization', function () {
 
     taggd.deleteTag(0);
   });
+
+  it('should cancel events', function (done) {
+    var image = getImageElement();
+    var taggd = new Taggd(image);
+
+    image.addEventListener('taggd.tag.add', function (e) {
+      e.preventDefault();
+
+      expect(e.detail.taggd).toEqual(taggd);
+      expect(e.detail.taggd.getTags().length).toEqual(0);
+
+      setTimeout(function () {
+        done();
+      }, 1000);
+    });
+
+    image.addEventListener('taggd.tag.added', function (e) {
+      done.fail('taggd.tag.added was called, even though taggd.tag.add was cancelled');
+    });
+
+    taggd.addTag(new Taggd.Tag({
+      x: .5,
+      y: .5,
+    }, 'Hello World'));
+  });
 });
