@@ -32,7 +32,11 @@ const paths = {
   },
 };
 
-function buildScripts() {
+gulp.task('clean', () => {
+  return del(DIR_BUILD);
+});
+
+gulp.task('build:scripts', () => {
   return browserify()
     .transform(babelify, OPTIONS_BABEL)
     .require(paths.scripts.entry, { entry: true })
@@ -46,29 +50,20 @@ function buildScripts() {
     .pipe($.rename('taggd.min.js'))
     .pipe($.sourcemaps.write('.'))
     .pipe(gulp.dest(paths.scripts.dest));
-}
+});
 
-function buildStyles() {
+gulp.task('build:styles', () => {
   return gulp.src(paths.styles.src)
     .pipe($.sourcemaps.init())
     .pipe($.minifyCss())
     .pipe($.sourcemaps.write('.'))
     .pipe(gulp.dest(paths.styles.dest));
-}
-
-function clean() {
-  return del(DIR_BUILD);
-}
-
-const build = gulp.series(clean, gulp.parallel(buildScripts, buildStyles));
-
-gulp.task('default', build);
-gulp.task('build', build);
-gulp.task('build:scripts', buildScripts);
-gulp.task('build:styles', buildStyles);
-gulp.task('clean', clean);
-
-gulp.task('watch', build, () => {
-  gulp.watch(paths.scripts.src, buildScripts);
-  gulp.watch(paths.styles.src, buildStyles);
 });
+
+gulp.task('build', gulp.series('clean', gulp.parallel('build:scripts', 'build:styles')));
+gulp.task('default', gulp.series('build'));
+
+gulp.task('watch', gulp.series('build', () => {
+  gulp.watch(paths.scripts.src, 'build:scripts');
+  gulp.watch(paths.styles.src, 'build:styles');
+}));
