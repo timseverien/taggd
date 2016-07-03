@@ -27,39 +27,9 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var EventFactory = require('./util/event-factory');
 var ObjectIs = require('./util/object-is');
 var TypeErrorMessage = require('./util/type-error-message');
-
-/**
- * Create a new event for a specific tag
- * @param {String} eventName - The event name
- * @param {Tag} tag - The Tag instance
- * @return {CustomEvent} The created event
- */
-function createTagEvent(eventName, tag) {
-  return new CustomEvent(eventName, {
-    bubbles: true,
-    detail: {
-      tag: tag
-    }
-  });
-}
-
-/**
- * Create a new event for a specific tag
- * @param {String} eventName - The event name
- * @param {Tag} tag - The Tag instance
- * @return {CustomEvent} The created event
- */
-function createCancelableTagEvent(eventName, tag) {
-  return new CustomEvent(eventName, {
-    bubbles: true,
-    cancelable: true,
-    detail: {
-      tag: tag
-    }
-  });
-}
 
 /**
  * @todo:
@@ -93,13 +63,13 @@ var Tag = function () {
   _createClass(Tag, [{
     key: 'show',
     value: function show() {
-      var showEvent = createCancelableTagEvent('taggd.tag.show', this);
+      var showEvent = EventFactory.createCancelableTagEvent('taggd.tag.show', this);
       var isCanceled = !this.popupElement.dispatchEvent(showEvent);
 
       if (!isCanceled) {
         this.popupElement.style.display = '';
 
-        var shownEvent = createTagEvent('taggd.tag.shown', this);
+        var shownEvent = EventFactory.createTagEvent('taggd.tag.shown', this);
         this.popupElement.dispatchEvent(shownEvent);
       }
 
@@ -114,13 +84,13 @@ var Tag = function () {
   }, {
     key: 'hide',
     value: function hide() {
-      var hideEvent = createCancelableTagEvent('taggd.tag.hide', this);
+      var hideEvent = EventFactory.createCancelableTagEvent('taggd.tag.hide', this);
       var isCanceled = !this.popupElement.dispatchEvent(hideEvent);
 
       if (!isCanceled) {
         this.popupElement.style.display = 'none';
 
-        var hiddenEvent = createTagEvent('taggd.tag.hidden', this);
+        var hiddenEvent = EventFactory.createTagEvent('taggd.tag.hidden', this);
         this.popupElement.dispatchEvent(hiddenEvent);
       }
 
@@ -140,7 +110,7 @@ var Tag = function () {
         throw new Error(TypeErrorMessage.getMessage(type, 'a string or a function'));
       }
 
-      var changeEvent = createCancelableTagEvent('taggd.tag.change', this);
+      var changeEvent = EventFactory.createCancelableTagEvent('taggd.tag.change', this);
       var isCanceled = !this.popupElement.dispatchEvent(changeEvent);
 
       if (!isCanceled) {
@@ -150,7 +120,7 @@ var Tag = function () {
           this.popupElement.innerHTML = text;
         }
 
-        var changedEvent = createTagEvent('taggd.tag.changed', this);
+        var changedEvent = EventFactory.createTagEvent('taggd.tag.changed', this);
         this.popupElement.dispatchEvent(changedEvent);
       }
 
@@ -174,7 +144,7 @@ var Tag = function () {
         throw new Error(TypeErrorMessage.getIntegerMessage(y));
       }
 
-      var changeEvent = createCancelableTagEvent('taggd.tag.change', this);
+      var changeEvent = EventFactory.createCancelableTagEvent('taggd.tag.change', this);
       var isCanceled = !this.popupElement.dispatchEvent(changeEvent);
 
       if (!isCanceled) {
@@ -182,7 +152,7 @@ var Tag = function () {
         this.popupElement.style.left = positionStyle.left;
         this.popupElement.style.top = positionStyle.top;
 
-        var changedEvent = createTagEvent('taggd.tag.changed', this);
+        var changedEvent = EventFactory.createTagEvent('taggd.tag.changed', this);
         this.popupElement.dispatchEvent(changedEvent);
       }
 
@@ -200,13 +170,13 @@ var Tag = function () {
     value: function setButtonAttributes() {
       var attributes = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-      var changeEvent = createCancelableTagEvent('taggd.tag.change', this);
+      var changeEvent = EventFactory.createCancelableTagEvent('taggd.tag.change', this);
       var isCanceled = !this.buttonElement.dispatchEvent(changeEvent);
 
       if (!isCanceled) {
         Tag.setElementAttributes(this.buttonElement, attributes);
 
-        var changedEvent = createTagEvent('taggd.tag.changed', this);
+        var changedEvent = EventFactory.createTagEvent('taggd.tag.changed', this);
         this.buttonElement.dispatchEvent(changedEvent);
       }
 
@@ -224,13 +194,13 @@ var Tag = function () {
     value: function setPopupAttributes() {
       var attributes = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-      var changeEvent = createCancelableTagEvent('taggd.tag.change', this);
+      var changeEvent = EventFactory.createCancelableTagEvent('taggd.tag.change', this);
       var isCanceled = !this.popupElement.dispatchEvent(changeEvent);
 
       if (!isCanceled) {
         Tag.setElementAttributes(this.popupElement, attributes);
 
-        var changedEvent = createTagEvent('taggd.tag.changed', this);
+        var changedEvent = EventFactory.createTagEvent('taggd.tag.changed', this);
         this.popupElement.dispatchEvent(changedEvent);
       }
 
@@ -302,7 +272,7 @@ var Tag = function () {
 
 module.exports = Tag;
 
-},{"./util/object-is":6,"./util/type-error-message":7}],5:[function(require,module,exports){
+},{"./util/event-factory":6,"./util/object-is":7,"./util/type-error-message":8}],5:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -312,55 +282,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Tag = require('./Tag');
+var EventFactory = require('./util/event-factory');
 var ObjectIs = require('./util/object-is');
 var TypeErrorMessage = require('./util/type-error-message');
 
 Number.isInteger = Number.isInteger || require('number-is-integer');
-
-/**
- * Create a new event for a specific tag
- * @param {String} eventName - The event name
- * @param {Taggd} taggd - The Taggd instance
- * @param {Tag} [tag] - The Tag instance
- * @return {CustomEvent} The created event
- */
-function createTaggdEvent(eventName, taggd) {
-  var tag = arguments.length <= 2 || arguments[2] === undefined ? undefined : arguments[2];
-
-  var detail = { taggd: taggd };
-
-  if (tag) {
-    detail['tag'] = tag;
-  }
-
-  return new CustomEvent(eventName, {
-    bubbles: true,
-    detail: detail
-  });
-}
-
-/**
- * Create a new event for a specific tag
- * @param {String} eventName - The event name
- * @param {Taggd} taggd - The Taggd instance
- * @param {Tag} [tag] - The Tag instance
- * @return {CustomEvent} The created event
- */
-function createCancelableTaggdEvent(eventName, taggd) {
-  var tag = arguments.length <= 2 || arguments[2] === undefined ? undefined : arguments[2];
-
-  var detail = { taggd: taggd };
-
-  if (tag) {
-    detail['tag'] = tag;
-  }
-
-  return new CustomEvent(eventName, {
-    bubbles: true,
-    cancelable: true,
-    detail: detail
-  });
-}
 
 /**
  * @todo:
@@ -391,7 +317,7 @@ var Taggd = function () {
     this.setOptions(options);
     this.setTags(data);
 
-    var initEvent = createTaggdEvent('taggd.init', this);
+    var initEvent = EventFactory.createTaggdEvent('taggd.init', this);
     this.image.dispatchEvent(initEvent);
   }
 
@@ -418,7 +344,7 @@ var Taggd = function () {
         throw new TypeError(TypeErrorMessage.getTagMessage(tag));
       }
 
-      var addEvent = createCancelableTaggdEvent('taggd.tag.add', this, tag);
+      var addEvent = EventFactory.createCancelableTaggdEvent('taggd.tag.add', this, tag);
       var isCanceled = !this.image.dispatchEvent(addEvent);
 
       if (!isCanceled) {
@@ -434,7 +360,7 @@ var Taggd = function () {
         this.wrapper.appendChild(tag.buttonElement);
         this.wrapper.appendChild(tag.popupElement);
 
-        var addedEvent = createTaggdEvent('taggd.tag.added', this, tag);
+        var addedEvent = EventFactory.createTaggdEvent('taggd.tag.added', this, tag);
         this.image.dispatchEvent(addedEvent);
       }
 
@@ -476,7 +402,7 @@ var Taggd = function () {
       }
 
       var tag = this.tags[index];
-      var deleteEvent = createCancelableTaggdEvent('taggd.tag.delete', this, tag);
+      var deleteEvent = EventFactory.createCancelableTaggdEvent('taggd.tag.delete', this, tag);
       var isCanceled = !this.image.dispatchEvent(deleteEvent);
 
       if (!isCanceled) {
@@ -484,7 +410,7 @@ var Taggd = function () {
         this.wrapper.removeChild(tag.popupElement);
         this.tags.splice(tag, 1);
 
-        var deletedEvent = createTaggdEvent('taggd.tag.deleted', this, tag);
+        var deletedEvent = EventFactory.createTaggdEvent('taggd.tag.deleted', this, tag);
         this.image.dispatchEvent(deletedEvent);
       }
 
@@ -573,7 +499,7 @@ var Taggd = function () {
   }, {
     key: 'destroy',
     value: function destroy() {
-      var destroyEvent = createTaggdEvent('taggd.destroy', this);
+      var destroyEvent = EventFactory.createTaggdEvent('taggd.destroy', this);
       var isCanceled = !this.image.dispatchEvent(destroyEvent);
 
       if (!isCanceled) {
@@ -589,7 +515,7 @@ var Taggd = function () {
   }, {
     key: 'enableEditorMode',
     value: function enableEditorMode() {
-      var enableEditorEvent = createTaggdEvent('taggd.editor.enable', this);
+      var enableEditorEvent = EventFactory.createTaggdEvent('taggd.editor.enable', this);
       var isCanceled = !this.image.dispatchEvent(enableEditorEvent);
 
       if (!isCanceled) {
@@ -605,7 +531,7 @@ var Taggd = function () {
   }, {
     key: 'disableEditorMode',
     value: function disableEditorMode() {
-      var disableEditorEvent = createTaggdEvent('taggd.editor.disable', this);
+      var disableEditorEvent = EventFactory.createTaggdEvent('taggd.editor.disable', this);
       var isCanceled = !this.image.dispatchEvent(disableEditorEvent);
 
       if (!isCanceled) {
@@ -633,7 +559,113 @@ module.exports.Tag = Tag;
 
 window.Taggd = module.exports;
 
-},{"./Tag":4,"./util/object-is":6,"./util/type-error-message":7,"number-is-integer":2}],6:[function(require,module,exports){
+},{"./Tag":4,"./util/event-factory":6,"./util/object-is":7,"./util/type-error-message":8,"number-is-integer":2}],6:[function(require,module,exports){
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var EventFactory = function () {
+  function EventFactory() {
+    _classCallCheck(this, EventFactory);
+  }
+
+  _createClass(EventFactory, null, [{
+    key: 'createTaggdEvent',
+
+    /**
+     * Create a new event for a specific tag
+     * @param {String} eventName - The event name
+     * @param {Taggd} taggd - The Taggd instance
+     * @param {Tag} [tag] - The Tag instance
+     * @return {CustomEvent} The created event
+     */
+    value: function createTaggdEvent(eventName, taggd) {
+      var tag = arguments.length <= 2 || arguments[2] === undefined ? undefined : arguments[2];
+
+      var detail = { taggd: taggd };
+
+      if (tag) {
+        detail['tag'] = tag;
+      }
+
+      return new CustomEvent(eventName, {
+        bubbles: true,
+        detail: detail
+      });
+    }
+
+    /**
+     * Create a new event for a specific tag
+     * @param {String} eventName - The event name
+     * @param {Taggd} taggd - The Taggd instance
+     * @param {Tag} [tag] - The Tag instance
+     * @return {CustomEvent} The created event
+     */
+
+  }, {
+    key: 'createCancelableTaggdEvent',
+    value: function createCancelableTaggdEvent(eventName, taggd) {
+      var tag = arguments.length <= 2 || arguments[2] === undefined ? undefined : arguments[2];
+
+      var detail = { taggd: taggd };
+
+      if (tag) {
+        detail['tag'] = tag;
+      }
+
+      return new CustomEvent(eventName, {
+        bubbles: true,
+        cancelable: true,
+        detail: detail
+      });
+    }
+
+    /**
+     * Create a new event for a specific tag
+     * @param {String} eventName - The event name
+     * @param {Tag} tag - The Tag instance
+     * @return {CustomEvent} The created event
+     */
+
+  }, {
+    key: 'createTagEvent',
+    value: function createTagEvent(eventName, tag) {
+      return new CustomEvent(eventName, {
+        bubbles: true,
+        detail: {
+          tag: tag
+        }
+      });
+    }
+
+    /**
+     * Create a new event for a specific tag
+     * @param {String} eventName - The event name
+     * @param {Tag} tag - The Tag instance
+     * @return {CustomEvent} The created event
+     */
+
+  }, {
+    key: 'createCancelableTagEvent',
+    value: function createCancelableTagEvent(eventName, tag) {
+      return new CustomEvent(eventName, {
+        bubbles: true,
+        cancelable: true,
+        detail: {
+          tag: tag
+        }
+      });
+    }
+  }]);
+
+  return EventFactory;
+}();
+
+module.exports = EventFactory;
+
+},{}],7:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
@@ -678,7 +710,7 @@ module.exports = {
   }
 };
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 'use strict';
 
 var TypeErrorMessage = {

@@ -1,36 +1,6 @@
+const EventFactory = require('./util/event-factory');
 const ObjectIs = require('./util/object-is');
 const TypeErrorMessage = require('./util/type-error-message');
-
-/**
- * Create a new event for a specific tag
- * @param {String} eventName - The event name
- * @param {Tag} tag - The Tag instance
- * @return {CustomEvent} The created event
- */
-function createTagEvent(eventName, tag) {
-  return new CustomEvent(eventName, {
-    bubbles: true,
-    detail: {
-      tag,
-    },
-  });
-}
-
-/**
- * Create a new event for a specific tag
- * @param {String} eventName - The event name
- * @param {Tag} tag - The Tag instance
- * @return {CustomEvent} The created event
- */
-function createCancelableTagEvent(eventName, tag) {
-  return new CustomEvent(eventName, {
-    bubbles: true,
-    cancelable: true,
-    detail: {
-      tag,
-    },
-  });
-}
 
 /**
  * @todo:
@@ -54,13 +24,13 @@ class Tag {
    * @return {Taggd.Tag} Current Tag
    */
   show() {
-    const showEvent = createCancelableTagEvent('taggd.tag.show', this);
+    const showEvent = EventFactory.createCancelableTagEvent('taggd.tag.show', this);
     const isCanceled = !this.popupElement.dispatchEvent(showEvent);
 
     if (!isCanceled) {
       this.popupElement.style.display = '';
 
-      const shownEvent = createTagEvent('taggd.tag.shown', this);
+      const shownEvent = EventFactory.createTagEvent('taggd.tag.shown', this);
       this.popupElement.dispatchEvent(shownEvent);
     }
 
@@ -72,13 +42,13 @@ class Tag {
    * @return {Taggd.Tag} Current Tag
    */
   hide() {
-    const hideEvent = createCancelableTagEvent('taggd.tag.hide', this);
+    const hideEvent = EventFactory.createCancelableTagEvent('taggd.tag.hide', this);
     const isCanceled = !this.popupElement.dispatchEvent(hideEvent);
 
     if (!isCanceled) {
       this.popupElement.style.display = 'none';
 
-      const hiddenEvent = createTagEvent('taggd.tag.hidden', this);
+      const hiddenEvent = EventFactory.createTagEvent('taggd.tag.hidden', this);
       this.popupElement.dispatchEvent(hiddenEvent);
     }
 
@@ -95,7 +65,7 @@ class Tag {
       throw new Error(TypeErrorMessage.getMessage(type, 'a string or a function'));
     }
 
-    const changeEvent = createCancelableTagEvent('taggd.tag.change', this);
+    const changeEvent = EventFactory.createCancelableTagEvent('taggd.tag.change', this);
     const isCanceled = !this.popupElement.dispatchEvent(changeEvent);
 
     if (!isCanceled) {
@@ -105,7 +75,7 @@ class Tag {
         this.popupElement.innerHTML = text;
       }
 
-      const changedEvent = createTagEvent('taggd.tag.changed', this);
+      const changedEvent = EventFactory.createTagEvent('taggd.tag.changed', this);
       this.popupElement.dispatchEvent(changedEvent);
     }
 
@@ -126,7 +96,7 @@ class Tag {
       throw new Error(TypeErrorMessage.getIntegerMessage(y));
     }
 
-    const changeEvent = createCancelableTagEvent('taggd.tag.change', this);
+    const changeEvent = EventFactory.createCancelableTagEvent('taggd.tag.change', this);
     const isCanceled = !this.popupElement.dispatchEvent(changeEvent);
 
     if (!isCanceled) {
@@ -134,7 +104,7 @@ class Tag {
       this.popupElement.style.left = positionStyle.left;
       this.popupElement.style.top = positionStyle.top;
 
-      const changedEvent = createTagEvent('taggd.tag.changed', this);
+      const changedEvent = EventFactory.createTagEvent('taggd.tag.changed', this);
       this.popupElement.dispatchEvent(changedEvent);
     }
 
@@ -147,13 +117,13 @@ class Tag {
    * @return {Taggd.Tag} Current tag
    */
   setButtonAttributes(attributes = {}) {
-    const changeEvent = createCancelableTagEvent('taggd.tag.change', this);
+    const changeEvent = EventFactory.createCancelableTagEvent('taggd.tag.change', this);
     const isCanceled = !this.buttonElement.dispatchEvent(changeEvent);
 
     if (!isCanceled) {
       Tag.setElementAttributes(this.buttonElement, attributes);
 
-      const changedEvent = createTagEvent('taggd.tag.changed', this);
+      const changedEvent = EventFactory.createTagEvent('taggd.tag.changed', this);
       this.buttonElement.dispatchEvent(changedEvent);
     }
 
@@ -166,13 +136,13 @@ class Tag {
    * @return {Taggd.Tag} Current tag
    */
   setPopupAttributes(attributes = {}) {
-    const changeEvent = createCancelableTagEvent('taggd.tag.change', this);
+    const changeEvent = EventFactory.createCancelableTagEvent('taggd.tag.change', this);
     const isCanceled = !this.popupElement.dispatchEvent(changeEvent);
 
     if (!isCanceled) {
       Tag.setElementAttributes(this.popupElement, attributes);
 
-      const changedEvent = createTagEvent('taggd.tag.changed', this);
+      const changedEvent = EventFactory.createTagEvent('taggd.tag.changed', this);
       this.popupElement.dispatchEvent(changedEvent);
     }
 
