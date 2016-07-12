@@ -27,7 +27,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var EventFactory = require('./util/event-factory');
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var EventEmitter = require('./util/event-emitter');
 var ObjectIs = require('./util/object-is');
 var TypeErrorMessage = require('./util/type-error-message');
 
@@ -36,22 +40,41 @@ var TypeErrorMessage = require('./util/type-error-message');
  * - Set custom data (for use in user-defined event handlers)
  */
 
-var Tag = function () {
+var Tag = function (_EventEmitter) {
+  _inherits(Tag, _EventEmitter);
+
   function Tag(position, text) {
     var buttonAttributes = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
     var popupAttributes = arguments.length <= 3 || arguments[3] === undefined ? {} : arguments[3];
 
     _classCallCheck(this, Tag);
 
-    this.buttonElement = document.createElement('button');
-    this.popupElement = document.createElement('span');
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Tag).call(this));
 
-    this.setButtonAttributes(buttonAttributes);
-    this.setPopupAttributes(popupAttributes);
-    this.setPosition(position.x, position.y);
-    this.setText(text);
+    _this.buttonElement = document.createElement('button');
+    _this.popupElement = document.createElement('span');
 
-    this.hide();
+    _this.isControlsEnabled = false;
+    _this.inputLabelElement = undefined;
+    _this.buttonSaveElement = undefined;
+    _this.buttonDeleteElement = undefined;
+
+    _this.buttonSaveElementClickHandler = function () {
+      return _this.setText(_this.inputLabelElement.value);
+    };
+    _this.buttonDeleteElementClickHandler = function () {
+      _this.emit('taggd.tag.doDelete', _this);
+    };
+
+    _this.text = undefined;
+
+    _this.setButtonAttributes(buttonAttributes);
+    _this.setPopupAttributes(popupAttributes);
+    _this.setPosition(position.x, position.y);
+    _this.setText(text);
+
+    _this.hide();
+    return _this;
   }
 
   /**
@@ -63,14 +86,11 @@ var Tag = function () {
   _createClass(Tag, [{
     key: 'show',
     value: function show() {
-      var showEvent = EventFactory.createCancelableTagEvent('taggd.tag.show', this);
-      var isCanceled = !this.popupElement.dispatchEvent(showEvent);
+      var isCanceled = !this.emit('taggd.tag.show', this);
 
       if (!isCanceled) {
         this.popupElement.style.display = '';
-
-        var shownEvent = EventFactory.createTagEvent('taggd.tag.shown', this);
-        this.popupElement.dispatchEvent(shownEvent);
+        this.emit('taggd.tag.shown', this);
       }
 
       return this;
@@ -84,14 +104,11 @@ var Tag = function () {
   }, {
     key: 'hide',
     value: function hide() {
-      var hideEvent = EventFactory.createCancelableTagEvent('taggd.tag.hide', this);
-      var isCanceled = !this.popupElement.dispatchEvent(hideEvent);
+      var isCanceled = !this.emit('taggd.tag.hide', this);
 
       if (!isCanceled) {
         this.popupElement.style.display = 'none';
-
-        var hiddenEvent = EventFactory.createTagEvent('taggd.tag.hidden', this);
-        this.popupElement.dispatchEvent(hiddenEvent);
+        this.emit('taggd.tag.hidden', this);
       }
 
       return this;
@@ -110,18 +127,22 @@ var Tag = function () {
         throw new Error(TypeErrorMessage.getMessage(type, 'a string or a function'));
       }
 
-      var changeEvent = EventFactory.createCancelableTagEvent('taggd.tag.change', this);
-      var isCanceled = !this.popupElement.dispatchEvent(changeEvent);
+      var isCanceled = !this.emit('taggd.tag.change', this);
 
       if (!isCanceled) {
         if (ObjectIs.function(text)) {
-          this.popupElement.innerHTML = text(this);
+          this.text = text(this);
         } else {
-          this.popupElement.innerHTML = text;
+          this.text = text;
         }
 
-        var changedEvent = EventFactory.createTagEvent('taggd.tag.changed', this);
-        this.popupElement.dispatchEvent(changedEvent);
+        if (!this.isControlsEnabled) {
+          this.popupElement.innerHTML = this.text;
+        } else {
+          this.inputLabelElement.value = this.text;
+        }
+
+        this.emit('taggd.tag.changed', this);
       }
 
       return this;
@@ -144,16 +165,14 @@ var Tag = function () {
         throw new Error(TypeErrorMessage.getIntegerMessage(y));
       }
 
-      var changeEvent = EventFactory.createCancelableTagEvent('taggd.tag.change', this);
-      var isCanceled = !this.popupElement.dispatchEvent(changeEvent);
+      var isCanceled = !this.emit('taggd.tag.change', this);
 
       if (!isCanceled) {
         var positionStyle = Tag.getPositionStyle(x, y);
         this.popupElement.style.left = positionStyle.left;
         this.popupElement.style.top = positionStyle.top;
 
-        var changedEvent = EventFactory.createTagEvent('taggd.tag.changed', this);
-        this.popupElement.dispatchEvent(changedEvent);
+        this.emit('taggd.tag.changed', this);
       }
 
       return this;
@@ -170,14 +189,11 @@ var Tag = function () {
     value: function setButtonAttributes() {
       var attributes = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-      var changeEvent = EventFactory.createCancelableTagEvent('taggd.tag.change', this);
-      var isCanceled = !this.buttonElement.dispatchEvent(changeEvent);
+      var isCanceled = !this.emit('taggd.tag.change', this);
 
       if (!isCanceled) {
         Tag.setElementAttributes(this.buttonElement, attributes);
-
-        var changedEvent = EventFactory.createTagEvent('taggd.tag.changed', this);
-        this.buttonElement.dispatchEvent(changedEvent);
+        this.emit('taggd.tag.changed', this);
       }
 
       return this;
@@ -194,17 +210,61 @@ var Tag = function () {
     value: function setPopupAttributes() {
       var attributes = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-      var changeEvent = EventFactory.createCancelableTagEvent('taggd.tag.change', this);
-      var isCanceled = !this.popupElement.dispatchEvent(changeEvent);
+      var isCanceled = !this.emit('taggd.tag.change', this);
 
       if (!isCanceled) {
         Tag.setElementAttributes(this.popupElement, attributes);
-
-        var changedEvent = EventFactory.createTagEvent('taggd.tag.changed', this);
-        this.popupElement.dispatchEvent(changedEvent);
+        this.emit('taggd.tag.changed', this);
       }
 
       return this;
+    }
+
+    /**
+     * Enables the tag controls
+     * @return {Taggd.Tag} Current tag
+     */
+
+  }, {
+    key: 'enableControls',
+    value: function enableControls() {
+      this.isControlsEnabled = true;
+
+      this.inputLabelElement = document.createElement('input');
+      this.buttonSaveElement = document.createElement('button');
+      this.buttonDeleteElement = document.createElement('button');
+
+      this.buttonSaveElement.innerHTML = Tag.LABEL_BUTTON_SAVE;
+      this.buttonDeleteElement.innerHTML = Tag.LABEL_BUTTON_DELETE;
+
+      this.buttonSaveElement.addEventListener('click', this.buttonSaveElementClickHandler);
+      this.buttonDeleteElement.addEventListener('click', this.buttonDeleteElementClickHandler);
+
+      this.popupElement.innerHTML = '';
+      this.popupElement.appendChild(this.inputLabelElement);
+      this.popupElement.appendChild(this.buttonSaveElement);
+      this.popupElement.appendChild(this.buttonDeleteElement);
+
+      // Set input content
+      this.setText(this.text);
+    }
+
+    /**
+     * Disabled the tag controls
+     * @return {Taggd.Tag} Current tag
+     */
+
+  }, {
+    key: 'disableControls',
+    value: function disableControls() {
+      this.isControlsEnabled = false;
+
+      this.inputLabelElement = undefined;
+      this.buttonSaveElement = undefined;
+      this.buttonDeleteElement = undefined;
+
+      // Remove elements and set set content
+      this.setText(this.text);
     }
 
     /**
@@ -268,11 +328,14 @@ var Tag = function () {
   }]);
 
   return Tag;
-}();
+}(EventEmitter);
+
+Tag.LABEL_BUTTON_SAVE = 'save';
+Tag.LABEL_BUTTON_DELETE = 'delete';
 
 module.exports = Tag;
 
-},{"./util/event-factory":6,"./util/object-is":7,"./util/type-error-message":8}],5:[function(require,module,exports){
+},{"./util/event-emitter":6,"./util/object-is":7,"./util/type-error-message":8}],5:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -281,8 +344,12 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 var Tag = require('./Tag');
-var EventFactory = require('./util/event-factory');
+var EventEmitter = require('./util/event-emitter');
 var ObjectIs = require('./util/object-is');
 var TypeErrorMessage = require('./util/type-error-message');
 
@@ -291,34 +358,35 @@ Number.isInteger = Number.isInteger || require('number-is-integer');
 /**
  * @todo:
  * - Editor mode
- * 	 - Enable/disable mode
  * 	 - Save/delete button configuration
  * 	 - Trigger events upon creation/deletion
  * - Set ARIA roles
  */
 
-var Taggd = function () {
+var Taggd = function (_EventEmitter) {
+  _inherits(Taggd, _EventEmitter);
+
   function Taggd(image) {
     var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
     var data = arguments.length <= 2 || arguments[2] === undefined ? [] : arguments[2];
 
     _classCallCheck(this, Taggd);
 
-    this.wrapper = document.createElement('div');
-    this.wrapper.classList.add('taggd');
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Taggd).call(this));
 
-    this.wrapper.insertBefore(image);
+    _this.wrapper = document.createElement('div');
+    _this.wrapper.classList.add('taggd');
+
+    _this.wrapper.insertBefore(image);
     image.parentElement.removeChild(image);
-    this.wrapper.appendChild(image);
+    _this.wrapper.appendChild(image);
 
-    this.image = image;
-    this.tags = [];
+    _this.image = image;
+    _this.tags = [];
 
-    this.setOptions(options);
-    this.setTags(data);
-
-    var initEvent = EventFactory.createTaggdEvent('taggd.init', this);
-    this.image.dispatchEvent(initEvent);
+    _this.setOptions(options);
+    _this.setTags(data);
+    return _this;
   }
 
   _createClass(Taggd, [{
@@ -340,12 +408,13 @@ var Taggd = function () {
   }, {
     key: 'addTag',
     value: function addTag(tag) {
+      var _this2 = this;
+
       if (!ObjectIs.ofInstance(tag, Tag)) {
         throw new TypeError(TypeErrorMessage.getTagMessage(tag));
       }
 
-      var addEvent = EventFactory.createCancelableTaggdEvent('taggd.tag.add', this, tag);
-      var isCanceled = !this.image.dispatchEvent(addEvent);
+      var isCanceled = !this.emit('taggd.tag.add', this, tag);
 
       if (!isCanceled) {
         // Add events to show/hide tags
@@ -356,12 +425,28 @@ var Taggd = function () {
           return tag.hide();
         });
 
+        // Route all tag events through taggd instance
+        tag.onAnything(function (eventName) {
+          for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+            args[_key - 1] = arguments[_key];
+          }
+
+          _this2.emit.apply(_this2, [eventName, _this2].concat(args));
+        });
+
+        tag.once('taggd.tag.doDelete', function (tag) {
+          var tagIndex = _this2.tags.indexOf(tag);
+
+          if (tagIndex >= 0) {
+            _this2.deleteTag(tagIndex);
+          }
+        });
+
         this.tags.push(tag);
         this.wrapper.appendChild(tag.buttonElement);
         this.wrapper.appendChild(tag.popupElement);
 
-        var addedEvent = EventFactory.createTaggdEvent('taggd.tag.added', this, tag);
-        this.image.dispatchEvent(addedEvent);
+        this.emit('taggd.tag.added', this, tag);
       }
 
       return this;
@@ -402,16 +487,14 @@ var Taggd = function () {
       }
 
       var tag = this.tags[index];
-      var deleteEvent = EventFactory.createCancelableTaggdEvent('taggd.tag.delete', this, tag);
-      var isCanceled = !this.image.dispatchEvent(deleteEvent);
+      var isCanceled = !this.emit('taggd.tag.delete', this, tag);
 
       if (!isCanceled) {
         this.wrapper.removeChild(tag.buttonElement);
         this.wrapper.removeChild(tag.popupElement);
         this.tags.splice(tag, 1);
 
-        var deletedEvent = EventFactory.createTaggdEvent('taggd.tag.deleted', this, tag);
-        this.image.dispatchEvent(deletedEvent);
+        this.emit('taggd.tag.deleted', this, tag);
       }
 
       return this;
@@ -439,14 +522,14 @@ var Taggd = function () {
   }, {
     key: 'addTags',
     value: function addTags(tags) {
-      var _this = this;
+      var _this3 = this;
 
       if (!Array.isArray(tags)) {
         throw new TypeError(TypeErrorMessage.getArrayMessage(tags, 'Taggd.Tag'));
       }
 
       tags.forEach(function (tag) {
-        return _this.addTag(tag);
+        return _this3.addTag(tag);
       });
       return this;
     }
@@ -499,8 +582,7 @@ var Taggd = function () {
   }, {
     key: 'destroy',
     value: function destroy() {
-      var destroyEvent = EventFactory.createTaggdEvent('taggd.destroy', this);
-      var isCanceled = !this.image.dispatchEvent(destroyEvent);
+      var isCanceled = !this.emit('taggd.destroy', this);
 
       if (!isCanceled) {
         this.deleteTags();
@@ -515,11 +597,12 @@ var Taggd = function () {
   }, {
     key: 'enableEditorMode',
     value: function enableEditorMode() {
-      var enableEditorEvent = EventFactory.createTaggdEvent('taggd.editor.enable', this);
-      var isCanceled = !this.image.dispatchEvent(enableEditorEvent);
+      var isCanceled = !this.emit('taggd.editor.enable', this);
 
       if (!isCanceled) {
-        // TODO: Enable editor mode
+        this.getTags().forEach(function (tag) {
+          return tag.enableControls();
+        });
       }
     }
 
@@ -531,17 +614,18 @@ var Taggd = function () {
   }, {
     key: 'disableEditorMode',
     value: function disableEditorMode() {
-      var disableEditorEvent = EventFactory.createTaggdEvent('taggd.editor.disable', this);
-      var isCanceled = !this.image.dispatchEvent(disableEditorEvent);
+      var isCanceled = !this.emit('taggd.editor.disable', this);
 
       if (!isCanceled) {
-        // TODO: Enable editor mode
+        this.getTags().forEach(function (tag) {
+          return tag.disableControls();
+        });
       }
     }
   }]);
 
   return Taggd;
-}();
+}(EventEmitter);
 
 /**
  * Default options for all Taggd instances
@@ -559,111 +643,88 @@ module.exports.Tag = Tag;
 
 window.Taggd = module.exports;
 
-},{"./Tag":4,"./util/event-factory":6,"./util/object-is":7,"./util/type-error-message":8,"number-is-integer":2}],6:[function(require,module,exports){
+},{"./Tag":4,"./util/event-emitter":6,"./util/object-is":7,"./util/type-error-message":8,"number-is-integer":2}],6:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var EventFactory = function () {
-  function EventFactory() {
-    _classCallCheck(this, EventFactory);
+var EVENT_WILDCARD = '*';
+
+var EventEmitter = function () {
+  function EventEmitter() {
+    _classCallCheck(this, EventEmitter);
+
+    this.handlers = {};
   }
 
-  _createClass(EventFactory, null, [{
-    key: 'createTaggdEvent',
-
-    /**
-     * Create a new event for a specific tag
-     * @param {String} eventName - The event name
-     * @param {Taggd} taggd - The Taggd instance
-     * @param {Tag} [tag] - The Tag instance
-     * @return {CustomEvent} The created event
-     */
-    value: function createTaggdEvent(eventName, taggd) {
-      var tag = arguments.length <= 2 || arguments[2] === undefined ? undefined : arguments[2];
-
-      var detail = { taggd: taggd };
-
-      if (tag) {
-        detail['tag'] = tag;
+  _createClass(EventEmitter, [{
+    key: 'onAnything',
+    value: function onAnything(handler) {
+      this.on(EVENT_WILDCARD, handler);
+    }
+  }, {
+    key: 'on',
+    value: function on(eventName, handler) {
+      if (!this.handlers[eventName]) {
+        this.handlers[eventName] = [];
       }
 
-      return new CustomEvent(eventName, {
-        bubbles: true,
-        detail: detail
+      this.handlers[eventName].push(handler);
+    }
+  }, {
+    key: 'off',
+    value: function off(eventName, handler) {
+      if (!this.handlers[eventName]) return;
+
+      var handlerIndex = this.handlers[eventName].indexOf(handler);
+
+      if (handlerIndex >= 0) {
+        this.handlers[eventName].splice(handlerIndex, 1);
+      }
+    }
+  }, {
+    key: 'once',
+    value: function once(eventName, handler) {
+      var _this = this;
+
+      this.on(eventName, function () {
+        handler.apply(undefined, arguments);
+        _this.off(eventName, handler);
       });
     }
-
-    /**
-     * Create a new event for a specific tag
-     * @param {String} eventName - The event name
-     * @param {Taggd} taggd - The Taggd instance
-     * @param {Tag} [tag] - The Tag instance
-     * @return {CustomEvent} The created event
-     */
-
   }, {
-    key: 'createCancelableTaggdEvent',
-    value: function createCancelableTaggdEvent(eventName, taggd) {
-      var tag = arguments.length <= 2 || arguments[2] === undefined ? undefined : arguments[2];
-
-      var detail = { taggd: taggd };
-
-      if (tag) {
-        detail['tag'] = tag;
+    key: 'emit',
+    value: function emit(eventName) {
+      for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+        args[_key - 1] = arguments[_key];
       }
 
-      return new CustomEvent(eventName, {
-        bubbles: true,
-        cancelable: true,
-        detail: detail
-      });
-    }
+      var isCanceled = false;
 
-    /**
-     * Create a new event for a specific tag
-     * @param {String} eventName - The event name
-     * @param {Tag} tag - The Tag instance
-     * @return {CustomEvent} The created event
-     */
+      if (this.handlers[EVENT_WILDCARD]) {
+        this.handlers[EVENT_WILDCARD].forEach(function (eventHandler) {
+          var returnValue = eventHandler.apply(undefined, [eventName].concat(args));
+          isCanceled = returnValue !== undefined && !returnValue || isCanceled;
+        });
+      }
 
-  }, {
-    key: 'createTagEvent',
-    value: function createTagEvent(eventName, tag) {
-      return new CustomEvent(eventName, {
-        bubbles: true,
-        detail: {
-          tag: tag
-        }
-      });
-    }
+      if (this.handlers[eventName]) {
+        this.handlers[eventName].forEach(function (eventHandler) {
+          var returnValue = eventHandler.apply(undefined, args);
+          isCanceled = returnValue !== undefined && !returnValue || isCanceled;
+        });
+      }
 
-    /**
-     * Create a new event for a specific tag
-     * @param {String} eventName - The event name
-     * @param {Tag} tag - The Tag instance
-     * @return {CustomEvent} The created event
-     */
-
-  }, {
-    key: 'createCancelableTagEvent',
-    value: function createCancelableTagEvent(eventName, tag) {
-      return new CustomEvent(eventName, {
-        bubbles: true,
-        cancelable: true,
-        detail: {
-          tag: tag
-        }
-      });
+      return !isCanceled;
     }
   }]);
 
-  return EventFactory;
+  return EventEmitter;
 }();
 
-module.exports = EventFactory;
+module.exports = EventEmitter;
 
 },{}],7:[function(require,module,exports){
 'use strict';

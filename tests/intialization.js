@@ -2,15 +2,11 @@ describe('Initialization', function () {
   beforeEach(createImage);
   afterEach(destroyBody);
 
-  it('should trigger init event', function (done) {
+  it('should trigger init event', function () {
     var image = getImageElement();
+    var taggd = new Taggd(image);
 
-    image.addEventListener('taggd.init', function (e) {
-      expect(e.detail.taggd).toEqual(jasmine.any(Object));
-      done();
-    });
-
-    new Taggd(image);
+    expect(taggd).toEqual(jasmine.any(Object));
   });
 
   it('should wrap image', function () {
@@ -30,31 +26,31 @@ describe('Initialization', function () {
     ];
 
     var taggd = new Taggd(image, {}, tags);
-    expect(image.parentElement.children.length).toEqual(3);
+    expect(taggd.wrapper.children.length).toEqual(3);
   });
 
   it('should trigger change events', function (done) {
     var image = getImageElement();
     var taggd = new Taggd(image);
 
-    image.addEventListener('taggd.tag.add', function (e) {
-      expect(e.detail.taggd).toEqual(taggd);
-      expect(e.detail.taggd.getTags().length).toEqual(0);
+    taggd.on('taggd.tag.add', function (instance) {
+      expect(instance).toEqual(taggd);
+      expect(instance.getTags().length).toEqual(0);
     });
 
-    image.addEventListener('taggd.tag.added', function (e) {
-      expect(e.detail.taggd).toEqual(taggd);
-      expect(e.detail.taggd.getTags().length).toEqual(1);
+    taggd.on('taggd.tag.added', function (instance) {
+      expect(instance).toEqual(taggd);
+      expect(instance.getTags().length).toEqual(1);
     });
 
-    image.addEventListener('taggd.tag.delete', function (e) {
-      expect(e.detail.taggd).toEqual(taggd);
-      expect(e.detail.taggd.getTags().length).toEqual(1);
+    taggd.on('taggd.tag.delete', function (instance) {
+      expect(instance).toEqual(taggd);
+      expect(instance.getTags().length).toEqual(1);
     });
 
-    image.addEventListener('taggd.tag.deleted', function (e) {
-      expect(e.detail.taggd).toEqual(taggd);
-      expect(e.detail.taggd.getTags().length).toEqual(0);
+    taggd.on('taggd.tag.deleted', function (instance) {
+      expect(instance).toEqual(taggd);
+      expect(instance.getTags().length).toEqual(0);
       done();
     });
 
@@ -70,18 +66,18 @@ describe('Initialization', function () {
     var image = getImageElement();
     var taggd = new Taggd(image);
 
-    image.addEventListener('taggd.tag.add', function (e) {
-      e.preventDefault();
-
-      expect(e.detail.taggd).toEqual(taggd);
-      expect(e.detail.taggd.getTags().length).toEqual(0);
+    taggd.on('taggd.tag.add', function (instance) {
+      expect(instance).toEqual(taggd);
+      expect(instance.getTags().length).toEqual(0);
 
       setTimeout(function () {
         done();
       }, 1000);
+
+      return false;
     });
 
-    image.addEventListener('taggd.tag.added', function (e) {
+    taggd.on('taggd.tag.added', function () {
       done.fail('taggd.tag.added was called, even though taggd.tag.add was cancelled');
     });
 

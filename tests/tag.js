@@ -74,12 +74,12 @@ describe('Tag', function () {
       y: Math.random(),
     }, 'Hello World');
 
-    tag.buttonElement.addEventListener('taggd.tag.change', function (e) {
-      expect(e.detail.tag).toEqual(tag);
+    tag.on('taggd.tag.change', function (instance) {
+      expect(instance).toEqual(tag);
     });
 
-    tag.buttonElement.addEventListener('taggd.tag.changed', function (e) {
-      expect(e.detail.tag).toEqual(tag);
+    tag.on('taggd.tag.changed', function (instance) {
+      expect(instance).toEqual(tag);
       done();
     });
 
@@ -97,14 +97,14 @@ describe('Tag', function () {
     var changeEventsTriggered = 0;
     var expectedChangeEvents = 6;
 
-    tag.popupElement.addEventListener('taggd.tag.change', function (e) {
+    tag.on('taggd.tag.change', function (instance) {
       changeEventsTriggered++;
-      expect(e.detail.tag).toEqual(tag);
+      expect(instance).toEqual(tag);
     });
 
-    tag.popupElement.addEventListener('taggd.tag.changed', function (e) {
+    tag.on('taggd.tag.changed', function (instance) {
       changeEventsTriggered++;
-      expect(e.detail.tag).toEqual(tag);
+      expect(instance).toEqual(tag);
 
       if (changeEventsTriggered === expectedChangeEvents) {
         done();
@@ -124,20 +124,20 @@ describe('Tag', function () {
       y: Math.random(),
     }, 'Hello World');
 
-    tag.popupElement.addEventListener('taggd.tag.show', function (e) {
-      expect(e.detail.tag).toEqual(tag);
+    tag.on('taggd.tag.show', function (instance) {
+      expect(instance).toEqual(tag);
     });
 
-    tag.popupElement.addEventListener('taggd.tag.shown', function (e) {
-      expect(e.detail.tag).toEqual(tag);
+    tag.on('taggd.tag.shown', function (instance) {
+      expect(instance).toEqual(tag);
     });
 
-    tag.popupElement.addEventListener('taggd.tag.hide', function (e) {
-      expect(e.detail.tag).toEqual(tag);
+    tag.on('taggd.tag.hide', function (instance) {
+      expect(instance).toEqual(tag);
     });
 
-    tag.popupElement.addEventListener('taggd.tag.hidden', function (e) {
-      expect(e.detail.tag).toEqual(tag);
+    tag.on('taggd.tag.hidden', function (instance) {
+      expect(instance).toEqual(tag);
       done();
     });
 

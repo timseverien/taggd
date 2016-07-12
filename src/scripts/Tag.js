@@ -1,15 +1,25 @@
-const EventFactory = require('./util/event-factory');
+const EventEmitter = require('./util/event-emitter');
 const ObjectIs = require('./util/object-is');
 const TypeErrorMessage = require('./util/type-error-message');
 
-/**
- * @todo:
- * - Set custom data (for use in user-defined event handlers)
- */
-class Tag {
+class Tag extends EventEmitter {
   constructor(position, text, buttonAttributes = {}, popupAttributes = {}) {
+    super();
+
     this.buttonElement = document.createElement('button');
     this.popupElement = document.createElement('span');
+
+    this.isControlsEnabled = false;
+    this.inputLabelElement = undefined;
+    this.buttonSaveElement = undefined;
+    this.buttonDeleteElement = undefined;
+
+    this.buttonSaveElementClickHandler = () => this.setText(this.inputLabelElement.value);
+    this.buttonDeleteElementClickHandler = () => {
+      this.emit('taggd.tag.doDelete', this);
+    };
+
+    this.text = undefined;
 
     this.setButtonAttributes(buttonAttributes);
     this.setPopupAttributes(popupAttributes);
@@ -24,14 +34,11 @@ class Tag {
    * @return {Taggd.Tag} Current Tag
    */
   show() {
-    const showEvent = EventFactory.createCancelableTagEvent('taggd.tag.show', this);
-    const isCanceled = !this.popupElement.dispatchEvent(showEvent);
+    const isCanceled = !this.emit('taggd.tag.show', this);
 
     if (!isCanceled) {
       this.popupElement.style.display = '';
-
-      const shownEvent = EventFactory.createTagEvent('taggd.tag.shown', this);
-      this.popupElement.dispatchEvent(shownEvent);
+      this.emit('taggd.tag.shown', this);
     }
 
     return this;
@@ -42,14 +49,11 @@ class Tag {
    * @return {Taggd.Tag} Current Tag
    */
   hide() {
-    const hideEvent = EventFactory.createCancelableTagEvent('taggd.tag.hide', this);
-    const isCanceled = !this.popupElement.dispatchEvent(hideEvent);
+    const isCanceled = !this.emit('taggd.tag.hide', this);
 
     if (!isCanceled) {
       this.popupElement.style.display = 'none';
-
-      const hiddenEvent = EventFactory.createTagEvent('taggd.tag.hidden', this);
-      this.popupElement.dispatchEvent(hiddenEvent);
+      this.emit('taggd.tag.hidden', this)
     }
 
     return this;
@@ -65,18 +69,22 @@ class Tag {
       throw new Error(TypeErrorMessage.getMessage(type, 'a string or a function'));
     }
 
-    const changeEvent = EventFactory.createCancelableTagEvent('taggd.tag.change', this);
-    const isCanceled = !this.popupElement.dispatchEvent(changeEvent);
+    const isCanceled = !this.emit('taggd.tag.change', this);
 
     if (!isCanceled) {
       if (ObjectIs.function(text)) {
-        this.popupElement.innerHTML = text(this);
+        this.text = text(this);
       } else {
-        this.popupElement.innerHTML = text;
+        this.text = text;
       }
 
-      const changedEvent = EventFactory.createTagEvent('taggd.tag.changed', this);
-      this.popupElement.dispatchEvent(changedEvent);
+      if (!this.isControlsEnabled) {
+        this.popupElement.innerHTML = this.text;
+      } else {
+        this.inputLabelElement.value = this.text;
+      }
+
+      this.emit('taggd.tag.changed', this);
     }
 
     return this;
@@ -96,16 +104,14 @@ class Tag {
       throw new Error(TypeErrorMessage.getIntegerMessage(y));
     }
 
-    const changeEvent = EventFactory.createCancelableTagEvent('taggd.tag.change', this);
-    const isCanceled = !this.popupElement.dispatchEvent(changeEvent);
+    const isCanceled = !this.emit('taggd.tag.change', this);
 
     if (!isCanceled) {
       const positionStyle = Tag.getPositionStyle(x, y);
       this.popupElement.style.left = positionStyle.left;
       this.popupElement.style.top = positionStyle.top;
 
-      const changedEvent = EventFactory.createTagEvent('taggd.tag.changed', this);
-      this.popupElement.dispatchEvent(changedEvent);
+      this.emit('taggd.tag.changed', this);
     }
 
     return this;
@@ -117,14 +123,11 @@ class Tag {
    * @return {Taggd.Tag} Current tag
    */
   setButtonAttributes(attributes = {}) {
-    const changeEvent = EventFactory.createCancelableTagEvent('taggd.tag.change', this);
-    const isCanceled = !this.buttonElement.dispatchEvent(changeEvent);
+    const isCanceled = !this.emit('taggd.tag.change', this);
 
     if (!isCanceled) {
       Tag.setElementAttributes(this.buttonElement, attributes);
-
-      const changedEvent = EventFactory.createTagEvent('taggd.tag.changed', this);
-      this.buttonElement.dispatchEvent(changedEvent);
+      this.emit('taggd.tag.changed', this);
     }
 
     return this;
@@ -136,17 +139,55 @@ class Tag {
    * @return {Taggd.Tag} Current tag
    */
   setPopupAttributes(attributes = {}) {
-    const changeEvent = EventFactory.createCancelableTagEvent('taggd.tag.change', this);
-    const isCanceled = !this.popupElement.dispatchEvent(changeEvent);
+    const isCanceled = !this.emit('taggd.tag.change', this);
 
     if (!isCanceled) {
       Tag.setElementAttributes(this.popupElement, attributes);
-
-      const changedEvent = EventFactory.createTagEvent('taggd.tag.changed', this);
-      this.popupElement.dispatchEvent(changedEvent);
+      this.emit('taggd.tag.changed', this);
     }
 
     return this;
+  }
+
+  /**
+   * Enables the tag controls
+   * @return {Taggd.Tag} Current tag
+   */
+  enableControls() {
+    this.isControlsEnabled = true;
+
+    this.inputLabelElement = document.createElement('input');
+    this.buttonSaveElement = document.createElement('button');
+    this.buttonDeleteElement = document.createElement('button');
+
+    this.buttonSaveElement.innerHTML = Tag.LABEL_BUTTON_SAVE;
+    this.buttonDeleteElement.innerHTML = Tag.LABEL_BUTTON_DELETE;
+
+    this.buttonSaveElement.addEventListener('click', this.buttonSaveElementClickHandler);
+    this.buttonDeleteElement.addEventListener('click', this.buttonDeleteElementClickHandler);
+
+    this.popupElement.innerHTML = '';
+    this.popupElement.appendChild(this.inputLabelElement);
+    this.popupElement.appendChild(this.buttonSaveElement);
+    this.popupElement.appendChild(this.buttonDeleteElement);
+
+    // Set input content
+    this.setText(this.text);
+  }
+
+  /**
+   * Disabled the tag controls
+   * @return {Taggd.Tag} Current tag
+   */
+  disableControls() {
+    this.isControlsEnabled = false;
+
+    this.inputLabelElement = undefined;
+    this.buttonSaveElement = undefined;
+    this.buttonDeleteElement = undefined;
+
+    // Remove elements and set set content
+    this.setText(this.text);
   }
 
   /**
@@ -202,5 +243,8 @@ class Tag {
     );
   }
 }
+
+Tag.LABEL_BUTTON_SAVE = 'save';
+Tag.LABEL_BUTTON_DELETE = 'delete';
 
 module.exports = Tag;

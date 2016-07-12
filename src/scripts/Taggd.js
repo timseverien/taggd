@@ -1,5 +1,5 @@
 const Tag = require('./Tag');
-const EventFactory = require('./util/event-factory');
+const EventEmitter = require('./util/event-emitter');
 const ObjectIs = require('./util/object-is');
 const TypeErrorMessage = require('./util/type-error-message');
 
@@ -8,13 +8,14 @@ Number.isInteger = Number.isInteger || require('number-is-integer');
 /**
  * @todo:
  * - Editor mode
- * 	 - Enable/disable mode
  * 	 - Save/delete button configuration
  * 	 - Trigger events upon creation/deletion
  * - Set ARIA roles
  */
-class Taggd {
+class Taggd extends EventEmitter {
   constructor(image, options = {}, data = []) {
+    super();
+
     this.wrapper = document.createElement('div');
     this.wrapper.classList.add('taggd');
 
@@ -27,9 +28,6 @@ class Taggd {
 
     this.setOptions(options);
     this.setTags(data);
-
-    const initEvent = EventFactory.createTaggdEvent('taggd.init', this);
-    this.image.dispatchEvent(initEvent);
   }
 
   setOptions(options) {
@@ -50,20 +48,31 @@ class Taggd {
       throw new TypeError(TypeErrorMessage.getTagMessage(tag));
     }
 
-    const addEvent = EventFactory.createCancelableTaggdEvent('taggd.tag.add', this, tag);
-    const isCanceled = !this.image.dispatchEvent(addEvent);
+    const isCanceled = !this.emit('taggd.tag.add', this, tag);
 
     if (!isCanceled) {
       // Add events to show/hide tags
       tag.buttonElement.addEventListener(this.options.show, () => tag.show());
       tag.buttonElement.addEventListener(this.options.hide, () => tag.hide());
 
+      // Route all tag events through taggd instance
+      tag.onAnything((eventName, ...args) => {
+        this.emit(eventName, this, ...args);
+      });
+
+      tag.once('taggd.tag.doDelete', (tag) => {
+        const tagIndex = this.tags.indexOf(tag);
+
+        if (tagIndex >= 0) {
+          this.deleteTag(tagIndex);
+        }
+      });
+
       this.tags.push(tag);
       this.wrapper.appendChild(tag.buttonElement);
       this.wrapper.appendChild(tag.popupElement);
 
-      const addedEvent = EventFactory.createTaggdEvent('taggd.tag.added', this, tag);
-      this.image.dispatchEvent(addedEvent);
+      this.emit('taggd.tag.added', this, tag);
     }
 
     return this;
@@ -98,16 +107,14 @@ class Taggd {
     }
 
     const tag = this.tags[index];
-    const deleteEvent = EventFactory.createCancelableTaggdEvent('taggd.tag.delete', this, tag);
-    const isCanceled = !this.image.dispatchEvent(deleteEvent);
+    const isCanceled = !this.emit('taggd.tag.delete', this, tag);
 
     if (!isCanceled) {
       this.wrapper.removeChild(tag.buttonElement);
       this.wrapper.removeChild(tag.popupElement);
       this.tags.splice(tag, 1);
 
-      const deletedEvent = EventFactory.createTaggdEvent('taggd.tag.deleted', this, tag);
-      this.image.dispatchEvent(deletedEvent);
+      this.emit('taggd.tag.deleted', this, tag);
     }
 
     return this;
@@ -173,8 +180,7 @@ class Taggd {
    * @return {Taggd} Current Taggd instance
    */
   destroy() {
-    const destroyEvent = EventFactory.createTaggdEvent('taggd.destroy', this);
-    const isCanceled = !this.image.dispatchEvent(destroyEvent);
+    const isCanceled = !this.emit('taggd.destroy', this);
 
     if (!isCanceled) {
       this.deleteTags();
@@ -186,11 +192,10 @@ class Taggd {
    * @return {Taggd} Current Taggd instance
    */
   enableEditorMode() {
-    const enableEditorEvent = EventFactory.createTaggdEvent('taggd.editor.enable', this);
-    const isCanceled = !this.image.dispatchEvent(enableEditorEvent);
+    const isCanceled = !this.emit('taggd.editor.enable', this);
 
     if (!isCanceled) {
-      // TODO: Enable editor mode
+      this.getTags().forEach((tag) => tag.enableControls());
     }
   }
 
@@ -199,11 +204,10 @@ class Taggd {
    * @return {Taggd} Current Taggd instance
    */
   disableEditorMode() {
-    const disableEditorEvent = EventFactory.createTaggdEvent('taggd.editor.disable', this);
-    const isCanceled = !this.image.dispatchEvent(disableEditorEvent);
+    const isCanceled = !this.emit('taggd.editor.disable', this);
 
     if (!isCanceled) {
-      // TODO: Enable editor mode
+      this.getTags().forEach((tag) => tag.disableControls());
     }
   }
 }
