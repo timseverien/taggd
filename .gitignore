@@ -1,4 +1,12 @@
-node_modules
+# OS-specific
+.DS_Store
+*.log
 
-# Avoid committing map files
+# Package managers
+node_modules/
+
+# Tests results
+coverage/
+
+# Prevent map files
 dest/**/*.map

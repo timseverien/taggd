@@ -13,16 +13,19 @@ module.exports = function(config) {
         watched: false,
         included: false,
         served: true,
-        nocache: false
+        nocache: false,
       },
     ],
-    reporters: ['progress'],
+    reporters: ['progress', 'coverage'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: false,
     browsers: ['PhantomJS'],
     singleRun: true,
-    concurrency: Infinity
-  })
-}
+    concurrency: Infinity,
+    preprocessors: {
+      'dest/taggd.js': 'coverage',
+    },
+  });
+};
