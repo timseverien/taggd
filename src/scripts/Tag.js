@@ -273,6 +273,7 @@ class Tag extends EventEmitter {
   }
 }
 
+Tag.LABEL_NEW_TAG = 'New tag';
 Tag.LABEL_BUTTON_SAVE = 'save';
 Tag.LABEL_BUTTON_DELETE = 'delete';
 

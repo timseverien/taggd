@@ -7,9 +7,6 @@ Number.isInteger = Number.isInteger || require('number-is-integer');
 
 /**
  * @todo:
- * - Editor mode
- * 	 - Save/delete button configuration
- * 	 - Trigger events upon creation/deletion
  * - Set ARIA roles
  */
 class Taggd extends EventEmitter {
@@ -38,6 +35,15 @@ class Taggd extends EventEmitter {
     this.image = image;
     this.options = {};
     this.tags = [];
+
+    this.imageClickHandler = (e) => {
+      var position = {
+        x: e.clientX / this.image.width,
+        y: e.clientY / this.image.height,
+      };
+
+      this.addTag(new Tag(position, Tag.LABEL_NEW_TAG));
+    };
 
     this.setOptions(options);
     this.setTags(data);
@@ -214,6 +220,7 @@ class Taggd extends EventEmitter {
     const isCanceled = !this.emit('taggd.editor.enable', this);
 
     if (!isCanceled) {
+      this.image.addEventListener('click', this.imageClickHandler);
       this.getTags().forEach((tag) => tag.enableControls());
     }
 
@@ -228,6 +235,7 @@ class Taggd extends EventEmitter {
     const isCanceled = !this.emit('taggd.editor.disable', this);
 
     if (!isCanceled) {
+      this.image.removeEventListener('click', this.imageClickHandler);
       this.getTags().forEach((tag) => tag.disableControls());
     }
 

@@ -354,6 +354,7 @@ var Tag = function (_EventEmitter) {
   return Tag;
 }(EventEmitter);
 
+Tag.LABEL_NEW_TAG = 'New tag';
 Tag.LABEL_BUTTON_SAVE = 'save';
 Tag.LABEL_BUTTON_DELETE = 'delete';
 
@@ -421,6 +422,15 @@ var Taggd = function (_EventEmitter) {
     _this.image = image;
     _this.options = {};
     _this.tags = [];
+
+    _this.imageClickHandler = function (e) {
+      var position = {
+        x: e.clientX / _this.image.width,
+        y: e.clientY / _this.image.height
+      };
+
+      _this.addTag(new Tag(position, Tag.LABEL_NEW_TAG));
+    };
 
     _this.setOptions(options);
     _this.setTags(data);
@@ -646,6 +656,7 @@ var Taggd = function (_EventEmitter) {
       var isCanceled = !this.emit('taggd.editor.enable', this);
 
       if (!isCanceled) {
+        this.image.addEventListener('click', this.imageClickHandler);
         this.getTags().forEach(function (tag) {
           return tag.enableControls();
         });
@@ -665,6 +676,7 @@ var Taggd = function (_EventEmitter) {
       var isCanceled = !this.emit('taggd.editor.disable', this);
 
       if (!isCanceled) {
+        this.image.removeEventListener('click', this.imageClickHandler);
         this.getTags().forEach(function (tag) {
           return tag.disableControls();
         });
