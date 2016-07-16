@@ -283,6 +283,33 @@ var Tag = function (_EventEmitter) {
       this.setText(this.text);
       return this;
     }
+  }, {
+    key: 'toJSON',
+    value: function toJSON() {
+      function getAttributes(rawAttributes) {
+        var attributes = {};
+
+        Array.prototype.forEach.call(rawAttributes, function (attribute) {
+          if (attribute.name === 'class' || attribute.name === 'style') {
+            return;
+          }
+
+          attributes[attribute.name] = attribute.value;
+        });
+
+        return attributes;
+      }
+
+      return {
+        position: {
+          x: parseFloat(this.buttonElement.style.left) / 100,
+          y: parseFloat(this.buttonElement.style.left) / 100
+        },
+        text: this.text,
+        buttonAttributes: getAttributes(this.buttonElement.attributes),
+        popupAttributes: getAttributes(this.popupElement.attributes)
+      };
+    }
 
     /**
      * Set element attributes

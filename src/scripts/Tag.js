@@ -213,6 +213,36 @@ class Tag extends EventEmitter {
   }
 
   /**
+   * Get a Taggd.createFromObject-compatible object
+   * @return {Object} A object for JSON
+   */
+  toJSON() {
+    function getAttributes(rawAttributes) {
+      var attributes = {};
+
+      Array.prototype.forEach.call(rawAttributes, (attribute) => {
+        if (attribute.name === 'class' || attribute.name === 'style') {
+          return;
+        }
+
+        attributes[attribute.name] = attribute.value;
+      });
+
+      return attributes;
+    }
+
+    return {
+      position: {
+        x: parseFloat(this.buttonElement.style.left) / 100,
+        y: parseFloat(this.buttonElement.style.left) / 100,
+      },
+      text: this.text,
+      buttonAttributes: getAttributes(this.buttonElement.attributes),
+      popupAttributes: getAttributes(this.popupElement.attributes),
+    };
+  }
+
+  /**
    * Set element attributes
    * @param {DomNode} element - The element the attributes should be set to
    * @param {Object} attributes = {} - A map of attributes to set

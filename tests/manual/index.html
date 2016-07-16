@@ -9,6 +9,11 @@
 <body>
 
   <img src="../assets/512x256.jpg" alt="" id="image">
+
+  <button id="btn-generate-output">Get tags</button>
+  <pre id="output"></pre>
+
+
   <script src="../../dest/taggd.js"></script>
   <script src="../functions.js"></script>
   <script>
@@ -22,6 +27,13 @@
     ]);
 
     taggd.enableEditorMode();
+
+    var btnGenerateOutput = document.getElementById('btn-generate-output');
+    var output = document.getElementById('output');
+
+    btnGenerateOutput.addEventListener('click', function () {
+      output.innerHTML = JSON.stringify(taggd.getTags(), null, 2);
+    });
   </script>
 
 </body>
