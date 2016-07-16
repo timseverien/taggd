@@ -1,0 +1,18 @@
+.taggd {
+  position: relative;
+}
+
+.taggd__image {
+  display: block;
+  height: auto;
+  width: 100%;
+}
+
+.taggd__button {
+  position: absolute;
+  overflow: visible;
+}
+
+.taggd__popup {
+  position: absolute;
+}

@@ -13,7 +13,10 @@ class Tag extends EventEmitter {
     super();
 
     this.buttonElement = document.createElement('button');
+    this.buttonElement.classList.add('taggd__button');
+
     this.popupElement = document.createElement('span');
+    this.popupElement.classList.add('taggd__popup');
 
     this.buttonElement.appendChild(this.popupElement);
 

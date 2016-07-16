@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Taggd</title>
+
+  <link rel="stylesheet" href="../../dest/taggd.css">
+</head>
+<body>
+
+  <img src="../assets/512x256.jpg" alt="" id="image">
+  <script src="../../dest/taggd.js"></script>
+  <script src="../functions.js"></script>
+  <script>
+    var image = document.getElementById('image');
+
+    var taggd = new Taggd(image);
+    taggd.setTags([
+      createTag(),
+      createTag(),
+      createTag(),
+    ]);
+  </script>
+
+</body>
+</html>

@@ -29,7 +29,9 @@ class Taggd extends EventEmitter {
     this.wrapper = document.createElement('div');
     this.wrapper.classList.add('taggd');
 
-    this.wrapper.insertBefore(image);
+    image.classList.add('taggd__image');
+
+    image.parentElement.insertBefore(this.wrapper, image);
     image.parentElement.removeChild(image);
     this.wrapper.appendChild(image);
 

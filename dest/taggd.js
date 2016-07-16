@@ -53,7 +53,10 @@ var Tag = function (_EventEmitter) {
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Tag).call(this));
 
     _this.buttonElement = document.createElement('button');
+    _this.buttonElement.classList.add('taggd__button');
+
     _this.popupElement = document.createElement('span');
+    _this.popupElement.classList.add('taggd__popup');
 
     _this.buttonElement.appendChild(_this.popupElement);
 
@@ -409,7 +412,9 @@ var Taggd = function (_EventEmitter) {
     _this.wrapper = document.createElement('div');
     _this.wrapper.classList.add('taggd');
 
-    _this.wrapper.insertBefore(image);
+    image.classList.add('taggd__image');
+
+    image.parentElement.insertBefore(_this.wrapper, image);
     image.parentElement.removeChild(image);
     _this.wrapper.appendChild(image);
 

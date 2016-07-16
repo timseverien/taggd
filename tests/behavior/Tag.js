@@ -65,7 +65,8 @@ describe('Tag', function () {
     expect(tags[0].popupElement.getAttribute('data-bar')).toEqual('foo');
 
     tags[0].setButtonAttributes({ class: 'bar' });
-    expect(tags[0].buttonElement.getAttribute('class')).toEqual('foo bar');
+    expect(tags[0].buttonElement.getAttribute('class').split(/\s+/)).toContain('foo');
+    expect(tags[0].buttonElement.getAttribute('class').split(/\s+/)).toContain('bar');
   });
 
   it('should trigger button change events', function (done) {
