@@ -4,10 +4,18 @@ const TypeErrorMessage = require('./util/type-error-message');
 
 class Tag extends EventEmitter {
   constructor(position, text, buttonAttributes = {}, popupAttributes = {}) {
+    if (!ObjectIs.ofType(position, 'object') || Array.isArray(position)) {
+      throw new TypeError(TypeErrorMessage.getObjectMessage(position));
+    } else if (!'x' in position || !'y' in position) {
+      throw new Error(`${position} should have x and y property`);
+    }
+
     super();
 
     this.buttonElement = document.createElement('button');
     this.popupElement = document.createElement('span');
+
+    this.buttonElement.appendChild(this.popupElement);
 
     this.isControlsEnabled = false;
     this.inputLabelElement = undefined;
@@ -65,8 +73,8 @@ class Tag extends EventEmitter {
    * @return {Taggd.Tag} Current Tag
    */
   setText(text) {
-    if (!ObjectIs.ofType(text, 'string') && ObjectIs.function(text)) {
-      throw new Error(TypeErrorMessage.getMessage(type, 'a string or a function'));
+    if (!ObjectIs.ofType(text, 'string') && !ObjectIs.function(text)) {
+      throw new TypeError(TypeErrorMessage.getMessage(type, 'a string or a function'));
     }
 
     const isCanceled = !this.emit('taggd.tag.change', this);
@@ -98,18 +106,19 @@ class Tag extends EventEmitter {
    */
   setPosition(x, y) {
     if (!ObjectIs.number(x)) {
-      throw new Error(TypeErrorMessage.getIntegerMessage(x));
+      throw new TypeError(TypeErrorMessage.getFloatMessage(x));
     }
     if (!ObjectIs.number(y)) {
-      throw new Error(TypeErrorMessage.getIntegerMessage(y));
+      throw new TypeError(TypeErrorMessage.getFloatMessage(y));
     }
 
     const isCanceled = !this.emit('taggd.tag.change', this);
 
     if (!isCanceled) {
       const positionStyle = Tag.getPositionStyle(x, y);
-      this.popupElement.style.left = positionStyle.left;
-      this.popupElement.style.top = positionStyle.top;
+
+      this.buttonElement.style.left = positionStyle.left;
+      this.buttonElement.style.top = positionStyle.top;
 
       this.emit('taggd.tag.changed', this);
     }
@@ -123,6 +132,10 @@ class Tag extends EventEmitter {
    * @return {Taggd.Tag} Current tag
    */
   setButtonAttributes(attributes = {}) {
+    if (!ObjectIs.ofType(attributes, 'object') || Array.isArray(attributes)) {
+      throw new TypeError(TypeErrorMessage.getObjectMessage(attributes));
+    }
+
     const isCanceled = !this.emit('taggd.tag.change', this);
 
     if (!isCanceled) {
@@ -139,6 +152,10 @@ class Tag extends EventEmitter {
    * @return {Taggd.Tag} Current tag
    */
   setPopupAttributes(attributes = {}) {
+    if (!ObjectIs.ofType(attributes, 'object') || Array.isArray(attributes)) {
+      throw new TypeError(TypeErrorMessage.getObjectMessage(attributes));
+    }
+
     const isCanceled = !this.emit('taggd.tag.change', this);
 
     if (!isCanceled) {
@@ -173,6 +190,7 @@ class Tag extends EventEmitter {
 
     // Set input content
     this.setText(this.text);
+    return this;
   }
 
   /**
@@ -188,6 +206,7 @@ class Tag extends EventEmitter {
 
     // Remove elements and set set content
     this.setText(this.text);
+    return this;
   }
 
   /**
@@ -197,8 +216,8 @@ class Tag extends EventEmitter {
    * @return {DomNode} The original element
    */
   static setElementAttributes(element, attributes = {}) {
-    if (!ObjectIs.ofType(attributes, 'object')) {
-      throw new Error(TypeErrorMessage.getObjectMessage(attributes));
+    if (!ObjectIs.ofType(attributes, 'object') || Array.isArray(attributes)) {
+      throw new TypeError(TypeErrorMessage.getObjectMessage(attributes));
     }
 
     for (let attribute in attributes) {
@@ -223,6 +242,13 @@ class Tag extends EventEmitter {
    * @return {Object} The style
    */
   static getPositionStyle(x, y) {
+    if (!ObjectIs.number(x)) {
+      throw new TypeError(TypeErrorMessage.getFloatMessage(x));
+    }
+    if (!ObjectIs.number(y)) {
+      throw new TypeError(TypeErrorMessage.getFloatMessage(y));
+    }
+
     return {
       left: (x * 100) + '%',
       top: (y * 100) + '%',

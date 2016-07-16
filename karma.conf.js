@@ -5,7 +5,8 @@ module.exports = function(config) {
     files: [
       'dest/taggd.js',
       'tests/functions.js',
-      'tests/*.js',
+      'tests/units/*.js',
+      'tests/behavior/*.js',
 
       {
         pattern: 'tests/assets/**/*.jpg',

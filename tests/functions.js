@@ -42,3 +42,26 @@ function triggerEvent(element, eventName) {
     'view': window,
   }));
 }
+
+/**
+ * Create a random tag
+ * @return {Taggd.Tag} - The tag
+ */
+function createTag() {
+  var characterSet = 'abcdefghijklmnopqrstuvwxyz';
+  var textLength = 0xF;
+  var text = '';
+
+  do {
+    text += characterSet[Math.floor(Math.random() * characterSet.length)];
+  } while (--textLength);
+
+  return new Taggd.Tag({
+    x: Math.random(),
+    y: Math.random(),
+  }, text);
+}
+
+function shortDelay(callback) {
+  setTimeout(callback, 1000 / 8);
+}

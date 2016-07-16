@@ -47,11 +47,12 @@ describe('Editor mode', function () {
     taggd.enableEditorMode();
 
     taggd.on('taggd.tag.deleted', function () {
-      expect(tags[0].popupElement.parentNode).not.toBe(taggd.wrapper);
+      expect(tags[0].popupElement.parentElement).not.toBe(taggd.wrapper);
       done();
     });
 
-    expect(tags[0].popupElement.parentNode).toBe(taggd.wrapper);
+    expect(tags[0].popupElement.parentElement).toBe(taggd.tags[0].buttonElement);
+    expect(tags[0].buttonElement.parentElement).toBe(taggd.wrapper);
     triggerEvent(tags[0].buttonDeleteElement, 'click');
   });
 });

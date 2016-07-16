@@ -1,13 +1,18 @@
-describe('Initialization', function () {
+describe('Taggd', function () {
   beforeEach(createImage);
   afterEach(destroyBody);
 
-  it('should trigger init event', function () {
+  it('should initialize', function () {
     var image = getImageElement();
     var taggd = new Taggd(image);
 
     expect(taggd).toEqual(jasmine.any(Object));
   });
+});
+
+describe('Taggd DOM', function () {
+  beforeEach(createImage);
+  afterEach(destroyBody);
 
   it('should wrap image', function () {
     var image = getImageElement();
@@ -26,8 +31,13 @@ describe('Initialization', function () {
     ];
 
     var taggd = new Taggd(image, {}, tags);
-    expect(taggd.wrapper.children.length).toEqual(3);
+    expect(taggd.wrapper.children.length).toEqual(2);
   });
+});
+
+describe('Taggd events', function () {
+  beforeEach(createImage);
+  afterEach(destroyBody);
 
   it('should trigger change events', function (done) {
     var image = getImageElement();
@@ -54,11 +64,7 @@ describe('Initialization', function () {
       done();
     });
 
-    taggd.addTag(new Taggd.Tag({
-      x: .5,
-      y: .5,
-    }, 'Hello World'));
-
+    taggd.addTag(createTag());
     taggd.deleteTag(0);
   });
 
@@ -69,10 +75,7 @@ describe('Initialization', function () {
     taggd.on('taggd.tag.add', function (instance) {
       expect(instance).toEqual(taggd);
       expect(instance.getTags().length).toEqual(0);
-
-      setTimeout(function () {
-        done();
-      }, 1000);
+      shortDelay(done);
 
       return false;
     });
@@ -81,9 +84,29 @@ describe('Initialization', function () {
       done.fail('taggd.tag.added was called, even though taggd.tag.add was cancelled');
     });
 
-    taggd.addTag(new Taggd.Tag({
-      x: .5,
-      y: .5,
-    }, 'Hello World'));
+    taggd.addTag(createTag());
+  });
+});
+
+describe('Taggd UI', function () {
+  beforeEach(createImage);
+  afterEach(destroyBody);
+
+  it('should show image on hover', function () {
+    var image = getImageElement();
+    var tags = [
+      new Taggd.Tag({
+        x: .5,
+        y: .5,
+      }, 'Hello World')
+    ];
+
+    var taggd = new Taggd(image, {}, tags);
+
+    expect(tags[0].popupElement.style.display).toBe('none');
+    triggerEvent(tags[0].buttonElement, 'mouseenter');
+    expect(tags[0].popupElement.style.display).not.toBe('none');
+    triggerEvent(tags[0].buttonElement, 'mouseleave');
+    expect(tags[0].popupElement.style.display).toBe('none');
   });
 });

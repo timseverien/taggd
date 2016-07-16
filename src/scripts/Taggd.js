@@ -13,7 +13,17 @@ Number.isInteger = Number.isInteger || require('number-is-integer');
  * - Set ARIA roles
  */
 class Taggd extends EventEmitter {
+  /**
+   * Create a new taggd instance
+   * @param {HTMLElement} image - The image to wrap
+   * @param {Object} options = {} - The options
+   * @param {Array} data = [] - The tags
+   */
   constructor(image, options = {}, data = []) {
+    if (!image instanceof Element) {
+      throw new TypeError(TypeErrorMessage.getMessage(image, Element));
+    }
+
     super();
 
     this.wrapper = document.createElement('div');
@@ -24,18 +34,25 @@ class Taggd extends EventEmitter {
     this.wrapper.appendChild(image);
 
     this.image = image;
+    this.options = {};
     this.tags = [];
 
     this.setOptions(options);
     this.setTags(data);
   }
 
+  /**
+   * Set taggd options
+   * @param {Object} options - The options to set
+   * @return {Taggd} Current Taggd instance
+   */
   setOptions(options) {
-    if (!ObjectIs.ofType(options, 'object')) {
+    if (!ObjectIs.ofType(options, 'object') || Array.isArray(options)) {
       throw new TypeError(TypeErrorMessage.getObjectMessage(tag));
     }
 
-    this.options = Object.assign({}, Taggd.DEFAULT_OPTIONS, options);
+    this.options = Object.assign(this.options, Taggd.DEFAULT_OPTIONS, options);
+    return this;
   }
 
   /**
@@ -70,7 +87,6 @@ class Taggd extends EventEmitter {
 
       this.tags.push(tag);
       this.wrapper.appendChild(tag.buttonElement);
-      this.wrapper.appendChild(tag.popupElement);
 
       this.emit('taggd.tag.added', this, tag);
     }
@@ -93,7 +109,6 @@ class Taggd extends EventEmitter {
 
   /**
    * Delete a single tag by index
-   *
    * @param {Number} index - The index of the desired tag
    * @return {Taggd} Current Taggd instance
    */
@@ -111,7 +126,6 @@ class Taggd extends EventEmitter {
 
     if (!isCanceled) {
       this.wrapper.removeChild(tag.buttonElement);
-      this.wrapper.removeChild(tag.popupElement);
       this.tags.splice(tag, 1);
 
       this.emit('taggd.tag.deleted', this, tag);
@@ -123,6 +137,7 @@ class Taggd extends EventEmitter {
   /**
    * Set all tags
    * @param {Taggd.Tag[]} tags An array of tags
+   * @return {Taggd} Current Taggd instance
    */
   setTags(tags) {
     this.deleteTags();
@@ -185,6 +200,8 @@ class Taggd extends EventEmitter {
     if (!isCanceled) {
       this.deleteTags();
     }
+
+    return this;
   }
 
   /**
@@ -197,6 +214,8 @@ class Taggd extends EventEmitter {
     if (!isCanceled) {
       this.getTags().forEach((tag) => tag.enableControls());
     }
+
+    return this;
   }
 
   /**
@@ -209,6 +228,8 @@ class Taggd extends EventEmitter {
     if (!isCanceled) {
       this.getTags().forEach((tag) => tag.disableControls());
     }
+
+    return this;
   }
 }
 

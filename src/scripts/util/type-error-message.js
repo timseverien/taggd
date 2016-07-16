@@ -41,6 +41,15 @@ var TypeErrorMessage = {
   },
 
   /**
+   * Get the TypeError Float message
+   * @param {Object} object - The tested object
+   * @return {String} The error message
+   */
+  getFloatMessage: function (object) {
+    return this.getTypeErrorMessage(object, 'a floating number');
+  },
+
+  /**
    * Get the TypeError Object message
    * @param {Object} object - The tested object
    * @return {String} The error message

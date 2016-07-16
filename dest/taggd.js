@@ -35,11 +35,6 @@ var EventEmitter = require('./util/event-emitter');
 var ObjectIs = require('./util/object-is');
 var TypeErrorMessage = require('./util/type-error-message');
 
-/**
- * @todo:
- * - Set custom data (for use in user-defined event handlers)
- */
-
 var Tag = function (_EventEmitter) {
   _inherits(Tag, _EventEmitter);
 
@@ -49,10 +44,18 @@ var Tag = function (_EventEmitter) {
 
     _classCallCheck(this, Tag);
 
+    if (!ObjectIs.ofType(position, 'object') || Array.isArray(position)) {
+      throw new TypeError(TypeErrorMessage.getObjectMessage(position));
+    } else if (!'x' in position || !'y' in position) {
+      throw new Error(position + ' should have x and y property');
+    }
+
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Tag).call(this));
 
     _this.buttonElement = document.createElement('button');
     _this.popupElement = document.createElement('span');
+
+    _this.buttonElement.appendChild(_this.popupElement);
 
     _this.isControlsEnabled = false;
     _this.inputLabelElement = undefined;
@@ -123,8 +126,8 @@ var Tag = function (_EventEmitter) {
   }, {
     key: 'setText',
     value: function setText(text) {
-      if (!ObjectIs.ofType(text, 'string') && ObjectIs.function(text)) {
-        throw new Error(TypeErrorMessage.getMessage(type, 'a string or a function'));
+      if (!ObjectIs.ofType(text, 'string') && !ObjectIs.function(text)) {
+        throw new TypeError(TypeErrorMessage.getMessage(type, 'a string or a function'));
       }
 
       var isCanceled = !this.emit('taggd.tag.change', this);
@@ -159,18 +162,19 @@ var Tag = function (_EventEmitter) {
     key: 'setPosition',
     value: function setPosition(x, y) {
       if (!ObjectIs.number(x)) {
-        throw new Error(TypeErrorMessage.getIntegerMessage(x));
+        throw new TypeError(TypeErrorMessage.getFloatMessage(x));
       }
       if (!ObjectIs.number(y)) {
-        throw new Error(TypeErrorMessage.getIntegerMessage(y));
+        throw new TypeError(TypeErrorMessage.getFloatMessage(y));
       }
 
       var isCanceled = !this.emit('taggd.tag.change', this);
 
       if (!isCanceled) {
         var positionStyle = Tag.getPositionStyle(x, y);
-        this.popupElement.style.left = positionStyle.left;
-        this.popupElement.style.top = positionStyle.top;
+
+        this.buttonElement.style.left = positionStyle.left;
+        this.buttonElement.style.top = positionStyle.top;
 
         this.emit('taggd.tag.changed', this);
       }
@@ -188,6 +192,10 @@ var Tag = function (_EventEmitter) {
     key: 'setButtonAttributes',
     value: function setButtonAttributes() {
       var attributes = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+      if (!ObjectIs.ofType(attributes, 'object') || Array.isArray(attributes)) {
+        throw new TypeError(TypeErrorMessage.getObjectMessage(attributes));
+      }
 
       var isCanceled = !this.emit('taggd.tag.change', this);
 
@@ -209,6 +217,10 @@ var Tag = function (_EventEmitter) {
     key: 'setPopupAttributes',
     value: function setPopupAttributes() {
       var attributes = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+      if (!ObjectIs.ofType(attributes, 'object') || Array.isArray(attributes)) {
+        throw new TypeError(TypeErrorMessage.getObjectMessage(attributes));
+      }
 
       var isCanceled = !this.emit('taggd.tag.change', this);
 
@@ -247,6 +259,7 @@ var Tag = function (_EventEmitter) {
 
       // Set input content
       this.setText(this.text);
+      return this;
     }
 
     /**
@@ -265,6 +278,7 @@ var Tag = function (_EventEmitter) {
 
       // Remove elements and set set content
       this.setText(this.text);
+      return this;
     }
 
     /**
@@ -279,8 +293,8 @@ var Tag = function (_EventEmitter) {
     value: function setElementAttributes(element) {
       var attributes = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
-      if (!ObjectIs.ofType(attributes, 'object')) {
-        throw new Error(TypeErrorMessage.getObjectMessage(attributes));
+      if (!ObjectIs.ofType(attributes, 'object') || Array.isArray(attributes)) {
+        throw new TypeError(TypeErrorMessage.getObjectMessage(attributes));
       }
 
       for (var attribute in attributes) {
@@ -308,6 +322,13 @@ var Tag = function (_EventEmitter) {
   }, {
     key: 'getPositionStyle',
     value: function getPositionStyle(x, y) {
+      if (!ObjectIs.number(x)) {
+        throw new TypeError(TypeErrorMessage.getFloatMessage(x));
+      }
+      if (!ObjectIs.number(y)) {
+        throw new TypeError(TypeErrorMessage.getFloatMessage(y));
+      }
+
       return {
         left: x * 100 + '%',
         top: y * 100 + '%'
@@ -366,11 +387,22 @@ Number.isInteger = Number.isInteger || require('number-is-integer');
 var Taggd = function (_EventEmitter) {
   _inherits(Taggd, _EventEmitter);
 
+  /**
+   * Create a new taggd instance
+   * @param {HTMLElement} image - The image to wrap
+   * @param {Object} options = {} - The options
+   * @param {Array} data = [] - The tags
+   */
+
   function Taggd(image) {
     var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
     var data = arguments.length <= 2 || arguments[2] === undefined ? [] : arguments[2];
 
     _classCallCheck(this, Taggd);
+
+    if (!image instanceof Element) {
+      throw new TypeError(TypeErrorMessage.getMessage(image, Element));
+    }
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Taggd).call(this));
 
@@ -382,6 +414,7 @@ var Taggd = function (_EventEmitter) {
     _this.wrapper.appendChild(image);
 
     _this.image = image;
+    _this.options = {};
     _this.tags = [];
 
     _this.setOptions(options);
@@ -389,14 +422,22 @@ var Taggd = function (_EventEmitter) {
     return _this;
   }
 
+  /**
+   * Set taggd options
+   * @param {Object} options - The options to set
+   * @return {Taggd} Current Taggd instance
+   */
+
+
   _createClass(Taggd, [{
     key: 'setOptions',
     value: function setOptions(options) {
-      if (!ObjectIs.ofType(options, 'object')) {
+      if (!ObjectIs.ofType(options, 'object') || Array.isArray(options)) {
         throw new TypeError(TypeErrorMessage.getObjectMessage(tag));
       }
 
-      this.options = _extends({}, Taggd.DEFAULT_OPTIONS, options);
+      this.options = _extends(this.options, Taggd.DEFAULT_OPTIONS, options);
+      return this;
     }
 
     /**
@@ -444,7 +485,6 @@ var Taggd = function (_EventEmitter) {
 
         this.tags.push(tag);
         this.wrapper.appendChild(tag.buttonElement);
-        this.wrapper.appendChild(tag.popupElement);
 
         this.emit('taggd.tag.added', this, tag);
       }
@@ -470,7 +510,6 @@ var Taggd = function (_EventEmitter) {
 
     /**
      * Delete a single tag by index
-     *
      * @param {Number} index - The index of the desired tag
      * @return {Taggd} Current Taggd instance
      */
@@ -491,7 +530,6 @@ var Taggd = function (_EventEmitter) {
 
       if (!isCanceled) {
         this.wrapper.removeChild(tag.buttonElement);
-        this.wrapper.removeChild(tag.popupElement);
         this.tags.splice(tag, 1);
 
         this.emit('taggd.tag.deleted', this, tag);
@@ -503,6 +541,7 @@ var Taggd = function (_EventEmitter) {
     /**
      * Set all tags
      * @param {Taggd.Tag[]} tags An array of tags
+     * @return {Taggd} Current Taggd instance
      */
 
   }, {
@@ -587,6 +626,8 @@ var Taggd = function (_EventEmitter) {
       if (!isCanceled) {
         this.deleteTags();
       }
+
+      return this;
     }
 
     /**
@@ -604,6 +645,8 @@ var Taggd = function (_EventEmitter) {
           return tag.enableControls();
         });
       }
+
+      return this;
     }
 
     /**
@@ -621,6 +664,8 @@ var Taggd = function (_EventEmitter) {
           return tag.disableControls();
         });
       }
+
+      return this;
     }
   }]);
 
@@ -814,6 +859,15 @@ var TypeErrorMessage = {
    */
   getIntegerMessage: function getIntegerMessage(object) {
     return this.getTypeErrorMessage(object, 'an integer');
+  },
+
+  /**
+   * Get the TypeError Float message
+   * @param {Object} object - The tested object
+   * @return {String} The error message
+   */
+  getFloatMessage: function getFloatMessage(object) {
+    return this.getTypeErrorMessage(object, 'a floating number');
   },
 
   /**
