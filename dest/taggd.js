@@ -382,9 +382,6 @@ Number.isInteger = Number.isInteger || require('number-is-integer');
 
 /**
  * @todo:
- * - Editor mode
- * 	 - Save/delete button configuration
- * 	 - Trigger events upon creation/deletion
  * - Set ARIA roles
  */
 
@@ -429,7 +426,10 @@ var Taggd = function (_EventEmitter) {
         y: e.clientY / _this.image.height
       };
 
-      _this.addTag(new Tag(position, Tag.LABEL_NEW_TAG));
+      var tag = new Tag(position, Tag.LABEL_NEW_TAG);
+      tag.enableControls();
+
+      _this.addTag(tag);
     };
 
     _this.setOptions(options);

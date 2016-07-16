@@ -42,7 +42,10 @@ class Taggd extends EventEmitter {
         y: e.clientY / this.image.height,
       };
 
-      this.addTag(new Tag(position, Tag.LABEL_NEW_TAG));
+      var tag = new Tag(position, Tag.LABEL_NEW_TAG);
+      tag.enableControls();
+
+      this.addTag(tag);
     };
 
     this.setOptions(options);
