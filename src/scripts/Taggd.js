@@ -83,17 +83,17 @@ class Taggd extends EventEmitter {
       tag.buttonElement.addEventListener(this.options.show, () => tag.show());
       tag.buttonElement.addEventListener(this.options.hide, () => tag.hide());
 
-      // Route all tag events through taggd instance
-      tag.onAnything((eventName, ...args) => {
-        this.emit(eventName, this, ...args);
-      });
-
-      tag.once('taggd.tag.doDelete', (tag) => {
+      tag.once('taggd.tag.delete', (tag) => {
         const tagIndex = this.tags.indexOf(tag);
 
         if (tagIndex >= 0) {
           this.deleteTag(tagIndex);
         }
+      });
+
+      // Route all tag events through taggd instance
+      tag.onAnything((eventName, ...args) => {
+        this.emit(eventName, this, ...args);
       });
 
       this.tags.push(tag);
@@ -137,7 +137,7 @@ class Taggd extends EventEmitter {
 
     if (!isCanceled) {
       this.wrapper.removeChild(tag.buttonElement);
-      this.tags.splice(tag, 1);
+      this.tags.splice(index, 1);
 
       this.emit('taggd.tag.deleted', this, tag);
     }

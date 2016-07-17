@@ -27,7 +27,7 @@ class Tag extends EventEmitter {
 
     this.buttonSaveElementClickHandler = () => this.setText(this.inputLabelElement.value);
     this.buttonDeleteElementClickHandler = () => {
-      this.emit('taggd.tag.doDelete', this);
+      this.emit('taggd.tag.delete', this);
     };
 
     this.text = undefined;
@@ -179,6 +179,16 @@ class Tag extends EventEmitter {
     this.inputLabelElement = document.createElement('input');
     this.buttonSaveElement = document.createElement('button');
     this.buttonDeleteElement = document.createElement('button');
+
+    this.inputLabelElement.classList.add('taggd__editor-input');
+    this.buttonSaveElement.classList.add(
+      'taggd__editor-button',
+      'taggd__editor-button--save'
+    );
+    this.buttonDeleteElement.classList.add(
+      'taggd__editor-button',
+      'taggd__editor-button--delete'
+    );
 
     this.buttonSaveElement.innerHTML = Tag.LABEL_BUTTON_SAVE;
     this.buttonDeleteElement.innerHTML = Tag.LABEL_BUTTON_DELETE;

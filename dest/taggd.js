@@ -69,7 +69,7 @@ var Tag = function (_EventEmitter) {
       return _this.setText(_this.inputLabelElement.value);
     };
     _this.buttonDeleteElementClickHandler = function () {
-      _this.emit('taggd.tag.doDelete', _this);
+      _this.emit('taggd.tag.delete', _this);
     };
 
     _this.text = undefined;
@@ -248,6 +248,10 @@ var Tag = function (_EventEmitter) {
       this.inputLabelElement = document.createElement('input');
       this.buttonSaveElement = document.createElement('button');
       this.buttonDeleteElement = document.createElement('button');
+
+      this.inputLabelElement.classList.add('taggd__editor-input');
+      this.buttonSaveElement.classList.add('taggd__editor-button', 'taggd__editor-button--save');
+      this.buttonDeleteElement.classList.add('taggd__editor-button', 'taggd__editor-button--delete');
 
       this.buttonSaveElement.innerHTML = Tag.LABEL_BUTTON_SAVE;
       this.buttonDeleteElement.innerHTML = Tag.LABEL_BUTTON_DELETE;
@@ -514,6 +518,14 @@ var Taggd = function (_EventEmitter) {
           return tag.hide();
         });
 
+        tag.once('taggd.tag.delete', function (tag) {
+          var tagIndex = _this2.tags.indexOf(tag);
+
+          if (tagIndex >= 0) {
+            _this2.deleteTag(tagIndex);
+          }
+        });
+
         // Route all tag events through taggd instance
         tag.onAnything(function (eventName) {
           for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -521,14 +533,6 @@ var Taggd = function (_EventEmitter) {
           }
 
           _this2.emit.apply(_this2, [eventName, _this2].concat(args));
-        });
-
-        tag.once('taggd.tag.doDelete', function (tag) {
-          var tagIndex = _this2.tags.indexOf(tag);
-
-          if (tagIndex >= 0) {
-            _this2.deleteTag(tagIndex);
-          }
         });
 
         this.tags.push(tag);
@@ -578,7 +582,7 @@ var Taggd = function (_EventEmitter) {
 
       if (!isCanceled) {
         this.wrapper.removeChild(tag.buttonElement);
-        this.tags.splice(tag, 1);
+        this.tags.splice(index, 1);
 
         this.emit('taggd.tag.deleted', this, tag);
       }

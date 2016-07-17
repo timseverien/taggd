@@ -261,8 +261,12 @@ describe('Taggd.deleteTag', function () {
 
     expect(taggd.tags.length).toEqual(2);
 
-    taggd.deleteTag(0);
+    var toBeDeletedTagIndex = 1;
+    var toBeDeletedTag = tags[toBeDeletedTagIndex];
+
+    taggd.deleteTag(toBeDeletedTagIndex);
     expect(taggd.tags.length).toEqual(1);
+    expect(taggd.tags[0].text).not.toEqual(toBeDeletedTag.text);
   });
 });
 
