@@ -283,6 +283,12 @@ var Tag = function (_EventEmitter) {
       this.setText(this.text);
       return this;
     }
+
+    /**
+     * Get a Taggd.createFromObject-compatible object
+     * @return {Object} A object for JSON
+     */
+
   }, {
     key: 'toJSON',
     value: function toJSON() {
