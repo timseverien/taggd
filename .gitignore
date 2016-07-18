@@ -7,6 +7,3 @@ node_modules/
 
 # Tests results
 coverage/
-
-# Prevent map files
-dest/**/*.map

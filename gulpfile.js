@@ -12,7 +12,7 @@ const $ = require('gulp-load-plugins')({
   },
 });
 
-const DIR_BUILD = 'dest';
+const DIR_BUILD = 'dist';
 const DIR_SOURCE = 'src';
 
 const OPTIONS_BABEL = {

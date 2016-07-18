@@ -38,6 +38,14 @@ var TypeErrorMessage = require('./util/type-error-message');
 var Tag = function (_EventEmitter) {
   _inherits(Tag, _EventEmitter);
 
+  /**
+   * Create a new Tag instance
+   * @param {{ x: Number, y: Number }} position - The tag’s coordinates
+   * @param {String|Function} text - The tag’s content
+   * @param {Object} buttonAttributes = {} - The button’s attributes
+   * @param {Object} popupAttributes = {} - The popup’s attributes
+   */
+
   function Tag(position, text) {
     var buttonAttributes = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
     var popupAttributes = arguments.length <= 3 || arguments[3] === undefined ? {} : arguments[3];
@@ -122,7 +130,7 @@ var Tag = function (_EventEmitter) {
 
     /**
      * Set the tag’s text
-     * @param {String} text - The tag’s content
+     * @param {String|Function} text - The tag’s content
      * @return {Taggd.Tag} Current Tag
      */
 
