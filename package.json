@@ -2,6 +2,23 @@
   "name": "taggd",
   "version": "3.0.0",
   "description": "A tool to show and add tags to images",
+  "keywords": [
+    "tag",
+    "tags",
+    "image",
+    "detail",
+    "information",
+    "popup"
+  ],
+  "homepage": "https://github.com/timseverien/taggd#readme",
+  "bugs": "https://github.com/timseverien/taggd/issues",
+  "license": "MIT",
+  "author": {
+    "name": "Tim Severien",
+    "email": "hi@timseverien.com",
+    "url": "https://timseverien.com"
+  },
+  "main": "dist/taggd.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/timseverien/taggd.git"
@@ -10,16 +27,6 @@
     "build": "gulp",
     "test": "karma start karma.conf.js"
   },
-  "author": {
-    "name": "Tim Severien",
-    "email": "timseverien@gmail.com",
-    "url": "https://timseverien.com"
-  },
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/timseverien/taggd/issues"
-  },
-  "homepage": "https://github.com/timseverien/taggd#readme",
   "devDependencies": {
     "babel-plugin-transform-object-assign": "^6.8.0",
     "babel-preset-es2015": "^6.9.0",
