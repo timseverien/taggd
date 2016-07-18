@@ -37,3 +37,7 @@ const taggd = new Taggd(image, options, tags);
 ## Documentation
 
 For more information, check out [the documentation](https://github.com/timseverien/taggd/wiki).
+
+## License
+
+The code is released under [the MIT license](https://github.com/timseverien/taggd/blob/3.0/LICENSE.txt).
