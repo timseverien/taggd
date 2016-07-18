@@ -3,6 +3,13 @@ const ObjectIs = require('./util/object-is');
 const TypeErrorMessage = require('./util/type-error-message');
 
 class Tag extends EventEmitter {
+  /**
+   * Create a new Tag instance
+   * @param {{ x: Number, y: Number }} position - The tag’s coordinates
+   * @param {String|Function} text - The tag’s content
+   * @param {Object} buttonAttributes = {} - The button’s attributes
+   * @param {Object} popupAttributes = {} - The popup’s attributes
+   */
   constructor(position, text, buttonAttributes = {}, popupAttributes = {}) {
     if (!ObjectIs.ofType(position, 'object') || Array.isArray(position)) {
       throw new TypeError(TypeErrorMessage.getObjectMessage(position));
@@ -72,7 +79,7 @@ class Tag extends EventEmitter {
 
   /**
    * Set the tag’s text
-   * @param {String} text - The tag’s content
+   * @param {String|Function} text - The tag’s content
    * @return {Taggd.Tag} Current Tag
    */
   setText(text) {
