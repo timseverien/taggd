@@ -417,11 +417,6 @@ var TypeErrorMessage = require('./util/type-error-message');
 
 Number.isInteger = Number.isInteger || require('number-is-integer');
 
-/**
- * @todo:
- * - Set ARIA roles
- */
-
 var Taggd = function (_EventEmitter) {
   _inherits(Taggd, _EventEmitter);
 

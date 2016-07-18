@@ -5,10 +5,6 @@ const TypeErrorMessage = require('./util/type-error-message');
 
 Number.isInteger = Number.isInteger || require('number-is-integer');
 
-/**
- * @todo:
- * - Set ARIA roles
- */
 class Taggd extends EventEmitter {
   /**
    * Create a new taggd instance
