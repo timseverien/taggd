@@ -1,0 +1,34 @@
+{
+  "name": "taggd",
+  "description": "A tool to show and add tags to images",
+  "main": [
+    "dist/taggd.css",
+    "dist/taggd.min.js"
+  ],
+  "moduleType": [
+    "globals"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "tests"
+  ],
+  "keywords": [
+    "tag",
+    "tags",
+    "image",
+    "detail",
+    "information",
+    "popup"
+  ],
+  "authors": [
+    {
+      "name": "Tim Severien",
+      "email": "hi@timseverien.com",
+      "homepage": "https://timseverien.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/timseverien/taggd.git"
+  },
+}
