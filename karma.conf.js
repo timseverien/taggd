@@ -3,7 +3,7 @@ module.exports = function(config) {
     basePath: '',
     frameworks: ['jasmine'],
     files: [
-      'dest/taggd.js',
+      'dist/taggd.js',
       'tests/functions.js',
       'tests/units/*.js',
       'tests/behavior/*.js',
@@ -25,7 +25,7 @@ module.exports = function(config) {
     singleRun: true,
     concurrency: Infinity,
     preprocessors: {
-      'dest/taggd.js': 'coverage',
+      'dist/taggd.js': 'coverage',
     },
   });
 };
