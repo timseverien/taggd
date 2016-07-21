@@ -18,5 +18,5 @@ After that, the pull-request will be reviewed and merged if it meets all require
 Before submitting a pull-request, it needs meet some requirements:
 
 - The library should be [built](https://github.com/timseverien/taggd/wiki/Building). The assets are in git, so they need to be updated for every change in the source code.
-- If you add new features or solve bugs, be sure to add [tests](https://github.com/timseverien/taggd/wiki/Testing).
+- If you add new features or solve bugs, be sure to [add tests](https://github.com/timseverien/taggd/wiki/Testing#creating-tests).
 - [Test](https://github.com/timseverien/taggd/wiki/Testing) your changes before submitting a pull-request. Pull-request that fail tests will not be merged.
