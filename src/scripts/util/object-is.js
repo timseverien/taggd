@@ -5,9 +5,7 @@ module.exports = {
    * @param {Object} type - The class to test
    * @return {Boolean}
    */
-  ofInstance: (object, type) => {
-    return object instanceof type;
-  },
+  ofInstance: (object, type) => object instanceof type,
 
   /**
    * Check whether an object is equals to given type
@@ -15,25 +13,19 @@ module.exports = {
    * @param {String} type - The type to test
    * @return {Boolean}
    */
-  ofType: (object, type) => {
-    return typeof object === type;
-  },
+  ofType: (object, type) => typeof object === type,
 
   /**
    * Check whether given object is a function
    * @param {Object} object - The object to test
    * @return {Boolean}
    */
-  function: (object) => {
-    return typeof object === 'function';
-  },
+  function: (object) => typeof object === 'function',
 
   /**
    * Check whether given object is a Number
    * @param {Object} object - The object to test
    * @return {Boolean}
    */
-  number: (object) => {
-    return !isNaN(parseFloat(object));
-  }
+  number: (object) => !Number.isNaN(Number.parseFloat(object)),
 };

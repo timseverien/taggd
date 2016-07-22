@@ -13,7 +13,7 @@ class Tag extends EventEmitter {
   constructor(position, text, buttonAttributes = {}, popupAttributes = {}) {
     if (!ObjectIs.ofType(position, 'object') || Array.isArray(position)) {
       throw new TypeError(TypeErrorMessage.getObjectMessage(position));
-    } else if (!'x' in position || !'y' in position) {
+    } else if (!('x' in position) || !('y' in position)) {
       throw new Error(`${position} should have x and y property`);
     }
 
@@ -71,7 +71,7 @@ class Tag extends EventEmitter {
 
     if (!isCanceled) {
       this.popupElement.style.display = 'none';
-      this.emit('taggd.tag.hidden', this)
+      this.emit('taggd.tag.hidden', this);
     }
 
     return this;
@@ -84,7 +84,7 @@ class Tag extends EventEmitter {
    */
   setText(text) {
     if (!ObjectIs.ofType(text, 'string') && !ObjectIs.function(text)) {
-      throw new TypeError(TypeErrorMessage.getMessage(type, 'a string or a function'));
+      throw new TypeError(TypeErrorMessage.getMessage(text, 'a string or a function'));
     }
 
     const isCanceled = !this.emit('taggd.tag.change', this);
@@ -235,7 +235,7 @@ class Tag extends EventEmitter {
    */
   toJSON() {
     function getAttributes(rawAttributes) {
-      var attributes = {};
+      const attributes = {};
 
       Array.prototype.forEach.call(rawAttributes, (attribute) => {
         if (attribute.name === 'class' || attribute.name === 'style') {
@@ -270,17 +270,17 @@ class Tag extends EventEmitter {
       throw new TypeError(TypeErrorMessage.getObjectMessage(attributes));
     }
 
-    for (let attribute in attributes) {
-      const value = attributes[attribute];
+    Object.entries(attributes).forEach((attribute) => {
+      const [attributeName, attributeValue] = attribute;
 
-      if (attribute === 'class' && element.getAttribute(attribute)) {
-        const classValue = element.getAttribute(attribute) + ` ${value}`;
-        element.setAttribute(attribute, classValue);
-        continue;
+      if (attributeName === 'class' && element.getAttribute(attributeName)) {
+        const classValue = `${element.getAttribute(attributeName)} ${attributeValue}`;
+        element.setAttribute(attributeName, classValue);
+        return;
       }
 
-      element.setAttribute(attribute, value);
-    }
+      element.setAttribute(attributeName, attributeValue);
+    });
 
     return element;
   }
@@ -300,8 +300,8 @@ class Tag extends EventEmitter {
     }
 
     return {
-      left: (x * 100) + '%',
-      top: (y * 100) + '%',
+      left: `${x * 100}%`,
+      top: `${y * 100}%`,
     };
   }
 

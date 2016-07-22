@@ -3,8 +3,6 @@ const EventEmitter = require('./util/event-emitter');
 const ObjectIs = require('./util/object-is');
 const TypeErrorMessage = require('./util/type-error-message');
 
-Number.isInteger = Number.isInteger || require('number-is-integer');
-
 class Taggd extends EventEmitter {
   /**
    * Create a new taggd instance
@@ -33,12 +31,12 @@ class Taggd extends EventEmitter {
     this.tags = [];
 
     this.imageClickHandler = (e) => {
-      var position = {
+      const position = {
         x: e.clientX / this.image.width,
         y: e.clientY / this.image.height,
       };
 
-      var tag = new Tag(position, Tag.LABEL_NEW_TAG);
+      const tag = new Tag(position, Tag.LABEL_NEW_TAG);
       tag.enableControls();
 
       this.addTag(tag);
@@ -55,7 +53,7 @@ class Taggd extends EventEmitter {
    */
   setOptions(options) {
     if (!ObjectIs.ofType(options, 'object') || Array.isArray(options)) {
-      throw new TypeError(TypeErrorMessage.getObjectMessage(tag));
+      throw new TypeError(TypeErrorMessage.getObjectMessage(options));
     }
 
     this.options = Object.assign(this.options, Taggd.DEFAULT_OPTIONS, options);
@@ -79,7 +77,7 @@ class Taggd extends EventEmitter {
       tag.buttonElement.addEventListener(this.options.show, () => tag.show());
       tag.buttonElement.addEventListener(this.options.hide, () => tag.hide());
 
-      tag.once('taggd.tag.delete', (tag) => {
+      tag.once('taggd.tag.delete', () => {
         const tagIndex = this.tags.indexOf(tag);
 
         if (tagIndex >= 0) {

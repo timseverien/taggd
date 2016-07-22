@@ -1,3 +1,5 @@
+/* eslint arrow-body-style: 0 */
+
 const browserify = require('browserify');
 const babelify = require('babelify');
 const buffer = require('vinyl-buffer');
@@ -16,8 +18,11 @@ const DIR_BUILD = 'dist';
 const DIR_SOURCE = 'src';
 
 const OPTIONS_BABEL = {
-  presets: ['es2015'],
-  plugins: ['transform-object-assign'],
+  presets: ['es2015', 'es2017'],
+  plugins: [
+    'transform-runtime',
+    'transform-object-assign',
+  ],
 };
 
 const paths = {
