@@ -24,9 +24,12 @@
     "url": "git+https://github.com/timseverien/taggd.git"
   },
   "scripts": {
+    "lint": "eslint -c .eslintrc.json src/scripts",
+
     "prebuild": "npm run lint",
     "build": "gulp",
-    "lint": "eslint -c .eslintrc.json src/scripts",
+
+    "pretest": "npm run build",
     "test": "karma start karma.conf.js"
   },
   "devDependencies": {
