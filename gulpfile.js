@@ -19,10 +19,7 @@ const DIR_SOURCE = 'src';
 
 const OPTIONS_BABEL = {
   presets: ['es2015', 'es2017'],
-  plugins: [
-    'transform-runtime',
-    'transform-object-assign',
-  ],
+  plugins: ['transform-runtime'],
 };
 
 const paths = {
