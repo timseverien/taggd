@@ -1,4 +1,4 @@
-module.exports = function(config) {
+module.exports = (config) => {
   config.set({
     basePath: '',
     frameworks: ['jasmine'],
@@ -17,15 +17,23 @@ module.exports = function(config) {
       },
     ],
     reporters: ['progress', 'coverage'],
-    port: 9876,
-    colors: true,
-    logLevel: config.LOG_INFO,
     autoWatch: false,
     browsers: ['PhantomJS'],
     singleRun: true,
-    concurrency: Infinity,
     preprocessors: {
       'dist/taggd.js': 'coverage',
+    },
+    coverageReporter: {
+      reporters: [
+        // CLI output
+        { type: 'text' },
+        // Report to submit to Coveralls
+        {
+          type: 'lcov',
+          dir: 'coverage',
+          subdir: '.',
+        },
+      ],
     },
   });
 };

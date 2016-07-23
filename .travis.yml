@@ -3,3 +3,5 @@ node_js: "node"
 branches:
   except:
     - gh-pages
+after_success:
+  - npm run coveralls
