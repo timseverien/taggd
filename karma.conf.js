@@ -1,9 +1,9 @@
 module.exports = (config) => {
   config.set({
     basePath: '',
-    frameworks: ['jasmine'],
+    frameworks: ['browserify', 'jasmine'],
     files: [
-      'dist/taggd.js',
+      'src/**/*.js',
       'tests/functions.js',
       'tests/units/*.js',
       'tests/behavior/*.js',
@@ -21,7 +21,7 @@ module.exports = (config) => {
     browsers: ['PhantomJS'],
     singleRun: true,
     preprocessors: {
-      'dist/taggd.js': 'coverage',
+      'src/**/*.js': ['browserify', 'coverage'],
     },
     coverageReporter: {
       reporters: [
@@ -33,6 +33,15 @@ module.exports = (config) => {
           dir: 'coverage',
           subdir: '.',
         },
+      ],
+    },
+    browserify: {
+      debug: true,
+      transform: [
+        ['babelify', {
+          presets: ['es2015', 'es2017'],
+          plugins: ['transform-runtime'],
+        }],
       ],
     },
   });
