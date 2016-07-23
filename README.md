@@ -1,4 +1,4 @@
-# Taggd
+# Taggd [![Build Status](http://img.shields.io/travis/timseverien/taggd/3.0.svg)](https://travis-ci.org/timseverien/taggd) [![Coverage Status](http://img.shields.io/coveralls/timseverien/taggd/3.0.svg)](https://coveralls.io/r/timseverien/taggd?branch=3.0)
 
 Taggd is a tool that allows you to tag pictures with additional information.
 
