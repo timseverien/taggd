@@ -1,0 +1,9 @@
+# OS-specific
+.DS_Store
+*.log
+
+# Package managers
+node_modules/
+
+# Tests results
+coverage/

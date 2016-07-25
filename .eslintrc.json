@@ -1,0 +1,8 @@
+{
+  "extends": "airbnb",
+  "env": {
+    "jasmine": true,
+    "browser": true,
+    "jquery": true
+  }
+}
