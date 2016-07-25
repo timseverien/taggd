@@ -32,7 +32,7 @@ const tags = [];
 const taggd = new Taggd(image, options, tags);
 ```
 
-Available options are:
+Available `options` are:
 
 ```js
 {
