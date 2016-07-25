@@ -1,10 +1,10 @@
-# Taggd [![Build Status](http://img.shields.io/travis/timseverien/taggd/3.0.svg)](https://travis-ci.org/timseverien/taggd) [![Coverage Status](http://img.shields.io/coveralls/timseverien/taggd/3.0.svg)](https://coveralls.io/r/timseverien/taggd?branch=3.0) ![Library Size](https://badge-size.herokuapp.com/timseverien/taggd/3.0/dist/taggd.min.js?compression=gzip)
+# Taggd [![Build Status](http://img.shields.io/travis/timseverien/taggd.svg)](https://travis-ci.org/timseverien/taggd) [![Coverage Status](http://img.shields.io/coveralls/timseverien/taggd.svg)](https://coveralls.io/r/timseverien/taggd) ![Library Size](https://badge-size.herokuapp.com/timseverien/taggd/dist/taggd.min.js?compression=gzip)
 
 Taggd is a tool that allows you to tag pictures with additional information.
 
 ## Installation
 
-* [Download the latest release](https://github.com/timseverien/taggd/archive/3.0.zip)
+* [Download the latest release](https://github.com/timseverien/taggd/archive/master.zip)
 * npm: `npm install taggd`
 * Bower: `bower install taggd`
 
@@ -40,4 +40,4 @@ For more information, check out [the documentation](https://github.com/timseveri
 
 ## License
 
-The code is released under [the MIT license](https://github.com/timseverien/taggd/blob/3.0/LICENSE.txt).
+The code is released under [the MIT license](https://github.com/timseverien/taggd/blob/LICENSE.txt).
