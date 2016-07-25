@@ -32,11 +32,22 @@ const tags = [];
 const taggd = new Taggd(image, options, tags);
 ```
 
-[Options](https://github.com/timseverien/taggd/wiki#options) are a set of options to set behaviour. [Tags](https://github.com/timseverien/taggd/wiki#options) are the the buttons and popup that will render over your image.
+Available options are:
+
+```js
+{
+  // The event to show the tag
+  show: 'mouseenter',
+  // The event to hide the tag
+  hide: 'mouseleave',
+}
+```
+
+[Tags](https://doclets.io/timseverien/taggd/master#dl-Tag) are the buttons and popup that will render over your image.
 
 ## Documentation
 
-For more information, check out [the documentation](https://github.com/timseverien/taggd/wiki).
+For more information, check out [the documentation](https://doclets.io/timseverien/taggd/master/overview).
 
 ## License
 
