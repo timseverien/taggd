@@ -692,6 +692,7 @@ var createDict = function(){
   // Thrash, waste and sodomy: IE GC bug
   var iframe = require('./_dom-create')('iframe')
     , i      = enumBugKeys.length
+    , lt     = '<'
     , gt     = '>'
     , iframeDocument;
   iframe.style.display = 'none';
@@ -701,7 +702,7 @@ var createDict = function(){
   // html.removeChild(iframe);
   iframeDocument = iframe.contentWindow.document;
   iframeDocument.open();
-  iframeDocument.write('<script>document.F=Object</script' + gt);
+  iframeDocument.write(lt + 'script' + gt + 'document.F=Object' + lt + '/script' + gt);
   iframeDocument.close();
   createDict = iframeDocument.F;
   while(i--)delete createDict[PROTOTYPE][enumBugKeys[i]];
@@ -719,6 +720,7 @@ module.exports = Object.create || function create(O, Properties){
   } else result = createDict();
   return Properties === undefined ? result : dPs(result, Properties);
 };
+
 },{"./_an-object":35,"./_dom-create":43,"./_enum-bug-keys":44,"./_html":51,"./_object-dps":67,"./_shared-key":83}],66:[function(require,module,exports){
 var anObject       = require('./_an-object')
   , IE8_DOM_DEFINE = require('./_ie8-dom-define')
@@ -1501,10 +1503,9 @@ var Tag = function (_EventEmitter) {
    * Create a new Tag instance
    * @param {{ x: Number, y: Number }} position - The tag’s coordinates
    * @param {String|Function} text - The tag’s content
-   * @param {Object} buttonAttributes = {} - The button’s attributes
-   * @param {Object} popupAttributes = {} - The popup’s attributes
+   * @param {Object} [buttonAttributes] - The button’s attributes
+   * @param {Object} [popupAttributes] - The popup’s attributes
    */
-
   function Tag(position, text) {
     var buttonAttributes = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
     var popupAttributes = arguments.length <= 3 || arguments[3] === undefined ? {} : arguments[3];
@@ -1790,7 +1791,7 @@ var Tag = function (_EventEmitter) {
     /**
      * Set element attributes
      * @param {DomNode} element - The element the attributes should be set to
-     * @param {Object} attributes = {} - A map of attributes to set
+     * @param {Object} [attributes] - A map of attributes to set
      * @return {DomNode} The original element
      */
 
@@ -1910,10 +1911,9 @@ var Taggd = function (_EventEmitter) {
   /**
    * Create a new taggd instance
    * @param {HTMLElement} image - The image to wrap
-   * @param {Object} options = {} - The options
-   * @param {Array} data = [] - The tags
+   * @param {Object} [options] - The options
+   * @param {Array} [data] - The tags
    */
-
   function Taggd(image) {
     var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
     var data = arguments.length <= 2 || arguments[2] === undefined ? [] : arguments[2];
