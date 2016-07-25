@@ -1,4 +1,4 @@
-# Taggd [![Build Status](http://img.shields.io/travis/timseverien/taggd.svg)](https://travis-ci.org/timseverien/taggd) [![Coverage Status](http://img.shields.io/coveralls/timseverien/taggd.svg)](https://coveralls.io/r/timseverien/taggd) ![Library Size](https://badge-size.herokuapp.com/timseverien/taggd/dist/taggd.min.js?compression=gzip)
+# Taggd [![Build Status](http://img.shields.io/travis/timseverien/taggd.svg)](https://travis-ci.org/timseverien/taggd) [![Coverage Status](http://img.shields.io/coveralls/timseverien/taggd.svg)](https://coveralls.io/r/timseverien/taggd) ![Library Size](https://badge-size.herokuapp.com/timseverien/taggd/master/dist/taggd.min.js?compression=gzip)
 
 Taggd is a tool that allows you to tag pictures with additional information.
 
