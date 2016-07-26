@@ -242,6 +242,7 @@ class Taggd extends EventEmitter {
 
 /**
  * Default options for all Taggd instances
+ * @const
  * @type {Object}
  */
 Taggd.DEFAULT_OPTIONS = {

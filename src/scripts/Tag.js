@@ -320,8 +320,23 @@ class Tag extends EventEmitter {
   }
 }
 
+/**
+ * Label for a new tag
+ * @const
+ * @type {String}
+ */
 Tag.LABEL_NEW_TAG = 'New tag';
+/**
+ * Label for save button
+ * @const
+ * @type {String}
+ */
 Tag.LABEL_BUTTON_SAVE = 'save';
+/**
+ * Label for delete button
+ * @const
+ * @type {String}
+ */
 Tag.LABEL_BUTTON_DELETE = 'delete';
 
 module.exports = Tag;
