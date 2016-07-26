@@ -324,12 +324,14 @@ class Tag extends EventEmitter {
  * Label for a new tag
  * @const
  * @type {String}
+ * @ignore
  */
 Tag.LABEL_NEW_TAG = 'New tag';
 /**
  * Label for save button
  * @const
  * @type {String}
+ * @ignore
  */
 Tag.LABEL_BUTTON_SAVE = 'save';
 /**
