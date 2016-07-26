@@ -244,6 +244,7 @@ class Taggd extends EventEmitter {
  * Default options for all Taggd instances
  * @const
  * @type {Object}
+ * @ignore
  */
 Taggd.DEFAULT_OPTIONS = {
   show: 'mouseenter',
