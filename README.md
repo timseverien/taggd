@@ -32,18 +32,7 @@ const tags = [];
 const taggd = new Taggd(image, options, tags);
 ```
 
-Available `options` are:
-
-```js
-{
-  // The event to show the tag
-  show: 'mouseenter',
-  // The event to hide the tag
-  hide: 'mouseleave',
-}
-```
-
-[Tags](https://doclets.io/timseverien/taggd/master#dl-Tag) are the buttons and popup that will render over your image.
+The `options` parameter is a list of [options](https://doclets.io/timseverien/taggd/master/options). The `tags` parameter is a list of [Taggd.Tag](https://doclets.io/timseverien/taggd/master#dl-Tag)s. These are the buttons and popup that will render over your image.
 
 ## Documentation
 
