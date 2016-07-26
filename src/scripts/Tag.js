@@ -7,8 +7,8 @@ class Tag extends EventEmitter {
    * Create a new Tag instance
    * @param {{ x: Number, y: Number }} position - The tag’s coordinates
    * @param {String|Function} text - The tag’s content
-   * @param {Object} [buttonAttributes] - The button’s attributes
-   * @param {Object} [popupAttributes] - The popup’s attributes
+   * @param {Object} [buttonAttributes = {}] - The button’s attributes
+   * @param {Object} [popupAttributes = {}] - The popup’s attributes
    */
   constructor(position, text, buttonAttributes = {}, popupAttributes = {}) {
     if (!ObjectIs.ofType(position, 'object') || Array.isArray(position)) {
@@ -138,7 +138,7 @@ class Tag extends EventEmitter {
 
   /**
    * Set the tag button’s attributes
-   * @param {Object} atttributes - The attributes to set
+   * @param {Object} atttributes = {} - The attributes to set
    * @return {Taggd.Tag} Current tag
    */
   setButtonAttributes(attributes = {}) {
@@ -158,7 +158,7 @@ class Tag extends EventEmitter {
 
   /**
    * Set the tag popup’s attributes
-   * @param {Object} atttributes - The attributes to set
+   * @param {Object} atttributes = {} - The attributes to set
    * @return {Taggd.Tag} Current tag
    */
   setPopupAttributes(attributes = {}) {
@@ -262,7 +262,7 @@ class Tag extends EventEmitter {
   /**
    * Set element attributes
    * @param {DomNode} element - The element the attributes should be set to
-   * @param {Object} [attributes] - A map of attributes to set
+   * @param {Object} [attributes = {}] - A map of attributes to set
    * @return {DomNode} The original element
    */
   static setElementAttributes(element, attributes = {}) {
