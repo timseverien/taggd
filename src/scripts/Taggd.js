@@ -75,7 +75,9 @@ class Taggd extends EventEmitter {
     if (!isCanceled) {
       // Add events to show/hide tags
       tag.buttonElement.addEventListener(this.options.show, () => tag.show());
-      tag.buttonElement.addEventListener(this.options.hide, () => tag.hide());
+      tag.buttonElement.addEventListener(this.options.hide, () => {
+        window.setTimeout(() => tag.hide(), this.options.hideDelay);
+      });
 
       tag.once('taggd.tag.delete', () => {
         const tagIndex = this.tags.indexOf(tag);
@@ -249,6 +251,7 @@ class Taggd extends EventEmitter {
 Taggd.DEFAULT_OPTIONS = {
   show: 'mouseenter',
   hide: 'mouseleave',
+  hideDelay: 500,
 };
 
 module.exports = Taggd;

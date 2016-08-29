@@ -1503,8 +1503,8 @@ var Tag = function (_EventEmitter) {
    * Create a new Tag instance
    * @param {{ x: Number, y: Number }} position - The tag’s coordinates
    * @param {String|Function} text - The tag’s content
-   * @param {Object} [buttonAttributes] - The button’s attributes
-   * @param {Object} [popupAttributes] - The popup’s attributes
+   * @param {Object} [buttonAttributes = {}] - The button’s attributes
+   * @param {Object} [popupAttributes = {}] - The popup’s attributes
    */
   function Tag(position, text) {
     var buttonAttributes = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
@@ -1654,7 +1654,7 @@ var Tag = function (_EventEmitter) {
 
     /**
      * Set the tag button’s attributes
-     * @param {Object} atttributes - The attributes to set
+     * @param {Object} atttributes = {} - The attributes to set
      * @return {Taggd.Tag} Current tag
      */
 
@@ -1679,7 +1679,7 @@ var Tag = function (_EventEmitter) {
 
     /**
      * Set the tag popup’s attributes
-     * @param {Object} atttributes - The attributes to set
+     * @param {Object} atttributes = {} - The attributes to set
      * @return {Taggd.Tag} Current tag
      */
 
@@ -1791,7 +1791,7 @@ var Tag = function (_EventEmitter) {
     /**
      * Set element attributes
      * @param {DomNode} element - The element the attributes should be set to
-     * @param {Object} [attributes] - A map of attributes to set
+     * @param {Object} [attributes = {}] - A map of attributes to set
      * @return {DomNode} The original element
      */
 
@@ -1861,8 +1861,27 @@ var Tag = function (_EventEmitter) {
   return Tag;
 }(EventEmitter);
 
+/**
+ * Label for a new tag
+ * @const
+ * @type {String}
+ * @ignore
+ */
+
+
 Tag.LABEL_NEW_TAG = 'New tag';
+/**
+ * Label for save button
+ * @const
+ * @type {String}
+ * @ignore
+ */
 Tag.LABEL_BUTTON_SAVE = 'save';
+/**
+ * Label for delete button
+ * @const
+ * @type {String}
+ */
 Tag.LABEL_BUTTON_DELETE = 'delete';
 
 module.exports = Tag;
@@ -1911,8 +1930,8 @@ var Taggd = function (_EventEmitter) {
   /**
    * Create a new taggd instance
    * @param {HTMLElement} image - The image to wrap
-   * @param {Object} [options] - The options
-   * @param {Array} [data] - The tags
+   * @param {Object} [options = {}] - The [options]{@link https://doclets.io/timseverien/taggd/master/options}
+   * @param {Array} [data = []] - The tags
    */
   function Taggd(image) {
     var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
@@ -1996,7 +2015,9 @@ var Taggd = function (_EventEmitter) {
           return tag.show();
         });
         tag.buttonElement.addEventListener(this.options.hide, function () {
-          return tag.hide();
+          window.setTimeout(function () {
+            return tag.hide();
+          }, _this2.options.hideDelay);
         });
 
         tag.once('taggd.tag.delete', function () {
@@ -2208,13 +2229,16 @@ var Taggd = function (_EventEmitter) {
 
 /**
  * Default options for all Taggd instances
+ * @const
  * @type {Object}
+ * @ignore
  */
 
 
 Taggd.DEFAULT_OPTIONS = {
   show: 'mouseenter',
-  hide: 'mouseleave'
+  hide: 'mouseleave',
+  hideDelay: 500
 };
 
 module.exports = Taggd;
