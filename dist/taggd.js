@@ -1924,6 +1924,24 @@ var EventEmitter = require('./util/event-emitter');
 var ObjectIs = require('./util/object-is');
 var TypeErrorMessage = require('./util/type-error-message');
 
+/**
+ * Get an element’s offset relative to the document
+ * @param {HTMLElement} image - The image to find the offset for
+ * @return {Object}
+ */
+function getElementOffset(image) {
+  var currentElement = image;
+  var offset = { x: 0, y: 0 };
+
+  do {
+    offset.x += currentElement.offsetLeft - currentElement.scrollLeft;
+    offset.y += currentElement.offsetTop - currentElement.scrollTop;
+    currentElement = currentElement.offsetParent;
+  } while (currentElement);
+
+  return offset;
+}
+
 var Taggd = function (_EventEmitter) {
   (0, _inherits3.default)(Taggd, _EventEmitter);
 
@@ -1958,9 +1976,10 @@ var Taggd = function (_EventEmitter) {
     _this.tags = [];
 
     _this.imageClickHandler = function (e) {
+      var offset = getElementOffset(_this.image);
       var position = {
-        x: e.clientX / _this.image.width,
-        y: e.clientY / _this.image.height
+        x: (e.pageX - offset.x) / _this.image.width,
+        y: (e.pageY - offset.y) / _this.image.height
       };
 
       var tag = new Tag(position, Tag.LABEL_NEW_TAG);
