@@ -1,0 +1,40 @@
+.taggd__button {
+  display: block;
+  height: 1rem;
+  width: 1rem;
+  margin-left: -.5rem;
+  margin-top: -.5rem;
+  border-radius: .5rem;
+  background-color: rgba(219, 50, 92, 0.75);
+}
+
+.taggd__button:hover {
+  background-color: rgb(219, 50, 92);
+  z-index: 10;
+}
+
+.taggd__popup {
+  display: block;
+  padding: .75rem;
+  position: absolute;
+  left: 50%;
+  top: 125%;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  background-color: rgba(219, 50, 92, 0.75);
+  transform: translateX(-50%);
+}
+
+.taggd__editor-input,
+.taggd__editor-button {
+  padding: .25rem .5rem;
+  border: 1px solid #fff;
+  margin-right: .25rem;
+  background-color: transparent;
+  color: #fff;
+}
+
+.taggd__editor-button--delete {
+  margin-right: 0;
+}
