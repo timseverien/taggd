@@ -2,6 +2,8 @@
   display: block;
   height: 1rem;
   width: 1rem;
+  margin-left: -.5rem;
+  margin-top: -.5rem;
   border-radius: .5rem;
   background-color: rgba(219, 50, 92, 0.75);
 }
