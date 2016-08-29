@@ -62,7 +62,7 @@ describe('Taggd', function () {
     };
     var taggd = new Taggd(image, options);
 
-    expect(taggd.options).toEqual(options);
+    expect(taggd.options).toEqual(jasmine.objectContaining(options));
   });
 
   it('should set tags', function () {
@@ -105,7 +105,7 @@ describe('Taggd.setOptions', function () {
     expect(taggd.options).toEqual(Taggd.DEFAULT_OPTIONS);
 
     taggd.setOptions(options);
-    expect(taggd.options).toEqual(options);
+    expect(taggd.options).toEqual(jasmine.objectContaining(options));
   });
 
   it('should return taggd instance', function () {

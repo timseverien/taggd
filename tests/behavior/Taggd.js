@@ -92,7 +92,7 @@ describe('Taggd UI', function () {
   beforeEach(createImage);
   afterEach(destroyBody);
 
-  it('should show image on hover', function () {
+  it('should show image on hover', function (done) {
     var image = getImageElement();
     var tags = [
       new Taggd.Tag({
@@ -107,6 +107,10 @@ describe('Taggd UI', function () {
     triggerEvent(tags[0].buttonElement, 'mouseenter');
     expect(tags[0].popupElement.style.display).not.toBe('none');
     triggerEvent(tags[0].buttonElement, 'mouseleave');
-    expect(tags[0].popupElement.style.display).toBe('none');
+
+    window.setTimeout(function () {
+      expect(tags[0].popupElement.style.display).toBe('none');
+      done();
+    }, taggd.options.hideDelay * 2);
   });
 });
