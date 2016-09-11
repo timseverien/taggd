@@ -310,3 +310,25 @@ describe('Tag.createFromObject', function () {
     expect(tag.popupElement.getAttribute('bar')).toEqual(popupAttributes.bar);
   });
 });
+
+describe('Taggd.toJSON', function () {
+  it('should output an object identical to what entered Tag.createFromObject', function () {
+    var text = 'foo';
+    var position = {
+      x: .25,
+      y: .75,
+    };
+    var positionStyle = Taggd.Tag.getPositionStyle(position.x, position.y);
+    var buttonAttributes = { foo: 'bar' };
+    var popupAttributes = { bar: 'foo' };
+    var tagObject = {
+      position: position,
+      text: text,
+      buttonAttributes: buttonAttributes,
+      popupAttributes: popupAttributes,
+    };
+    var tag = Taggd.Tag.createFromObject(tagObject);
+
+    expect(tag.toJSON()).toEqual(tagObject);
+  });
+});
