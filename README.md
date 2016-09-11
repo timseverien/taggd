@@ -32,7 +32,7 @@ const tags = [];
 const taggd = new Taggd(image, options, tags);
 ```
 
-The `options` parameter is a list of [options](https://doclets.io/timseverien/taggd/master/options). The `tags` parameter is a list of [Taggd.Tag](https://doclets.io/timseverien/taggd/master#dl-Tag)s. These are the buttons and popup that will render over your image.
+The `options` parameter is a list of [options](https://doclets.io/timseverien/taggd/master/options). The `tags` parameter is a list of [Taggd.Tag](https://doclets.io/timseverien/taggd/master#dl-Tag)s. These are the buttons and popup that will render over your image. You can generate these using the [Taggd tags generator](https://timseverien.github.io/taggd/v3/generator).
 
 ## Documentation
 
