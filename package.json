@@ -57,6 +57,7 @@
     "karma-jasmine": "^1.0.2",
     "karma-phantomjs-launcher": "^1.0.0",
     "number-is-integer": "^1.0.0",
+    "offset": "0.0.1",
     "phantomjs-prebuilt": "^2.1.7",
     "scrolltop": "0.0.1",
     "vinyl-buffer": "^1.0.0",

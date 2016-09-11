@@ -1,27 +1,10 @@
+const getElementOffset = require('offset');
 const getScrollTop = require('scrolltop');
 
 const Tag = require('./Tag');
 const EventEmitter = require('./util/event-emitter');
 const ObjectIs = require('./util/object-is');
 const TypeErrorMessage = require('./util/type-error-message');
-
-/**
- * Get an element’s offset relative to the document
- * @param {HTMLElement} image - The image to find the offset for
- * @return {Object}
- */
-function getElementOffset(image) {
-  let currentElement = image;
-  const offset = { x: 0, y: 0 };
-
-  do {
-    offset.x += currentElement.offsetLeft - currentElement.scrollLeft;
-    offset.y += currentElement.offsetTop - currentElement.scrollTop;
-    currentElement = currentElement.offsetParent;
-  } while (currentElement);
-
-  return offset;
-}
 
 class Taggd extends EventEmitter {
   /**
