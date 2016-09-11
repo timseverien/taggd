@@ -1460,6 +1460,23 @@ for(var collections = ['NodeList', 'DOMTokenList', 'MediaList', 'StyleSheetList'
   Iterators[NAME] = Iterators.Array;
 }
 },{"./_global":48,"./_hide":50,"./_iterators":60,"./_wks":97,"./es6.array.iterator":101}],117:[function(require,module,exports){
+// http://stackoverflow.com/questions/442404/dynamically-retrieve-the-position-x-y-of-an-html-element
+module.exports = function(el) {
+  if (el.getBoundingClientRect) {
+      return el.getBoundingClientRect();
+  }
+  else {
+    var x = 0, y = 0;
+    do {
+        x += el.offsetLeft - el.scrollLeft;
+        y += el.offsetTop - el.scrollTop;
+    } 
+    while (el = el.offsetParent);
+
+    return { "left": x, "top": y }
+  }
+}
+},{}],118:[function(require,module,exports){
 
 /**
  * get the window's scrolltop.
@@ -1474,7 +1491,7 @@ module.exports = function(){
     : document.body.scrollTop;
 };
 
-},{}],118:[function(require,module,exports){
+},{}],119:[function(require,module,exports){
 'use strict';
 
 var _slicedToArray2 = require('babel-runtime/helpers/slicedToArray');
@@ -1795,7 +1812,7 @@ var Tag = function (_EventEmitter) {
       return {
         position: {
           x: parseFloat(this.buttonElement.style.left) / 100,
-          y: parseFloat(this.buttonElement.style.left) / 100
+          y: parseFloat(this.buttonElement.style.top) / 100
         },
         text: this.text,
         buttonAttributes: getAttributes(this.buttonElement.attributes),
@@ -1901,7 +1918,7 @@ Tag.LABEL_BUTTON_DELETE = 'delete';
 
 module.exports = Tag;
 
-},{"./util/event-emitter":120,"./util/object-is":121,"./util/type-error-message":122,"babel-runtime/core-js/object/entries":9,"babel-runtime/core-js/object/get-prototype-of":10,"babel-runtime/helpers/classCallCheck":14,"babel-runtime/helpers/createClass":15,"babel-runtime/helpers/inherits":16,"babel-runtime/helpers/possibleConstructorReturn":17,"babel-runtime/helpers/slicedToArray":18}],119:[function(require,module,exports){
+},{"./util/event-emitter":121,"./util/object-is":122,"./util/type-error-message":123,"babel-runtime/core-js/object/entries":9,"babel-runtime/core-js/object/get-prototype-of":10,"babel-runtime/helpers/classCallCheck":14,"babel-runtime/helpers/createClass":15,"babel-runtime/helpers/inherits":16,"babel-runtime/helpers/possibleConstructorReturn":17,"babel-runtime/helpers/slicedToArray":18}],120:[function(require,module,exports){
 'use strict';
 
 var _isInteger = require('babel-runtime/core-js/number/is-integer');
@@ -1934,30 +1951,13 @@ var _inherits3 = _interopRequireDefault(_inherits2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var scrollTop = require('scrolltop');
+var getElementOffset = require('offset');
+var getScrollTop = require('scrolltop');
 
 var Tag = require('./Tag');
 var EventEmitter = require('./util/event-emitter');
 var ObjectIs = require('./util/object-is');
 var TypeErrorMessage = require('./util/type-error-message');
-
-/**
- * Get an element’s offset relative to the document
- * @param {HTMLElement} image - The image to find the offset for
- * @return {Object}
- */
-function getElementOffset(image) {
-  var currentElement = image;
-  var offset = { x: 0, y: 0 };
-
-  do {
-    offset.x += currentElement.offsetLeft - currentElement.scrollLeft;
-    offset.y += currentElement.offsetTop - currentElement.scrollTop;
-    currentElement = currentElement.offsetParent;
-  } while (currentElement);
-
-  return offset;
-}
 
 var Taggd = function (_EventEmitter) {
   (0, _inherits3.default)(Taggd, _EventEmitter);
@@ -1993,11 +1993,12 @@ var Taggd = function (_EventEmitter) {
     _this.tags = [];
 
     _this.imageClickHandler = function (e) {
+      var scrollTop = getScrollTop();
       var offset = getElementOffset(_this.image);
 
       var position = {
         x: (e.pageX - offset.x) / _this.image.width,
-        y: (e.pageY - offset.y - scrollTop()) / _this.image.height
+        y: (e.pageY - offset.y - scrollTop) / _this.image.height
       };
 
       var tag = new Tag(position, Tag.LABEL_NEW_TAG);
@@ -2283,7 +2284,7 @@ module.exports.Tag = Tag;
 
 window.Taggd = module.exports;
 
-},{"./Tag":118,"./util/event-emitter":120,"./util/object-is":121,"./util/type-error-message":122,"babel-runtime/core-js/number/is-integer":3,"babel-runtime/core-js/object/assign":6,"babel-runtime/core-js/object/get-prototype-of":10,"babel-runtime/helpers/classCallCheck":14,"babel-runtime/helpers/createClass":15,"babel-runtime/helpers/inherits":16,"babel-runtime/helpers/possibleConstructorReturn":17,"scrolltop":117}],120:[function(require,module,exports){
+},{"./Tag":119,"./util/event-emitter":121,"./util/object-is":122,"./util/type-error-message":123,"babel-runtime/core-js/number/is-integer":3,"babel-runtime/core-js/object/assign":6,"babel-runtime/core-js/object/get-prototype-of":10,"babel-runtime/helpers/classCallCheck":14,"babel-runtime/helpers/createClass":15,"babel-runtime/helpers/inherits":16,"babel-runtime/helpers/possibleConstructorReturn":17,"offset":117,"scrolltop":118}],121:[function(require,module,exports){
 'use strict';
 
 var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
@@ -2371,7 +2372,7 @@ var EventEmitter = function () {
 
 module.exports = EventEmitter;
 
-},{"babel-runtime/helpers/classCallCheck":14,"babel-runtime/helpers/createClass":15}],121:[function(require,module,exports){
+},{"babel-runtime/helpers/classCallCheck":14,"babel-runtime/helpers/createClass":15}],122:[function(require,module,exports){
 'use strict';
 
 var _parseFloat = require('babel-runtime/core-js/number/parse-float');
@@ -2428,7 +2429,7 @@ module.exports = {
   }
 };
 
-},{"babel-runtime/core-js/number/is-nan":4,"babel-runtime/core-js/number/parse-float":5,"babel-runtime/helpers/typeof":19}],122:[function(require,module,exports){
+},{"babel-runtime/core-js/number/is-nan":4,"babel-runtime/core-js/number/parse-float":5,"babel-runtime/helpers/typeof":19}],123:[function(require,module,exports){
 'use strict';
 
 var TypeErrorMessage = {
@@ -2513,4 +2514,4 @@ var TypeErrorMessage = {
 
 module.exports = TypeErrorMessage;
 
-},{}]},{},[119]);
+},{}]},{},[120]);
