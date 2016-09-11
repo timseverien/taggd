@@ -251,7 +251,7 @@ class Tag extends EventEmitter {
     return {
       position: {
         x: parseFloat(this.buttonElement.style.left) / 100,
-        y: parseFloat(this.buttonElement.style.left) / 100,
+        y: parseFloat(this.buttonElement.style.top) / 100,
       },
       text: this.text,
       buttonAttributes: getAttributes(this.buttonElement.attributes),
