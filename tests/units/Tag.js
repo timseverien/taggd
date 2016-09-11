@@ -60,21 +60,21 @@ describe('Tag', function () {
   });
 });
 
-describe('Taggd.show', function () {
+describe('Tag.show', function () {
   it('should return tag instance', function () {
     var tag = createTag();
     expect(tag.show()).toEqual(tag);
   });
 });
 
-describe('Taggd.hide', function () {
+describe('Tag.hide', function () {
   it('should return tag instance', function () {
     var tag = createTag();
     expect(tag.hide()).toEqual(tag);
   });
 });
 
-describe('Taggd.setText', function () {
+describe('Tag.setText', function () {
   it('should throw for invalid text', function () {
     var tag = createTag();
 
@@ -99,7 +99,7 @@ describe('Taggd.setText', function () {
   });
 });
 
-describe('Taggd.setPosition', function () {
+describe('Tag.setPosition', function () {
   it('should throw for invalid text', function () {
     var tag = createTag();
 
@@ -130,7 +130,7 @@ describe('Taggd.setPosition', function () {
   });
 });
 
-describe('Taggd.setButtonAttributes', function () {
+describe('Tag.setButtonAttributes', function () {
   it('should throw for invalid attributes', function () {
     var tag = createTag();
 
@@ -149,7 +149,7 @@ describe('Taggd.setButtonAttributes', function () {
   });
 });
 
-describe('Taggd.setPopupAttributes', function () {
+describe('Tag.setPopupAttributes', function () {
   it('should throw for invalid attributes', function () {
     var tag = createTag();
 
@@ -168,21 +168,21 @@ describe('Taggd.setPopupAttributes', function () {
   });
 });
 
-describe('Taggd.enableControls', function () {
+describe('Tag.enableControls', function () {
   it('should return tag instance', function () {
     var tag = createTag();
     expect(tag.enableControls()).toEqual(tag);
   });
 });
 
-describe('Taggd.disableControls', function () {
+describe('Tag.disableControls', function () {
   it('should return tag instance', function () {
     var tag = createTag();
     expect(tag.disableControls()).toEqual(tag);
   });
 });
 
-describe('Taggd.setElementAttributes', function () {
+describe('Tag.setElementAttributes', function () {
   it('should throw for invalid attributes', function () {
     var element = document.createElement('div');
 
@@ -227,7 +227,7 @@ describe('Taggd.setElementAttributes', function () {
   });
 });
 
-describe('Taggd.getPositionStyle', function () {
+describe('Tag.getPositionStyle', function () {
   it('should throw for invalid position', function () {
     expect(function () {
       Taggd.Tag.getPositionStyle('foo', 'bar');
@@ -252,7 +252,7 @@ describe('Taggd.getPositionStyle', function () {
   });
 });
 
-describe('Taggd.createFromObject', function () {
+describe('Tag.createFromObject', function () {
   it('should throw for invalid object', function () {
     var text = 'foo';
     var position = {
