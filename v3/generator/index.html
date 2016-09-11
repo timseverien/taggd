@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Taggd data generator</title>
+
+  <link rel="stylesheet" href="https://necolas.github.io/normalize.css/4.1.1/normalize.css">
+  <link rel="stylesheet" href="https://rawgit.com/timseverien/taggd/master/dist/taggd.css">
+  <link rel="stylesheet" href="https://rawgit.com/timseverien/taggd/master/tests/manual/themes/taggd-classic.css">
+
+  <style>
+  body {
+    background-color: #fafafa;
+    color: #333;
+  }
+
+  img {
+    height: auto;
+    width: 100%;
+  }
+
+  .container {
+    margin: 0 auto;
+    max-width: 32rem;
+  }
+
+  .section {
+    margin-top: 4rem;
+  }
+
+  .code {
+    color: #aaa;
+  }
+  .code__highlight {
+    color: #000;
+  }
+
+  .input-image {
+    display: block;
+    padding: 3rem 1rem;
+    border: 2px dashed #ccc;
+    background-color: #eee;
+    color: #888;
+    text-align: center;
+  }
+  .input-image:hover,
+  .input-image:focus {
+    border-color: #bbb;
+    background-color: #e4e4e4;
+    color: #666;
+  }
+  .input-image input {
+    position: absolute;
+    opacity: 0;
+  }
+  </style>
+</head>
+<body>
+
+<main class="container">
+  <h1>Taggd data generator</h1>
+  <p>This page allows you to generate tags to use with <a href="https://github.com/timseverien/taggd">Taggd</a>.</p>
+
+  <section class="section">
+    <h2>1. Choose an image</h2>
+    <p>Choose an image to add tags to.</p>
+
+    <label class="input-image">
+      <input type="file" id="input-image">
+      Drop an image in this area or click to browse.
+    </label>
+  </section>
+
+  <section class="section">
+    <h2>2. Add tags</h2>
+    <p>Add tags by clicking on the image. You can add text in the popup, after clicking the tag.</p>
+
+    <img id="output-image">
+  </section>
+
+  <section class="section">
+    <h2>3. Copy the tags</h2>
+    <p>Copy the data array and paste it into your project.</p>
+
+    <pre class="code">new Taggd(..., ..., <span id="output-tags" class="code__highlight">[]</span>);</pre>
+  </section>
+</main>
+
+<script src="https://rawgit.com/timseverien/taggd/master/dist/taggd.min.js"></script>
+<script src="assets/scripts/generator.js"></script>
+<script>new Generator(
+  document.getElementById('input-image'),
+  document.getElementById('output-image'),
+  document.getElementById('output-tags')
+);</script>
+
+</body>
+</html>
