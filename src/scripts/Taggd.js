@@ -26,7 +26,7 @@ class Taggd extends EventEmitter {
    * Create a new taggd instance
    * @param {HTMLElement} image - The image to wrap
    * @param {Object} [options = {}] - The [options]{@link https://doclets.io/timseverien/taggd/master/options}
-   * @param {Array} [data = []] - The tags
+   * @param {Array} [data = []] - The [tags]{@link https://timseverien.github.io/taggd/v3/generator}
    */
   constructor(image, options = {}, data = []) {
     if (!image instanceof Element) {
