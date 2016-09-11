@@ -1,3 +1,5 @@
+const scrollTop = require('scrolltop');
+
 const Tag = require('./Tag');
 const EventEmitter = require('./util/event-emitter');
 const ObjectIs = require('./util/object-is');
@@ -50,9 +52,10 @@ class Taggd extends EventEmitter {
 
     this.imageClickHandler = (e) => {
       const offset = getElementOffset(this.image);
+
       const position = {
         x: (e.pageX - offset.x) / this.image.width,
-        y: (e.pageY - offset.y) / this.image.height,
+        y: (e.pageY - offset.y - scrollTop()) / this.image.height,
       };
 
       const tag = new Tag(position, Tag.LABEL_NEW_TAG);

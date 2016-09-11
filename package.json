@@ -58,6 +58,7 @@
     "karma-phantomjs-launcher": "^1.0.0",
     "number-is-integer": "^1.0.0",
     "phantomjs-prebuilt": "^2.1.7",
+    "scrolltop": "0.0.1",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
   }

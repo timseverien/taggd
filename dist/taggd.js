@@ -1460,6 +1460,21 @@ for(var collections = ['NodeList', 'DOMTokenList', 'MediaList', 'StyleSheetList'
   Iterators[NAME] = Iterators.Array;
 }
 },{"./_global":48,"./_hide":50,"./_iterators":60,"./_wks":97,"./es6.array.iterator":101}],117:[function(require,module,exports){
+
+/**
+ * get the window's scrolltop.
+ * 
+ * @return {Number}
+ */
+
+module.exports = function(){
+  if (window.pageYOffset) return window.pageYOffset;
+  return document.documentElement.clientHeight
+    ? document.documentElement.scrollTop
+    : document.body.scrollTop;
+};
+
+},{}],118:[function(require,module,exports){
 'use strict';
 
 var _slicedToArray2 = require('babel-runtime/helpers/slicedToArray');
@@ -1517,7 +1532,7 @@ var Tag = function (_EventEmitter) {
       throw new Error(position + ' should have x and y property');
     }
 
-    var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Tag).call(this));
+    var _this = (0, _possibleConstructorReturn3.default)(this, (Tag.__proto__ || (0, _getPrototypeOf2.default)(Tag)).call(this));
 
     _this.buttonElement = document.createElement('button');
     _this.buttonElement.classList.add('taggd__button');
@@ -1886,7 +1901,7 @@ Tag.LABEL_BUTTON_DELETE = 'delete';
 
 module.exports = Tag;
 
-},{"./util/event-emitter":119,"./util/object-is":120,"./util/type-error-message":121,"babel-runtime/core-js/object/entries":9,"babel-runtime/core-js/object/get-prototype-of":10,"babel-runtime/helpers/classCallCheck":14,"babel-runtime/helpers/createClass":15,"babel-runtime/helpers/inherits":16,"babel-runtime/helpers/possibleConstructorReturn":17,"babel-runtime/helpers/slicedToArray":18}],118:[function(require,module,exports){
+},{"./util/event-emitter":120,"./util/object-is":121,"./util/type-error-message":122,"babel-runtime/core-js/object/entries":9,"babel-runtime/core-js/object/get-prototype-of":10,"babel-runtime/helpers/classCallCheck":14,"babel-runtime/helpers/createClass":15,"babel-runtime/helpers/inherits":16,"babel-runtime/helpers/possibleConstructorReturn":17,"babel-runtime/helpers/slicedToArray":18}],119:[function(require,module,exports){
 'use strict';
 
 var _isInteger = require('babel-runtime/core-js/number/is-integer');
@@ -1919,6 +1934,8 @@ var _inherits3 = _interopRequireDefault(_inherits2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var scrollTop = require('scrolltop');
+
 var Tag = require('./Tag');
 var EventEmitter = require('./util/event-emitter');
 var ObjectIs = require('./util/object-is');
@@ -1949,7 +1966,7 @@ var Taggd = function (_EventEmitter) {
    * Create a new taggd instance
    * @param {HTMLElement} image - The image to wrap
    * @param {Object} [options = {}] - The [options]{@link https://doclets.io/timseverien/taggd/master/options}
-   * @param {Array} [data = []] - The tags
+   * @param {Array} [data = []] - The [tags]{@link https://timseverien.github.io/taggd/v3/generator}
    */
   function Taggd(image) {
     var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
@@ -1960,7 +1977,7 @@ var Taggd = function (_EventEmitter) {
       throw new TypeError(TypeErrorMessage.getMessage(image, Element));
     }
 
-    var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Taggd).call(this));
+    var _this = (0, _possibleConstructorReturn3.default)(this, (Taggd.__proto__ || (0, _getPrototypeOf2.default)(Taggd)).call(this));
 
     _this.wrapper = document.createElement('div');
     _this.wrapper.classList.add('taggd');
@@ -1977,9 +1994,10 @@ var Taggd = function (_EventEmitter) {
 
     _this.imageClickHandler = function (e) {
       var offset = getElementOffset(_this.image);
+
       var position = {
         x: (e.pageX - offset.x) / _this.image.width,
-        y: (e.pageY - offset.y) / _this.image.height
+        y: (e.pageY - offset.y - scrollTop()) / _this.image.height
       };
 
       var tag = new Tag(position, Tag.LABEL_NEW_TAG);
@@ -2265,7 +2283,7 @@ module.exports.Tag = Tag;
 
 window.Taggd = module.exports;
 
-},{"./Tag":117,"./util/event-emitter":119,"./util/object-is":120,"./util/type-error-message":121,"babel-runtime/core-js/number/is-integer":3,"babel-runtime/core-js/object/assign":6,"babel-runtime/core-js/object/get-prototype-of":10,"babel-runtime/helpers/classCallCheck":14,"babel-runtime/helpers/createClass":15,"babel-runtime/helpers/inherits":16,"babel-runtime/helpers/possibleConstructorReturn":17}],119:[function(require,module,exports){
+},{"./Tag":118,"./util/event-emitter":120,"./util/object-is":121,"./util/type-error-message":122,"babel-runtime/core-js/number/is-integer":3,"babel-runtime/core-js/object/assign":6,"babel-runtime/core-js/object/get-prototype-of":10,"babel-runtime/helpers/classCallCheck":14,"babel-runtime/helpers/createClass":15,"babel-runtime/helpers/inherits":16,"babel-runtime/helpers/possibleConstructorReturn":17,"scrolltop":117}],120:[function(require,module,exports){
 'use strict';
 
 var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
@@ -2353,7 +2371,7 @@ var EventEmitter = function () {
 
 module.exports = EventEmitter;
 
-},{"babel-runtime/helpers/classCallCheck":14,"babel-runtime/helpers/createClass":15}],120:[function(require,module,exports){
+},{"babel-runtime/helpers/classCallCheck":14,"babel-runtime/helpers/createClass":15}],121:[function(require,module,exports){
 'use strict';
 
 var _parseFloat = require('babel-runtime/core-js/number/parse-float');
@@ -2410,7 +2428,7 @@ module.exports = {
   }
 };
 
-},{"babel-runtime/core-js/number/is-nan":4,"babel-runtime/core-js/number/parse-float":5,"babel-runtime/helpers/typeof":19}],121:[function(require,module,exports){
+},{"babel-runtime/core-js/number/is-nan":4,"babel-runtime/core-js/number/parse-float":5,"babel-runtime/helpers/typeof":19}],122:[function(require,module,exports){
 'use strict';
 
 var TypeErrorMessage = {
@@ -2495,4 +2513,4 @@ var TypeErrorMessage = {
 
 module.exports = TypeErrorMessage;
 
-},{}]},{},[118]);
+},{}]},{},[119]);
