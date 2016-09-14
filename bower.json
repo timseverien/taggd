@@ -3,7 +3,7 @@
   "description": "A tool to show and add tags to images",
   "main": [
     "dist/taggd.css",
-    "dist/taggd.min.js"
+    "dist/taggd.js"
   ],
   "moduleType": [
     "globals"
@@ -30,5 +30,5 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/timseverien/taggd.git"
-  },
+  }
 }
