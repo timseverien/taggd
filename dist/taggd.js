@@ -2451,9 +2451,9 @@ var TypeErrorMessage = {
    */
   getArrayMessage: function getArrayMessage(object, expectedType) {
     if (expectedType) {
-      return undefined.getTypeErrorMessage(object, 'an array of ' + expectedType);
+      return TypeErrorMessage.getTypeErrorMessage(object, 'an array of ' + expectedType);
     }
-    return undefined.getTypeErrorMessage(object, 'an array');
+    return TypeErrorMessage.getTypeErrorMessage(object, 'an array');
   },
 
   /**
@@ -2462,7 +2462,7 @@ var TypeErrorMessage = {
    * @return {String} The error message
    */
   getFunctionMessage: function getFunctionMessage(object) {
-    return undefined.getTypeErrorMessage(object, 'a function');
+    return TypeErrorMessage.getTypeErrorMessage(object, 'a function');
   },
 
   /**
@@ -2471,7 +2471,7 @@ var TypeErrorMessage = {
    * @return {String} The error message
    */
   getIntegerMessage: function getIntegerMessage(object) {
-    return undefined.getTypeErrorMessage(object, 'an integer');
+    return TypeErrorMessage.getTypeErrorMessage(object, 'an integer');
   },
 
   /**
@@ -2480,7 +2480,7 @@ var TypeErrorMessage = {
    * @return {String} The error message
    */
   getFloatMessage: function getFloatMessage(object) {
-    return undefined.getTypeErrorMessage(object, 'a floating number');
+    return TypeErrorMessage.getTypeErrorMessage(object, 'a floating number');
   },
 
   /**
@@ -2489,7 +2489,7 @@ var TypeErrorMessage = {
    * @return {String} The error message
    */
   getObjectMessage: function getObjectMessage(object) {
-    return undefined.getTypeErrorMessage(object, 'an object');
+    return TypeErrorMessage.getTypeErrorMessage(object, 'an object');
   },
 
   /**
@@ -2498,7 +2498,7 @@ var TypeErrorMessage = {
    * @return {String} The error message
    */
   getTagMessage: function getTagMessage(object) {
-    return undefined.getTypeErrorMessage(object, 'a tag');
+    return TypeErrorMessage.getTypeErrorMessage(object, 'a tag');
   },
 
   /**
