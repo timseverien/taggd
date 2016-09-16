@@ -15,9 +15,9 @@ const TypeErrorMessage = {
    */
   getArrayMessage: (object, expectedType) => {
     if (expectedType) {
-      return this.getTypeErrorMessage(object, `an array of ${expectedType}`);
+      return TypeErrorMessage.getTypeErrorMessage(object, `an array of ${expectedType}`);
     }
-    return this.getTypeErrorMessage(object, 'an array');
+    return TypeErrorMessage.getTypeErrorMessage(object, 'an array');
   },
 
   /**
@@ -25,35 +25,35 @@ const TypeErrorMessage = {
    * @param {Object} object - The tested object
    * @return {String} The error message
    */
-  getFunctionMessage: (object) => this.getTypeErrorMessage(object, 'a function'),
+  getFunctionMessage: (object) => TypeErrorMessage.getTypeErrorMessage(object, 'a function'),
 
   /**
    * Get the TypeError Integer message
    * @param {Object} object - The tested object
    * @return {String} The error message
    */
-  getIntegerMessage: (object) => this.getTypeErrorMessage(object, 'an integer'),
+  getIntegerMessage: (object) => TypeErrorMessage.getTypeErrorMessage(object, 'an integer'),
 
   /**
    * Get the TypeError Float message
    * @param {Object} object - The tested object
    * @return {String} The error message
    */
-  getFloatMessage: (object) => this.getTypeErrorMessage(object, 'a floating number'),
+  getFloatMessage: (object) => TypeErrorMessage.getTypeErrorMessage(object, 'a floating number'),
 
   /**
    * Get the TypeError Object message
    * @param {Object} object - The tested object
    * @return {String} The error message
    */
-  getObjectMessage: (object) => this.getTypeErrorMessage(object, 'an object'),
+  getObjectMessage: (object) => TypeErrorMessage.getTypeErrorMessage(object, 'an object'),
 
   /**
    * Get the TypeError Taggd.Tag message
    * @param {Object} object - The tested object
    * @return {String} The error message
    */
-  getTagMessage: (object) => this.getTypeErrorMessage(object, 'a tag'),
+  getTagMessage: (object) => TypeErrorMessage.getTypeErrorMessage(object, 'a tag'),
 
   /**
    * Get TypeError message
