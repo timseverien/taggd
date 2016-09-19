@@ -270,6 +270,34 @@ describe('Taggd.deleteTag', function () {
   });
 });
 
+describe('Taggd.deleteTags', function () {
+  beforeEach(createImage);
+  afterEach(destroyBody);
+
+  it('should return taggd instance', function () {
+    var image = getImageElement();
+    var tags = [
+      createTag(),
+      createTag(),
+    ];
+    var taggd = new Taggd(image, {}, tags);
+
+    expect(taggd.deleteTags()).toEqual(taggd);
+  });
+
+  it('should delete all tags', function () {
+    var image = getImageElement();
+    var tags = [
+      createTag(),
+      createTag(),
+    ];
+    var taggd = new Taggd(image, {}, tags);
+    taggd.deleteTags();
+
+    expect(taggd.getTags().length).toEqual(0);
+  });
+});
+
 describe('Taggd.enableEditorMode', function () {
   beforeEach(createImage);
   afterEach(destroyBody);

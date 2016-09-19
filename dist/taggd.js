@@ -2184,7 +2184,7 @@ var Taggd = function (_EventEmitter) {
   }, {
     key: 'deleteTags',
     value: function deleteTags() {
-      this.tags.slice(0, this.tags.length);
+      this.tags.splice(0, this.tags.length);
       return this;
     }
 
