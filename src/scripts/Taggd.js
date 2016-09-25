@@ -185,7 +185,9 @@ class Taggd extends EventEmitter {
    * @return {Taggd} Current Taggd instance
    */
   deleteTags() {
-    this.tags.splice(0, this.tags.length);
+    while (this.tags.length > 0) {
+      this.deleteTag(0);
+    }
     return this;
   }
 
