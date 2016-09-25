@@ -2046,14 +2046,24 @@ var Taggd = function (_EventEmitter) {
       }
 
       var isCanceled = !this.emit('taggd.tag.add', this, tag);
+      var hideTimeout = void 0;
+
+      var clearTimeout = function clearTimeout() {
+        if (hideTimeout) {
+          window.clearTimeout(hideTimeout);
+          hideTimeout = undefined;
+        }
+      };
 
       if (!isCanceled) {
         // Add events to show/hide tags
         tag.buttonElement.addEventListener(this.options.show, function () {
-          return tag.show();
+          clearTimeout();
+          tag.show();
         });
         tag.buttonElement.addEventListener(this.options.hide, function () {
-          window.setTimeout(function () {
+          clearTimeout();
+          hideTimeout = window.setTimeout(function () {
             return tag.hide();
           }, _this2.options.hideDelay);
         });

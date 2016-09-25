@@ -77,12 +77,24 @@ class Taggd extends EventEmitter {
     }
 
     const isCanceled = !this.emit('taggd.tag.add', this, tag);
+    let hideTimeout;
+
+    const clearTimeout = () => {
+      if (hideTimeout) {
+        window.clearTimeout(hideTimeout);
+        hideTimeout = undefined;
+      }
+    };
 
     if (!isCanceled) {
       // Add events to show/hide tags
-      tag.buttonElement.addEventListener(this.options.show, () => tag.show());
+      tag.buttonElement.addEventListener(this.options.show, () => {
+        clearTimeout();
+        tag.show();
+      });
       tag.buttonElement.addEventListener(this.options.hide, () => {
-        window.setTimeout(() => tag.hide(), this.options.hideDelay);
+        clearTimeout();
+        hideTimeout = window.setTimeout(() => tag.hide(), this.options.hideDelay);
       });
 
       tag.once('taggd.tag.delete', () => {
