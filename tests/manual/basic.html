@@ -14,6 +14,11 @@
     <img src="../assets/1024x512.jpg" alt="" id="image">
   </main>
 
+  <ul>
+    <li><button id="action-add">Add random tags</button></li>
+    <li><button id="action-delete">Delete all tags</button></li>
+  </ul>
+
   <script src="../../dist/taggd.js"></script>
   <script src="../functions.js"></script>
   <script>
@@ -25,6 +30,16 @@
       createTag(),
       createTag(),
     ]);
+
+    document.getElementById('action-add').addEventListener('click', function addRandomTags() {
+      for (var i = 0; i < 4; i++) {
+        taggd.addTag(createTag());
+      }
+    });
+
+    document.getElementById('action-delete').addEventListener('click', function deleteTags() {
+      taggd.deleteTags();
+    });
   </script>
 
 </body>
