@@ -22,21 +22,18 @@ function getExampleSlugFromContainer(container) {
 }
 
 /**
- * Get example markdown URL by slug.
- * @param {String} slug - The example slug
- * @return {String} The relative example URL
+ * Get example URL by slug.
+ * @param {String} extension - The filename extension
+ * @return {Function} A factory function to generate an example URL thing
  */
-function getExampleMarkdownUrl(slug) {
-  return 'examples/' + slug + '.html';
-}
-
-/**
- * Get example script URL by slug.
- * @param {String} slug - The example slug
- * @return {String} The relative example URL
- */
-function getExampleScriptUrl(slug) {
-  return 'examples/' + slug + '.js';
+function getExampleUrlFactory(extension) {
+  /**
+   * @param {String} slug - The example slug
+   * @return {String} The relative example URL
+   */
+  return function (slug) {
+    return 'examples/' + slug + '.' + extension;
+  }
 }
 
 /**
@@ -59,13 +56,14 @@ function fetchExample(path, onload) {
 
 /**
  * Create an example URLs object.
- * @param {HTMLElement} element - The container element
+ * @param {String} slug - The example slug
  * @return {Object} An object containing all URLs
  */
-function createExampleUrlsObject(element) {
+function createExampleUrlsObject(slug) {
   return {
-    markdown: getMarkdownUrlFromContainer(element),
-    script: getScriptUrlFromContainer(element),
+    markdown: getExampleUrlFactory('html')(slug),
+    script: getExampleUrlFactory('js')(slug),
+    snippet: getExampleUrlFactory('txt')(slug),
   };
 };
 
@@ -111,14 +109,11 @@ function getHighlightedSnippet(snippet) {
 }
 
 /** @type {Function} */
-var getMarkdownUrlFromContainer = pipe(getExampleSlugFromContainer, getExampleMarkdownUrl);
-/** @type {Function} */
-var getScriptUrlFromContainer = pipe(getExampleSlugFromContainer, getExampleScriptUrl);
-
+var getExampleUrlFromContainer = pipe(getExampleSlugFromContainer, createExampleUrlsObject);
 // Get all example containers
 var exampleContainers = document.querySelectorAll('[data-example]');
 // Get all URLs for examples
-var exampleUrls = Array.prototype.map.call(exampleContainers, createExampleUrlsObject);
+var exampleUrls = Array.prototype.map.call(exampleContainers, getExampleUrlFromContainer);
 // Load examples and populate their respective containers
 exampleUrls.forEach(function (exampleUrls, index) {
   fetchExample(exampleUrls.markdown, function (response) {
@@ -129,7 +124,7 @@ exampleUrls.forEach(function (exampleUrls, index) {
     exampleContainer.appendChild(createScriptElement(exampleUrls.script));
 
     if (exampleContainer.hasAttribute('data-example-snippet')) {
-      fetchExample(exampleUrls.script, function (snippet) {
+      fetchExample(exampleUrls.snippet, function (snippet) {
         exampleContainer.appendChild(createCodeSnippetElement(snippet));
       });
     }
