@@ -1539,8 +1539,8 @@ var Tag = function (_EventEmitter) {
    * @param {Object} [popupAttributes = {}] - The popup’s attributes
    */
   function Tag(position, text) {
-    var buttonAttributes = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
-    var popupAttributes = arguments.length <= 3 || arguments[3] === undefined ? {} : arguments[3];
+    var buttonAttributes = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+    var popupAttributes = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
     (0, _classCallCheck3.default)(this, Tag);
 
     if (!ObjectIs.ofType(position, 'object') || Array.isArray(position)) {
@@ -1693,7 +1693,7 @@ var Tag = function (_EventEmitter) {
   }, {
     key: 'setButtonAttributes',
     value: function setButtonAttributes() {
-      var attributes = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+      var attributes = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
       if (!ObjectIs.ofType(attributes, 'object') || Array.isArray(attributes)) {
         throw new TypeError(TypeErrorMessage.getObjectMessage(attributes));
@@ -1718,7 +1718,7 @@ var Tag = function (_EventEmitter) {
   }, {
     key: 'setPopupAttributes',
     value: function setPopupAttributes() {
-      var attributes = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+      var attributes = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
       if (!ObjectIs.ofType(attributes, 'object') || Array.isArray(attributes)) {
         throw new TypeError(TypeErrorMessage.getObjectMessage(attributes));
@@ -1830,7 +1830,7 @@ var Tag = function (_EventEmitter) {
   }], [{
     key: 'setElementAttributes',
     value: function setElementAttributes(element) {
-      var attributes = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+      var attributes = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
       if (!ObjectIs.ofType(attributes, 'object') || Array.isArray(attributes)) {
         throw new TypeError(TypeErrorMessage.getObjectMessage(attributes));
@@ -1969,8 +1969,8 @@ var Taggd = function (_EventEmitter) {
    * @param {Array} [data = []] - The [tags]{@link https://timseverien.github.io/taggd/v3/generator}
    */
   function Taggd(image) {
-    var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-    var data = arguments.length <= 2 || arguments[2] === undefined ? [] : arguments[2];
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    var data = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
     (0, _classCallCheck3.default)(this, Taggd);
 
     if (!image instanceof Element) {
@@ -1997,8 +1997,8 @@ var Taggd = function (_EventEmitter) {
       var offset = getElementOffset(_this.image);
 
       var position = {
-        x: (e.pageX - offset.x) / _this.image.width,
-        y: (e.pageY - offset.y - scrollTop) / _this.image.height
+        x: (e.pageX - offset.left) / _this.image.width,
+        y: (e.pageY - offset.top - scrollTop) / _this.image.height
       };
 
       var tag = new Tag(position, Tag.LABEL_NEW_TAG);

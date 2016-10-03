@@ -38,8 +38,8 @@ class Taggd extends EventEmitter {
       const offset = getElementOffset(this.image);
 
       const position = {
-        x: (e.pageX - offset.x) / this.image.width,
-        y: (e.pageY - offset.y - scrollTop) / this.image.height,
+        x: (e.pageX - offset.left) / this.image.width,
+        y: (e.pageY - offset.top - scrollTop) / this.image.height,
       };
 
       const tag = new Tag(position, Tag.LABEL_NEW_TAG);
