@@ -7,6 +7,7 @@ Taggd is a tool that allows you to tag pictures with additional information.
 * [Download the latest release](https://github.com/timseverien/taggd/archive/master.zip)
 * npm: `npm install taggd`
 * Bower: `bower install taggd`
+* cdnjs: https://cdnjs.com/libraries/taggd 
 
 ## Usage
 
