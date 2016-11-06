@@ -79,6 +79,12 @@ class Taggd extends EventEmitter {
     const isCanceled = !this.emit('taggd.tag.add', this, tag);
     let hideTimeout;
 
+    /**
+     * Test whether the event’s target is the button Element
+     * @param {Event} e - The event object
+     * @return {Boolean} Whether the event’s target is the button element
+     */
+    const isTargetButton = (e) => e.target === tag.buttonElement;
     const clearTimeout = () => {
       if (hideTimeout) {
         window.clearTimeout(hideTimeout);
@@ -88,14 +94,40 @@ class Taggd extends EventEmitter {
 
     if (!isCanceled) {
       // Add events to show/hide tags
-      tag.buttonElement.addEventListener(this.options.show, () => {
-        clearTimeout();
-        tag.show();
-      });
-      tag.buttonElement.addEventListener(this.options.hide, () => {
-        clearTimeout();
-        hideTimeout = window.setTimeout(() => tag.hide(), this.options.hideDelay);
-      });
+      // If show and hide event are identical, set show/hide mode to toggle
+      if (this.options.show === this.options.hide) {
+        tag.buttonElement.addEventListener(this.options.show, (e) => {
+          if (!isTargetButton(e)) return;
+
+          clearTimeout();
+
+          if (tag.isHidden()) {
+            tag.show();
+          } else {
+            tag.hide();
+          }
+        });
+      } else {
+        tag.buttonElement.addEventListener(this.options.show, (e) => {
+          if (!isTargetButton(e)) return;
+
+          clearTimeout();
+          tag.show();
+        });
+        tag.buttonElement.addEventListener(this.options.hide, (e) => {
+          if (!isTargetButton(e)) return;
+
+          clearTimeout();
+
+          // If the use moves the mouse between the button and popup, a delay should give some time
+          // to do just that. This only applies to the mouseleave event.
+          if (this.options.hide === 'mouseleave') {
+            hideTimeout = window.setTimeout(() => tag.hide(), this.options.hideDelay);
+          } else {
+            tag.hide();
+          }
+        });
+      }
 
       tag.once('taggd.tag.delete', () => {
         const tagIndex = this.tags.indexOf(tag);

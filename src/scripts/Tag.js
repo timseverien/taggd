@@ -48,6 +48,14 @@ class Tag extends EventEmitter {
   }
 
   /**
+   * Test whether the tag is hidden or not
+   * @return {Boolean} A boolean indicating the tag’s state
+   */
+  isHidden() {
+    return this.popupElement.style.display === 'none';
+  }
+
+  /**
    * Show the tag
    * @return {Taggd.Tag} Current Tag
    */

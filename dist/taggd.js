@@ -1583,12 +1583,23 @@ var Tag = function (_EventEmitter) {
   }
 
   /**
-   * Show the tag
-   * @return {Taggd.Tag} Current Tag
+   * Test whether the tag is hidden or not
+   * @return {Boolean} A boolean indicating the tag’s state
    */
 
 
   (0, _createClass3.default)(Tag, [{
+    key: 'isHidden',
+    value: function isHidden() {
+      return this.popupElement.style.display === 'none';
+    }
+
+    /**
+     * Show the tag
+     * @return {Taggd.Tag} Current Tag
+     */
+
+  }, {
     key: 'show',
     value: function show() {
       var isCanceled = !this.emit('taggd.tag.show', this);
@@ -2048,6 +2059,14 @@ var Taggd = function (_EventEmitter) {
       var isCanceled = !this.emit('taggd.tag.add', this, tag);
       var hideTimeout = void 0;
 
+      /**
+       * Test whether the event’s target is the button Element
+       * @param {Event} e - The event object
+       * @return {Boolean} Whether the event’s target is the button element
+       */
+      var isTargetButton = function isTargetButton(e) {
+        return e.target === tag.buttonElement;
+      };
       var clearTimeout = function clearTimeout() {
         if (hideTimeout) {
           window.clearTimeout(hideTimeout);
@@ -2057,16 +2076,42 @@ var Taggd = function (_EventEmitter) {
 
       if (!isCanceled) {
         // Add events to show/hide tags
-        tag.buttonElement.addEventListener(this.options.show, function () {
-          clearTimeout();
-          tag.show();
-        });
-        tag.buttonElement.addEventListener(this.options.hide, function () {
-          clearTimeout();
-          hideTimeout = window.setTimeout(function () {
-            return tag.hide();
-          }, _this2.options.hideDelay);
-        });
+        // If show and hide event are identical, set show/hide mode to toggle
+        if (this.options.show === this.options.hide) {
+          tag.buttonElement.addEventListener(this.options.show, function (e) {
+            if (!isTargetButton(e)) return;
+
+            clearTimeout();
+
+            if (tag.isHidden()) {
+              tag.show();
+            } else {
+              tag.hide();
+            }
+          });
+        } else {
+          tag.buttonElement.addEventListener(this.options.show, function (e) {
+            if (!isTargetButton(e)) return;
+
+            clearTimeout();
+            tag.show();
+          });
+          tag.buttonElement.addEventListener(this.options.hide, function (e) {
+            if (!isTargetButton(e)) return;
+
+            clearTimeout();
+
+            // If the use moves the mouse between the button and popup, a delay should give some time
+            // to do just that. This only applies to the mouseleave event.
+            if (_this2.options.hide === 'mouseleave') {
+              hideTimeout = window.setTimeout(function () {
+                return tag.hide();
+              }, _this2.options.hideDelay);
+            } else {
+              tag.hide();
+            }
+          });
+        }
 
         tag.once('taggd.tag.delete', function () {
           var tagIndex = _this2.tags.indexOf(tag);
