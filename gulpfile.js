@@ -66,6 +66,6 @@ gulp.task('build', gulp.series('clean', gulp.parallel('build:scripts', 'build:st
 gulp.task('default', gulp.series('build'));
 
 gulp.task('watch', gulp.series('build', () => {
-  gulp.watch(paths.scripts.src, 'build:scripts');
-  gulp.watch(paths.styles.src, 'build:styles');
+  gulp.watch(paths.scripts.src, gulp.series('build:scripts'));
+  gulp.watch(paths.styles.src, gulp.series('build:styles'));
 }));
