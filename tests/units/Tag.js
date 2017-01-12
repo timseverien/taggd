@@ -303,8 +303,8 @@ describe('Tag.createFromObject', function () {
       popupAttributes: popupAttributes,
     });
 
-    expect(tag.buttonElement.style.left).toEqual(positionStyle.left);
-    expect(tag.buttonElement.style.top).toEqual(positionStyle.top);
+    expect(tag.wrapperElement.style.left).toEqual(positionStyle.left);
+    expect(tag.wrapperElement.style.top).toEqual(positionStyle.top);
     expect(tag.text).toEqual(text);
     expect(tag.buttonElement.getAttribute('foo')).toEqual(buttonAttributes.foo);
     expect(tag.popupElement.getAttribute('bar')).toEqual(popupAttributes.bar);

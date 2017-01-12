@@ -19,13 +19,17 @@ class Tag extends EventEmitter {
 
     super();
 
+    this.wrapperElement = document.createElement('div');
+    this.wrapperElement.classList.add('taggd__wrapper');
+
     this.buttonElement = document.createElement('button');
     this.buttonElement.classList.add('taggd__button');
 
     this.popupElement = document.createElement('span');
     this.popupElement.classList.add('taggd__popup');
 
-    this.buttonElement.appendChild(this.popupElement);
+    this.wrapperElement.appendChild(this.buttonElement);
+    this.wrapperElement.appendChild(this.popupElement);
 
     this.isControlsEnabled = false;
     this.inputLabelElement = undefined;
@@ -135,8 +139,8 @@ class Tag extends EventEmitter {
     if (!isCanceled) {
       const positionStyle = Tag.getPositionStyle(x, y);
 
-      this.buttonElement.style.left = positionStyle.left;
-      this.buttonElement.style.top = positionStyle.top;
+      this.wrapperElement.style.left = positionStyle.left;
+      this.wrapperElement.style.top = positionStyle.top;
 
       this.emit('taggd.tag.changed', this);
     }
@@ -258,8 +262,8 @@ class Tag extends EventEmitter {
 
     return {
       position: {
-        x: parseFloat(this.buttonElement.style.left) / 100,
-        y: parseFloat(this.buttonElement.style.top) / 100,
+        x: parseFloat(this.wrapperElement.style.left) / 100,
+        y: parseFloat(this.wrapperElement.style.top) / 100,
       },
       text: this.text,
       buttonAttributes: getAttributes(this.buttonElement.attributes),

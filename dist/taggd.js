@@ -179,14 +179,14 @@ var _symbol = require("../core-js/symbol");
 
 var _symbol2 = _interopRequireDefault(_symbol);
 
-var _typeof = typeof _symbol2.default === "function" && typeof _iterator2.default === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default ? "symbol" : typeof obj; };
+var _typeof = typeof _symbol2.default === "function" && typeof _iterator2.default === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default && obj !== _symbol2.default.prototype ? "symbol" : typeof obj; };
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = typeof _symbol2.default === "function" && _typeof(_iterator2.default) === "symbol" ? function (obj) {
   return typeof obj === "undefined" ? "undefined" : _typeof(obj);
 } : function (obj) {
-  return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof(obj);
+  return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default && obj !== _symbol2.default.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof(obj);
 };
 },{"../core-js/symbol":12,"../core-js/symbol/iterator":13}],20:[function(require,module,exports){
 require('../modules/web.dom.iterable');
@@ -1551,13 +1551,17 @@ var Tag = function (_EventEmitter) {
 
     var _this = (0, _possibleConstructorReturn3.default)(this, (Tag.__proto__ || (0, _getPrototypeOf2.default)(Tag)).call(this));
 
+    _this.wrapperElement = document.createElement('div');
+    _this.wrapperElement.classList.add('taggd__wrapper');
+
     _this.buttonElement = document.createElement('button');
     _this.buttonElement.classList.add('taggd__button');
 
     _this.popupElement = document.createElement('span');
     _this.popupElement.classList.add('taggd__popup');
 
-    _this.buttonElement.appendChild(_this.popupElement);
+    _this.wrapperElement.appendChild(_this.buttonElement);
+    _this.wrapperElement.appendChild(_this.popupElement);
 
     _this.isControlsEnabled = false;
     _this.inputLabelElement = undefined;
@@ -1686,8 +1690,8 @@ var Tag = function (_EventEmitter) {
       if (!isCanceled) {
         var positionStyle = Tag.getPositionStyle(x, y);
 
-        this.buttonElement.style.left = positionStyle.left;
-        this.buttonElement.style.top = positionStyle.top;
+        this.wrapperElement.style.left = positionStyle.left;
+        this.wrapperElement.style.top = positionStyle.top;
 
         this.emit('taggd.tag.changed', this);
       }
@@ -1822,8 +1826,8 @@ var Tag = function (_EventEmitter) {
 
       return {
         position: {
-          x: parseFloat(this.buttonElement.style.left) / 100,
-          y: parseFloat(this.buttonElement.style.top) / 100
+          x: parseFloat(this.wrapperElement.style.left) / 100,
+          y: parseFloat(this.wrapperElement.style.top) / 100
         },
         text: this.text,
         buttonAttributes: getAttributes(this.buttonElement.attributes),
@@ -1848,11 +1852,9 @@ var Tag = function (_EventEmitter) {
       }
 
       (0, _entries2.default)(attributes).forEach(function (attribute) {
-        var _attribute = (0, _slicedToArray3.default)(attribute, 2);
-
-        var attributeName = _attribute[0];
-        var attributeValue = _attribute[1];
-
+        var _attribute = (0, _slicedToArray3.default)(attribute, 2),
+            attributeName = _attribute[0],
+            attributeValue = _attribute[1];
 
         if (attributeName === 'class' && element.getAttribute(attributeName)) {
           var classValue = element.getAttribute(attributeName) + ' ' + attributeValue;
@@ -2131,7 +2133,7 @@ var Taggd = function (_EventEmitter) {
         });
 
         this.tags.push(tag);
-        this.wrapper.appendChild(tag.buttonElement);
+        this.wrapper.appendChild(tag.wrapperElement);
 
         this.emit('taggd.tag.added', this, tag);
       }
@@ -2176,7 +2178,7 @@ var Taggd = function (_EventEmitter) {
       var isCanceled = !this.emit('taggd.tag.delete', this, tag);
 
       if (!isCanceled) {
-        this.wrapper.removeChild(tag.buttonElement);
+        this.wrapper.removeChild(tag.wrapperElement);
         this.tags.splice(index, 1);
 
         this.emit('taggd.tag.deleted', this, tag);

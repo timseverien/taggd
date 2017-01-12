@@ -143,7 +143,7 @@ class Taggd extends EventEmitter {
       });
 
       this.tags.push(tag);
-      this.wrapper.appendChild(tag.buttonElement);
+      this.wrapper.appendChild(tag.wrapperElement);
 
       this.emit('taggd.tag.added', this, tag);
     }
@@ -182,7 +182,7 @@ class Taggd extends EventEmitter {
     const isCanceled = !this.emit('taggd.tag.delete', this, tag);
 
     if (!isCanceled) {
-      this.wrapper.removeChild(tag.buttonElement);
+      this.wrapper.removeChild(tag.wrapperElement);
       this.tags.splice(index, 1);
 
       this.emit('taggd.tag.deleted', this, tag);

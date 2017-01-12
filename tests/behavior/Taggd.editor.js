@@ -51,8 +51,9 @@ describe('Editor mode', function () {
       done();
     });
 
-    expect(tags[0].popupElement.parentElement).toBe(taggd.tags[0].buttonElement);
-    expect(tags[0].buttonElement.parentElement).toBe(taggd.wrapper);
+    expect(tags[0].popupElement.parentElement).toBe(taggd.tags[0].wrapperElement);
+    expect(tags[0].buttonElement.parentElement).toBe(taggd.tags[0].wrapperElement);
+    expect(tags[0].wrapperElement.parentElement).toBe(taggd.wrapper);
     triggerEvent(tags[0].buttonDeleteElement, 'click');
   });
 });

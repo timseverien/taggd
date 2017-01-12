@@ -12,8 +12,9 @@ describe('Tag', function () {
     ];
 
     var taggd = new Taggd(image, {}, tags);
-    expect(tags[0].buttonElement.parentElement).toEqual(taggd.wrapper);
-    expect(tags[0].popupElement.parentElement).toEqual(tags[0].buttonElement);
+    expect(tags[0].wrapperElement.parentElement).toEqual(taggd.wrapper);
+    expect(tags[0].popupElement.parentElement).toEqual(tags[0].wrapperElement);
+    expect(tags[0].buttonElement.parentElement).toEqual(tags[0].wrapperElement);
   });
 
   it('should set correct text for popup element', function () {
@@ -39,8 +40,8 @@ describe('Tag', function () {
     ];
 
     var taggd = new Taggd(image, {}, tags);
-    expect(tags[0].buttonElement.style.left).toEqual('25%');
-    expect(tags[0].buttonElement.style.top).toEqual('75%');
+    expect(tags[0].wrapperElement.style.left).toEqual('25%');
+    expect(tags[0].wrapperElement.style.top).toEqual('75%');
   });
 
   it('should add custom attributes', function () {
