@@ -1,5 +1,6 @@
 articles:
   - Overview: README.md
+  - Events: docs/events.md
   - Options: docs/options.md
 files:
   - src/scripts/Taggd.js
