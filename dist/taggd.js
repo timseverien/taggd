@@ -2113,6 +2113,16 @@ var Taggd = function (_EventEmitter) {
               tag.hide();
             }
           });
+
+          // Force visibility if user interacts with the popup element
+          if (this.options.hide === 'mouseleave') {
+            tag.popupElement.addEventListener('mouseover', function () {
+              return clearTimeout();
+            });
+            tag.popupElement.addEventListener('mouseleave', function () {
+              return tag.hide();
+            });
+          }
         }
 
         tag.once('taggd.tag.delete', function () {

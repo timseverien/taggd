@@ -127,6 +127,12 @@ class Taggd extends EventEmitter {
             tag.hide();
           }
         });
+
+        // Force visibility if user interacts with the popup element
+        if (this.options.hide === 'mouseleave') {
+          tag.popupElement.addEventListener('mouseover', () => clearTimeout());
+          tag.popupElement.addEventListener('mouseleave', () => tag.hide());
+        }
       }
 
       tag.once('taggd.tag.delete', () => {
