@@ -1,4 +1,4 @@
-# Taggd [![Build Status](http://img.shields.io/travis/timseverien/taggd.svg)](https://travis-ci.org/timseverien/taggd) [![Coverage Status](http://img.shields.io/coveralls/timseverien/taggd.svg)](https://coveralls.io/r/timseverien/taggd) ![Library Size](https://badge-size.herokuapp.com/timseverien/taggd/master/dist/taggd.min.js?compression=gzip)
+# Taggd [![Build Status](http://img.shields.io/travis/timseverien/taggd.svg)](https://travis-ci.org/timseverien/taggd) [![Coverage Status](http://img.shields.io/coveralls/timseverien/taggd.svg)](https://coveralls.io/r/timseverien/taggd) ![Library Size](https://badge-size.herokuapp.com/timseverien/taggd/master/dist/taggd.min.js?compression=gzip) [![cdnjs](https://img.shields.io/cdnjs/v/taggd.svg)](https://cdnjs.com/libraries/taggd)
 
 Taggd is a tool that allows you to tag pictures with additional information.
 
@@ -7,7 +7,7 @@ Taggd is a tool that allows you to tag pictures with additional information.
 * [Download the latest release](https://github.com/timseverien/taggd/archive/master.zip)
 * npm: `npm install taggd`
 * Bower: `bower install taggd`
-* cdnjs: https://cdnjs.com/libraries/taggd 
+* cdnjs: https://cdnjs.com/libraries/taggd
 
 ## Usage
 
