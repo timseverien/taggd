@@ -52,6 +52,36 @@ class Tag extends EventEmitter {
   }
 
   /**
+   * Subscribe to an event.
+   * @param {String} eventName - The event to subscribe to.
+   * @param {Function} handler - The handler to execute.
+   * @return {Taggd} Current Taggd instance
+   */
+  on(eventName, handler) {
+    return super.on(eventName, handler);
+  }
+
+  /**
+   * Unsubscribe from an event.
+   * @param {String} eventName - The event to unsubscribe from.
+   * @param {Function} handler - The handler that was used to subscribe.
+   * @return {Taggd} Current Taggd instance
+   */
+  off(eventName, handler) {
+    return super.off(eventName, handler);
+  }
+
+  /**
+   * Subscribe to an event and unsubscribe once triggered.
+   * @param {String} eventName - The event to subscribe to.
+   * @param {Function} handler - The handler to execute.
+   * @return {Taggd} Current Taggd instance
+   */
+  once(eventName, handler) {
+    return super.once(eventName, handler);
+  }
+
+  /**
    * Test whether the tag is hidden or not
    * @return {Boolean} A boolean indicating the tag’s state
    */
