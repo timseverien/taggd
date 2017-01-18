@@ -49,7 +49,10 @@ Generator.prototype.initializeTaggd = function () {
 };
 
 Generator.prototype.generate = function () {
-  this.outputTags.innerHTML = JSON.stringify(Generator.cleanTags(this.taggd.getTags()), null, '  ');
+  var tags = Generator.cleanTags(this.taggd.getTags());
+  var data = Generator.indentLines(tags.map(Generator.getTagConstructor).join(',\n\n'));
+
+  this.outputTags.innerHTML = '\n' + data + '\n';
 };
 
 Generator.cleanTags = function(tags) {
@@ -67,4 +70,13 @@ Generator.cleanTags = function(tags) {
       text: tag.text,
     };
   });
+};
+
+Generator.getTagConstructor = function(tag) {
+  var object = JSON.stringify(tag, null, '  ');
+  return 'Taggd.Tag.createFromObject(' + object + ')';
+};
+
+Generator.indentLines = function(string) {
+  return '  ' + string.split(/\n/g).join('\n  ');
 };
