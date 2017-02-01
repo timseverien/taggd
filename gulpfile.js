@@ -21,6 +21,9 @@ const OPTIONS_BABEL = {
   presets: ['es2015', 'es2017'],
   plugins: ['transform-runtime'],
 };
+const OPTIONS_BROWSERIFY = {
+  standalone: 'Taggd',
+};
 
 const paths = {
   scripts: {
@@ -39,7 +42,7 @@ gulp.task('clean', () => {
 });
 
 gulp.task('build:scripts', () => {
-  return browserify()
+  return browserify(OPTIONS_BROWSERIFY)
     .transform(babelify, OPTIONS_BABEL)
     .require(paths.scripts.entry, { entry: true })
     .bundle()

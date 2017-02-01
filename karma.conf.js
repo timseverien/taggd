@@ -3,7 +3,7 @@ module.exports = (config) => {
     basePath: '',
     frameworks: ['browserify', 'jasmine'],
     files: [
-      'src/**/*.js',
+      'dist/taggd.js',
       'tests/functions.js',
       'tests/units/*.js',
       'tests/behavior/*.js',
