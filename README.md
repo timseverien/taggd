@@ -37,7 +37,7 @@ The `options` parameter is a list of [options](https://doclets.io/timseverien/ta
 
 ### Note on import strategy
 
-If you’re importing Taggd via the ES2015 syntax with a bundler that respects the [`module` field in `package.json`](https://github.com/rollup/rollup/wiki/pkg.module), `Taggd` and `Tag` are exported seperately:
+If you’re importing Taggd via the ES2015 syntax with a bundler that respects the [`module` field in `package.json`](https://github.com/rollup/rollup/wiki/pkg.module), `Taggd` and `Tag` are exported separately:
 
 ```js
 import { Taggd, Tag } from 'taggd';
