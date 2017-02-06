@@ -1,6 +1,6 @@
-const EventEmitter = require('./util/event-emitter');
-const ObjectIs = require('./util/object-is');
-const TypeErrorMessage = require('./util/type-error-message');
+const EventEmitter = require('../util/event-emitter');
+const ObjectIs = require('../util/object-is');
+const TypeErrorMessage = require('../util/type-error-message');
 
 class Tag extends EventEmitter {
   /**

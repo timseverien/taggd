@@ -28,7 +28,7 @@ const OPTIONS_BROWSERIFY = {
 const paths = {
   scripts: {
     src: `${DIR_SOURCE}/scripts/**/*.js`,
-    entry: `${DIR_SOURCE}/scripts/Taggd.js`,
+    entry: `${DIR_SOURCE}/scripts/umd.js`,
     dest: DIR_BUILD,
   },
   styles: {

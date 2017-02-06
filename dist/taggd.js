@@ -1585,9 +1585,9 @@ var _inherits3 = _interopRequireDefault(_inherits2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var EventEmitter = require('./util/event-emitter');
-var ObjectIs = require('./util/object-is');
-var TypeErrorMessage = require('./util/type-error-message');
+var EventEmitter = require('../util/event-emitter');
+var ObjectIs = require('../util/object-is');
+var TypeErrorMessage = require('../util/type-error-message');
 
 var Tag = function (_EventEmitter) {
   (0, _inherits3.default)(Tag, _EventEmitter);
@@ -2031,7 +2031,7 @@ Tag.LABEL_BUTTON_DELETE = 'delete';
 
 module.exports = Tag;
 
-},{"./util/event-emitter":125,"./util/object-is":126,"./util/type-error-message":127,"babel-runtime/core-js/object/entries":9,"babel-runtime/core-js/object/get-prototype-of":11,"babel-runtime/helpers/classCallCheck":15,"babel-runtime/helpers/createClass":16,"babel-runtime/helpers/get":17,"babel-runtime/helpers/inherits":18,"babel-runtime/helpers/possibleConstructorReturn":19,"babel-runtime/helpers/slicedToArray":20}],124:[function(require,module,exports){
+},{"../util/event-emitter":126,"../util/object-is":127,"../util/type-error-message":128,"babel-runtime/core-js/object/entries":9,"babel-runtime/core-js/object/get-prototype-of":11,"babel-runtime/helpers/classCallCheck":15,"babel-runtime/helpers/createClass":16,"babel-runtime/helpers/get":17,"babel-runtime/helpers/inherits":18,"babel-runtime/helpers/possibleConstructorReturn":19,"babel-runtime/helpers/slicedToArray":20}],124:[function(require,module,exports){
 'use strict';
 
 var _isInteger = require('babel-runtime/core-js/number/is-integer');
@@ -2072,9 +2072,9 @@ var getElementOffset = require('offset');
 var getScrollTop = require('scrolltop');
 
 var Tag = require('./Tag');
-var EventEmitter = require('./util/event-emitter');
-var ObjectIs = require('./util/object-is');
-var TypeErrorMessage = require('./util/type-error-message');
+var EventEmitter = require('../util/event-emitter');
+var ObjectIs = require('../util/object-is');
+var TypeErrorMessage = require('../util/type-error-message');
 
 var Taggd = function (_EventEmitter) {
   (0, _inherits3.default)(Taggd, _EventEmitter);
@@ -2496,7 +2496,24 @@ module.exports.Tag = Tag;
 
 window.Taggd = module.exports;
 
-},{"./Tag":123,"./util/event-emitter":125,"./util/object-is":126,"./util/type-error-message":127,"babel-runtime/core-js/number/is-integer":3,"babel-runtime/core-js/object/assign":6,"babel-runtime/core-js/object/get-prototype-of":11,"babel-runtime/helpers/classCallCheck":15,"babel-runtime/helpers/createClass":16,"babel-runtime/helpers/get":17,"babel-runtime/helpers/inherits":18,"babel-runtime/helpers/possibleConstructorReturn":19,"offset":121,"scrolltop":122}],125:[function(require,module,exports){
+},{"../util/event-emitter":126,"../util/object-is":127,"../util/type-error-message":128,"./Tag":123,"babel-runtime/core-js/number/is-integer":3,"babel-runtime/core-js/object/assign":6,"babel-runtime/core-js/object/get-prototype-of":11,"babel-runtime/helpers/classCallCheck":15,"babel-runtime/helpers/createClass":16,"babel-runtime/helpers/get":17,"babel-runtime/helpers/inherits":18,"babel-runtime/helpers/possibleConstructorReturn":19,"offset":121,"scrolltop":122}],125:[function(require,module,exports){
+'use strict';
+
+var _Tag = require('./classes/Tag');
+
+var _Tag2 = _interopRequireDefault(_Tag);
+
+var _Taggd = require('./classes/Taggd');
+
+var _Taggd2 = _interopRequireDefault(_Taggd);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+_Taggd2.default.Tag = _Tag2.default;
+
+module.exports = _Taggd2.default;
+
+},{"./classes/Tag":123,"./classes/Taggd":124}],126:[function(require,module,exports){
 'use strict';
 
 var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
@@ -2584,7 +2601,7 @@ var EventEmitter = function () {
 
 module.exports = EventEmitter;
 
-},{"babel-runtime/helpers/classCallCheck":15,"babel-runtime/helpers/createClass":16}],126:[function(require,module,exports){
+},{"babel-runtime/helpers/classCallCheck":15,"babel-runtime/helpers/createClass":16}],127:[function(require,module,exports){
 'use strict';
 
 var _parseFloat = require('babel-runtime/core-js/number/parse-float');
@@ -2641,7 +2658,7 @@ module.exports = {
   }
 };
 
-},{"babel-runtime/core-js/number/is-nan":4,"babel-runtime/core-js/number/parse-float":5,"babel-runtime/helpers/typeof":21}],127:[function(require,module,exports){
+},{"babel-runtime/core-js/number/is-nan":4,"babel-runtime/core-js/number/parse-float":5,"babel-runtime/helpers/typeof":21}],128:[function(require,module,exports){
 'use strict';
 
 var TypeErrorMessage = {
@@ -2726,5 +2743,5 @@ var TypeErrorMessage = {
 
 module.exports = TypeErrorMessage;
 
-},{}]},{},[124])(124)
+},{}]},{},[125])(125)
 });

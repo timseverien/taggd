@@ -19,7 +19,7 @@
     "url": "https://timseverien.com"
   },
   "main": "dist/taggd.js",
-  "module": "src/scripts/Taggd.js",
+  "module": "src/scripts/modern.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/timseverien/taggd.git"

@@ -33,7 +33,31 @@ const tags = [];
 const taggd = new Taggd(image, options, tags);
 ```
 
-The `options` parameter is a list of [options](https://doclets.io/timseverien/taggd/master/options). The `tags` parameter is a list of [Taggd.Tag](https://doclets.io/timseverien/taggd/master#dl-Tag)s. These are the buttons and popup that will render over your image. You can generate these using the [Taggd tags generator](https://timseverien.github.io/taggd/v3/generator).
+The `options` parameter is a list of [options](https://doclets.io/timseverien/taggd/master/options). The `tags` parameter is a list of [Tag](https://doclets.io/timseverien/taggd/master#dl-Tag)s. These are the buttons and popup that will render over your image. You can generate these using the [Taggd tags generator](https://timseverien.github.io/taggd/v3/generator).
+
+### Note on import strategy
+
+If you’re importing Taggd via the ES2015 syntax with a bundler that respects the [`module` field in `package.json`](https://github.com/rollup/rollup/wiki/pkg.module), `Taggd` and `Tag` are exported seperately:
+
+```js
+import { Taggd, Tag } from 'taggd';
+
+new Taggd(image, options, [
+  new Tag(...),
+]);
+```
+
+If you include the UMD bundle, `Tag` is part of the `Taggd` class:
+
+```js
+new Taggd(image, options, [
+  new Taggd.Tag(...),
+]);
+```
+
+The former allows ES2015+ environments to use imports as intended. The latter prevents having to expose multiple classes.
+
+If you have better ideas to have best of both worlds, please [create an issue](https://github.com/timseverien/taggd/issues).
 
 ## Documentation
 
