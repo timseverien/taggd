@@ -19,6 +19,7 @@
     "url": "https://timseverien.com"
   },
   "main": "dist/taggd.js",
+  "jsnext:main": "src/scripts/modern.js",
   "module": "src/scripts/modern.js",
   "repository": {
     "type": "git",
