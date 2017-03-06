@@ -3,6 +3,6 @@ articles:
   - Events: docs/events.md
   - Options: docs/options.md
 files:
-  - src/scripts/Taggd.js
-  - src/scripts/Tag.js
+  - src/scripts/classes/Taggd.js
+  - src/scripts/classes/Tag.js
 packageJson: package.json
