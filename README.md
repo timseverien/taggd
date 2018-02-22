@@ -1,8 +1,14 @@
-# Taggd [![Build Status](http://img.shields.io/travis/timseverien/taggd.svg)](https://travis-ci.org/timseverien/taggd) [![Coverage Status](http://img.shields.io/coveralls/timseverien/taggd.svg)](https://coveralls.io/r/timseverien/taggd) ![Library Size](https://badge-size.herokuapp.com/timseverien/taggd/master/dist/taggd.min.js?compression=gzip) [![cdnjs](https://img.shields.io/cdnjs/v/taggd.svg)](https://cdnjs.com/libraries/taggd)
+# DEPRECATED - Taggd [![Build Status](http://img.shields.io/travis/timseverien/taggd.svg)](https://travis-ci.org/timseverien/taggd) [![Coverage Status](http://img.shields.io/coveralls/timseverien/taggd.svg)](https://coveralls.io/r/timseverien/taggd) ![Library Size](https://badge-size.herokuapp.com/timseverien/taggd/master/dist/taggd.min.js?compression=gzip) [![cdnjs](https://img.shields.io/cdnjs/v/taggd.svg)](https://cdnjs.com/libraries/taggd)
 
 ![Example of Taggd, showing an image with markings where one of them shows a tooltip](https://github.com/timseverien/taggd/blob/master/docs/example.png)
 
 Taggd is a tool that allows you to tag pictures with additional information.
+
+## Deprecation Notice
+
+This project isn't actively maintained. This means issues will not be answered and pull requests will not be accepted.
+
+If you are reading this, please consider inheriting the repository. Please let me know by opening an issue.
 
 ## Installation
 
